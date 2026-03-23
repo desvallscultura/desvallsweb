@@ -15,7 +15,14 @@
 function doPost(e) {
   try {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
-    var data = e.parameter;
+    var data;
+    
+    // Suport per a enviament JSON (més robust per a fitxers grans) o paràmetres estàndard
+    if (e.postData && e.postData.contents) {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      data = e.parameter;
+    }
     
     // 1. SEGURETAT: PROTECCIÓ HONEPOT
     if (data.website_hp && data.website_hp.length > 0) {

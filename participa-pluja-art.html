@@ -277,7 +277,7 @@
     });
 
     // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxERgyXY4ib6D7gh5OjoUmX3nWTN0oVXMyYknwcxh0P-vn-JUHHNu7bV9TMve4-qpE6iQ/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDOYSgm10i0iBOT__mE3fI1ocsF37RX9RcPiLO_SFpOxTrTpLgm5lpXKSoR83w0rutgw/exec';
 
     const handleSubmission = function(e) {
         e.preventDefault();
@@ -311,8 +311,7 @@
                     method: 'POST',
                     mode: 'no-cors',
                     cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data).toString()
+                    body: JSON.stringify(data)
                 });
 
                 feedback.className = 'form-message success';
