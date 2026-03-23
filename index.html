@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sant Jordi Desvalls: l'únic municipi de Catalunya amb el nom del patró, capital de les lletres i les arts. Descobreix els festivals Pluja d'Art i Pluja de Lletres.">
+    <meta name="keywords" content="Desvalls Cultura, Sant Jordi Desvalls, Pluja d'Art, Pluja de Lletres, Cultura Rural, Girona, Art, Literatura">
+    <title>Desvalls Cultura | Capital de les Lletres i les Arts</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="container">
+            <a href="#" class="logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 40px; border-radius: 6px; mix-blend-mode: multiply;">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links">
+                <li><a href="#festivals">Festivals</a></li>
+                <li><a href="#agenda">Agenda</a></li>
+                <li><a href="#associa-t">Fes-te Soci</a></li>
+                <li><a href="participa-pluja-art.html" class="btn-primary" style="background: var(--dark); border-color: var(--dark); color: white;">Participa a Pluja d'Art 2026</a></li>
+            </ul>
+            <div class="mobile-menu-icon" id="mobileMenuIcon">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="container hero-content">
+            <span style="display: inline-block; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; margin-bottom: 2rem; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2);">Sant Jordi Desvalls: batec cultural tot l'any</span>
+            <h1 class="hero-title">ON EL LLIBRE <br> I L'ART PRENEN VIDA</h1>
+            <p class="hero-subtitle">Som l'únic poble de Catalunya que porta el nom del patró. Estem destinats a ser el gran epicentre literari rural i un altaveu constant per a totes les arts i expressions culturals.</p>
+            <div class="hero-actions">
+                <a href="#festivals" class="btn-primary">Descobreix la Programació</a>
+                <a href="#mecenatge" class="btn-secondary" style="border-color: var(--secondary); color: var(--secondary);">Fes-te Mecenes</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Els "Flagships" (Festivals Destacats) -->
+    <section id="festivals" class="section dark-section">
+        <div class="container text-center">
+            <h2 class="section-title text-light">Els Nostres Grans Festivals</h2>
+            <p style="color: var(--dark-muted); font-size: 1.15rem; max-width: 700px; margin: 0 auto 3rem;">La cita anual que converteix Sant Jordi Desvalls en el cor vibrant de les arts i les lletres a les comarques gironines.</p>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); text-align: left; gap: 2rem;">
+                <!-- Pluja de Lletres -->
+                <article class="glass-card" style="padding: 3rem 2rem; border-left: 4px solid var(--primary); position: relative; overflow: hidden;">
+                    <span style="position: absolute; top: -20px; right: -20px; font-size: 8rem; opacity: 0.05;">📚</span>
+                    <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 1rem;">Pluja de Lletres</h3>
+                    <p style="color: var(--white); font-weight: bold; margin-bottom: 1rem;">La literatura com a motor.</p>
+                    <p>Un cap de setmana on els carrers esclaten de lletres contra la regressió dels hàbits lectors. Rutes, maratons de clàssics (Rodoreda, Martorell), Jocs Florals i poesia en viu sense excepcions per a cap edat.</p>
+                </article>
+
+                <!-- Pluja d'Art -->
+                <article class="glass-card" style="padding: 3rem 2rem; border-left: 4px solid var(--secondary); position: relative; overflow: hidden;">
+                     <span style="position: absolute; top: -20px; right: -20px; font-size: 8rem; opacity: 0.05;">🎨</span>
+                    <h3 style="color: var(--secondary); font-size: 1.8rem; margin-bottom: 1rem;">Pluja d'Art</h3>
+                    <p style="color: var(--white); font-weight: bold; margin-bottom: 1rem;">L'exhibidor de talents ocults.</p>
+                    <p>L'altaveu necessari per creadors amateurs de disciplines múltiples. Inclou residències d'artista assistides pel Bòlit de Girona, el màgic Festival de Llum i exposicions plàstiques participatives pel poble.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- L'Ecosistema Contínu (Bento Grid) -->
+    <section id="agenda" class="section dark-section">
+        <div class="container text-center">
+            <h2 class="section-title text-light">Vida al Poble tot l'any</h2>
+            <p style="color: var(--white); opacity: 0.7; font-size: 1.15rem; max-width: 700px; margin: 0 auto 3rem;">No som un oasi de dos dies, portem activitat periòdica capaç de blindar l'ànima i l'intel·lecte territorial.</p>
+            
+            <div class="bento-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; text-align: left;">
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📖</div>
+                    <h4 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Clubs de Lectura amb Autors</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0; color: #a1a1aa;">Trobades presencials amb creadors trencant la quarta paret entre llibre i veïns.</p>
+                </div>
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧑‍🎓</div>
+                    <h4 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Xerrades de Coneixement</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0; color: #a1a1aa;">Intel·ligència Artificial, gestió mediambiental i salut pública sense embuts.</p>
+                </div>
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎭</div>
+                    <h4 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Llegim Teatre</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0; color: #a1a1aa;">Lectura dramatitzada en veu alta i assistència col·lectiva a funcions teatrals.</p>
+                </div>
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎤</div>
+                    <h4 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Recitals</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0; color: #a1a1aa;">Paraula i poesia oral veïnal per mantenir el batec constant de la recitació.</p>
+                </div>
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌟</div>
+                    <h4 style="color: var(--white); margin-bottom: 0.5rem; font-size: 1.2rem;">Lleure Formatiu Comú</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0; color: #a1a1aa;">Dansa per tothom, concursos de pintura ràpida i sessions al Cinema Fromzerossessions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria Immersiva (Scroll Lateral tipus Instagram) -->
+    <section id="galeria" class="section overflow-hidden">
+        <div class="container">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; gap: 1rem;">
+                <div>
+                    <h2 class="section-title text-left" style="margin-bottom: 0.5rem;">Vivències i Captures</h2>
+                    <p style="color: var(--dark-muted); font-size: 1.1rem; margin-bottom: 0;">L'essència de l'associació capturada als carrers. Segueix els nostres passos.</p>
+                </div>
+                <div class="socials" style="margin-bottom: 0.5rem;">
+                    <a href="https://instagram.com/desvallscultura" target="_blank" rel="noopener" class="btn-secondary" style="padding: 0.5rem 1rem; border-radius: 8px; color: var(--dark);">@desvallscultura</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: relative; width: 100%;">
+            <!-- Botons Nadius Escriptori -->
+            <button id="scrollLeft" class="gallery-nav-btn left-btn" aria-label="Desplaçar Galeria a l'Esquerra">&larr;</button>
+            <button id="scrollRight" class="gallery-nav-btn right-btn" aria-label="Desplaçar Galeria a la Dreta">&rarr;</button>
+
+            <!-- Snap Gallery Container -->
+            <div id="galleryScroller" class="gallery-scroller" style="display: flex; gap: 1.5rem; overflow-x: auto; padding: 0 5%; padding-bottom: 2rem; scroll-behavior: smooth; scroll-snap-type: x mandatory; -ms-overflow-style: none; scrollbar-width: none;">
+                
+                <!-- Foto 1 -->
+                <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-pluja1.jpg" alt="Vivència Pluja d'Art" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 142</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Foto 2 -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-lletres3.webp" alt="Vivència Pluja de Lletres" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 89</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Foto 3 -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-desva1.webp" alt="Vida al Poble" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 215</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Foto 4 -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-pluja15.jpg" alt="Festivals i Entorn" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 103</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Foto 5 -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-desva5.jpg" alt="Activitat associacionista" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 304</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+            
+            <!-- Video 1 (Pluja Art) -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <video src="img/gl-pluja-vid1.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 350</span>
+                     <span style="font-size: 1.5rem;">🎥</span>
+                </div>
+            </div>
+
+            <!-- Foto 6 (Pluja Art) -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-pluja10.webp" alt="Pluja Art Detall" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 190</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Foto 7 (Lletres) -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-lletres1.webp" alt="Pluja de Lletres" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 275</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+
+            <!-- Video 2 (Desvalls) -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <video src="img/gl-desva-vid1.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 500</span>
+                     <span style="font-size: 1.5rem;">🎥</span>
+                </div>
+            </div>
+
+            <!-- Foto 8 (Desvalls) -->
+            <div class="gallery-item glass-card" style="flex: 0 0 auto; scroll-snap-align: center; width: 300px; height: 400px; border-radius: var(--radius-lg); position: relative; padding: 0;">
+                <img src="img/gl-desva3.webp" alt="Vida Social" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; display: flex; justify-content: space-between; align-items: flex-end;">
+                     <span style="font-weight: 600;">❤️ 112</span>
+                     <span style="font-size: 1.5rem;">📸</span>
+                </div>
+            </div>
+            
+            <!-- Call to action targeta invisible -->
+            <div class="gallery-item" style="flex: 0 0 auto; scroll-snap-align: center; width: 250px; height: 400px; border-radius: var(--radius-lg); display: flex; justify-content: center; align-items: center;">
+                <a href="https://instagram.com/desvallscultura" target="_blank" style="text-decoration: none; color: var(--primary); font-weight: 800; font-size: 1.2rem; text-align: center;">Veure'n més <br> @desvallscultura &rarr;</a>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Script de Gestió de Galeria Escriptori -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const srRight = document.getElementById('scrollRight');
+        const srLeft = document.getElementById('scrollLeft');
+        const scroller = document.getElementById('galleryScroller');
+        if(srRight && srLeft && scroller) {
+            srRight.addEventListener('click', () => {
+                scroller.scrollBy({ left: 324, behavior: 'smooth' });
+            });
+            srLeft.addEventListener('click', () => {
+                scroller.scrollBy({ left: -324, behavior: 'smooth' });
+            });
+        }
+    });
+    </script>
+
+    <!-- Valors i Visió -->
+    <section id="valors" class="section">
+        <div class="container text-center">
+            <h2 class="section-title">La Nostra Identitat</h2>
+            <p style="max-width: 800px; margin: 0 auto 4rem; color: var(--dark-muted); font-size: 1.15rem; line-height: 1.8;">
+                <strong>Associació Desvalls Cultura</strong> té l'ambició de convertir Sant Jordi Desvalls, l'únic municipi de Catalunya que porta el nom del patró, en un referent del món de l'art i de la cultura. Som un poble viu que llegeix, crea i reflexiona comunitàriament els 365 dies de l'any.
+            </p>
+            
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; text-align: left;">
+                <article class="glass-card" style="padding: 2rem; border-top: 4px solid var(--primary);">
+                    <h3 style="color: var(--primary); font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.5rem;">📚</span> Epicentre Literari</h3>
+                    <p style="margin-bottom: 0;">Aprofitem aquesta feliç coincidència històrica amb el patró per esdevenir un centre neuràlgic del món del llibre, cooperant activament i creant xarxa amb la gran llista de fires de comarques gironines.</p>
+                </article>
+
+                <article class="glass-card" style="padding: 2rem; border-top: 4px solid var(--secondary);">
+                    <h3 style="color: var(--secondary); font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.5rem;">🎭</span> Impuls al Talent Emergent</h3>
+                    <p style="margin-bottom: 0;">Prioritat total a fer esclatar el coneixement d'artistes amateurs de tota mena de disciplines proporcionant-los un marc, uns carrers i un poble sencer per mostrar públicament les seves produccions.</p>
+                </article>
+
+                <article class="glass-card" style="padding: 2rem; border-top: 4px solid var(--primary);">
+                    <h3 style="color: var(--primary); font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.5rem;">🤝</span> Teixit Comunitari Viu</h3>
+                    <p style="margin-bottom: 0;">No ens limitem a dos grans festivals. Mantenim la xarxa cívica ben forta amb els Clubs de Lectura (acollint grans autors del moment), l'assistència organitzada de "Llegim Teatre" i els recitals periòdics fets per veïns.</p>
+                </article>
+
+                 <article class="glass-card" style="padding: 2rem; border-top: 4px solid var(--secondary);">
+                    <h3 style="color: var(--secondary); font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.5rem;">💡</span> Espai de Respostes</h3>
+                    <p style="margin-bottom: 0;">Som àgora ciutadana: amb les nostres xerrades de continuïtat debatem de la mà d'experts nacionals els reptes contemporanis (Intel·ligència Artificial), el benestar col·lectiu i l'ecologia del nostre entorn a l'abast de qualsevol.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mecenatge i Finançament B2B -->
+    <section id="mecenatge" class="section">
+        <div class="container">
+            <h2 class="section-title text-center" style="margin-bottom: 4rem;">Oportunitats de Patrocini</h2>
+            <div class="glass-card" style="padding: 4rem 2rem; background: linear-gradient(135deg, rgba(14,165,233,0.05) 0%, rgba(255,255,255,0.02) 100%); display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; border: 1px solid rgba(14,165,233,0.3);">
+                <div style="flex: 1; min-width: 300px; text-align: left;">
+                    <h3 style="font-size: 2rem; margin-bottom: 1.5rem;"><span style="color: var(--primary);">Uneix-te al Repte</span> Cultural Rural</h3>
+                    <p style="font-size: 1.15rem; line-height: 1.8; margin-bottom: 1.5rem;">Cercem <strong>empreses, fundacions privades o mecenes</strong> que vulguin cobrir subministraments logístics essencials (materials, tallers) i honoraris dignes pels artistes emergents de la zona.</p>
+                    <ul style="list-style-type: none; padding: 0; margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.6;">
+                        <li style="margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 1rem;">
+                            <span style="color: var(--secondary); font-size: 1.5rem; line-height: 1;">✔</span>
+                            <span><strong>Rebaixes Fiscals Llei Mecenatge:</strong> Desgravació massiva de suport tributari aplicable a qualsevol aportació monetària que destineu al fons d'art de l'associació.</span>
+                        </li>
+                        <li style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <span style="color: var(--secondary); font-size: 1.5rem; line-height: 1;">✔</span>
+                            <span><strong>Visibilitat i Reputació (RSC):</strong> La marca obtindrà impactes al llarg de tot l'any a fires en viu i suports físics/digitals reforçant una ètica compromesa total amb un territori.</span>
+                        </li>
+                    </ul>
+                    <a href="#associa-t" class="btn-primary" onclick="document.getElementById('tipus').value = 'mecenas'; document.querySelector('#associa-t').scrollIntoView();">Vull Ser Patrocinador Ara</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulari Inscripció (Integrat amb Google Sheets) -->
+    <section id="associa-t" class="section bg-gradient">
+        <div class="container text-center">
+            <h2 class="section-title">Participa. Fes-te Soci o Voluntari</h2>
+            <p style="max-width: 600px; margin: 0 auto 2rem; color: #555;">Uneix-te a la transformació cultural de Sant Jordi Desvalls. Tota ajuda suma per tirar endavant l'art i la literatura en clau local.</p>
+            
+            <div class="form-container glass-panel">
+                <form id="associationForm" class="contact-form">
+                    <div class="form-group">
+                        <label for="nom">Nom i Cognoms</label>
+                        <input type="text" id="nom" name="nom" required placeholder="Ex. Joan Fabrellas">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correu Electrònic</label>
+                        <input type="email" id="email" name="email" required placeholder="hola@exemple.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefon">Telèfon</label>
+                        <input type="tel" id="telefon" name="telefon" placeholder="Opcional">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipus">Com vols participar?</label>
+                        <select id="tipus" name="tipus">
+                            <option value="soci">Vull fer-me Soci / Membre Base</option>
+                            <option value="voluntari">Vull ser Voluntari (fires / esdeveniments)</option>
+                            <option value="mecenas">Vull fer una aportació com a Patrocinador(a)</option>
+                        </select>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" name="rgpd" required>
+                            He llegit i accepto la <a href="legal.html#privacitat" target="_blank">política de privacitat</a>.
+                        </label>
+                    </div>
+                    <button type="submit" class="btn-primary w-100" id="submitBtn">
+                        <span id="btnText">Enviar Sol·licitud</span>
+                        <div class="loader" id="loader" style="display:none;"></div>
+                    </button>
+                    <div id="formMessage" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>Desvalls Cultura</h3>
+                    <p>Fent xarxa a Sant Jordi Desvalls.</p>
+                    <div class="socials">
+                        <a href="mailto:desvallscultura@gmail.com">desvallscultura@gmail.com</a><br>
+                        <a href="https://instagram.com/desvallscultura" target="_blank" rel="noopener">@desvallscultura</a><br>
+                        <a href="https://instagram.com/plujadelletres" target="_blank" rel="noopener">@plujadelletres</a><br>
+                        <a href="https://instagram.com/firaplujadart" target="_blank" rel="noopener">@firaplujadart</a><br>
+                        <a href="https://github.com/desvallscultura/desvallsweb" target="_blank" rel="noopener" style="opacity: 0.7; font-size: 0.9rem;">Ver código en GitHub</a>
+                    </div>
+                </div>
+                <!-- Support Logos -->
+                <div class="footer-logos">
+                    <p>Amb el suport de:</p>
+                    <div class="logos-grid">
+                        <div class="logo-box">Ajuntament</div>
+                        <div class="logo-box">Diputació</div>
+                        <div class="logo-box">Generalitat</div>
+                        <div class="logo-box">Bòlit</div>
+                    </div>
+                </div>
+            </div>
+            <div class="copy">
+                &copy; <span id="year"></span> Desvalls Cultura. Tots els drets reservats.<br>
+                <a href="legal.html" class="legal-link">Avís Legal</a> | 
+                <a href="legal.html#privacitat" class="legal-link">Privacitat</a> | 
+                <a href="legal.html#cookies" class="legal-link">Galetes</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookieConsent" class="cookie-banner" style="display: none;">
+        <p>Aquest lloc web utilitza galetes essencials per garantir-ne el bon funcionament. <a href="legal.html#cookies">Més informació</a>.</p>
+        <button id="acceptCookies" class="btn-primary" style="padding: 0.5rem 1rem;">D'acord</button>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

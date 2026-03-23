@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participa - Pluja d'Art 2026 | Desvalls Cultura</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero-participa {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 6rem;
+            position: relative;
+        }
+        .form-unified {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .form-unified.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 40px; border-radius: 6px; mix-blend-mode: multiply;">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links" style="list-style: none; display: flex; gap: 2rem; align-items: center;">
+                <li><a href="index.html">Inici</a></li>
+                <li><a href="index.html#festivals">Festivals</a></li>
+                <li><a href="#form-inscripcio" class="btn-primary" style="background: var(--dark); border-color: var(--dark);">Anar al Formulari</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Participa -->
+    <section class="hero-participa dark-section">
+        <div class="container hero-content" style="position: relative; z-index: 2;">
+            <span style="display: inline-block; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; margin-bottom: 2rem; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2);">Convocatòria Oberta fins 31 de maig de 2026</span>
+            <h1 class="hero-title" style="background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 4rem; margin-bottom: 0.5rem;">SUMA LA TEVA LLUM<br> A LA PLUJA D'ART 2026</h1>
+            <p style="color: var(--primary); font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem;">📅 18, 19 i 20 de setembre de 2026</p>
+            <p class="hero-subtitle" style="color: #cbd5e1; max-width: 600px; margin: 0 auto 2rem;">Buscant creadors, artesans i ànimes inquietes que vulguin formar part del gran cap de setmana artístic de Sant Jordi Desvalls.</p>
+            <a href="#convocatories" class="btn-primary">Veure les Convocatòries</a>
+        </div>
+    </section>
+
+    <!-- Cards de Bases -->
+    <section id="convocatories" class="section">
+        <div class="container text-center">
+            <h2 class="section-title">Crides a l'Acció</h2>
+            <p style="color: var(--dark-muted); font-size: 1.15rem; max-width: 700px; margin: 0 auto 3rem;">Llegeix les bases de la teva categoria i omple el formulari corresponent a la part inferior de la pàgina per formalitzar la teva proposta.</p>
+            
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); text-align: left;">
+                
+                <!-- Projectes Generals -->
+                <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid var(--primary);">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎭</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Arts i Espectacles (General)</h3>
+                    <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Per a totes aquelles actuacions, exposicions i sorpreses artístiques que vulguin tenir el seu espai durant la fira.</p>
+                    <a href="docs/Bases Generals 2026.docx" download class="btn-secondary w-100" style="margin-bottom: 0.5rem;">📥 Descarregar Bases Generals</a>
+                </div>
+
+                <!-- Residència Bòlit -->
+                <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid #f43f5e;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧑‍🎨</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Residència i Treball de Camp</h3>
+                    <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Un projecte de col·laboració comunitària. <strong>Avís:</strong> L'equip del Bòlit Centre d'Art Contemporani actuarà com a jurat expert en la selecció del projecte guanyador i recolzarà oficialment en la difusió d'aquesta convocatòria.</p>
+                    <a href="docs/Bases Residència 2026.docx" download class="btn-secondary w-100" style="margin-bottom: 0.5rem;">📥 Descarregar Bases Residència</a>
+                </div>
+
+                <!-- Paradetes -->
+                <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid #10b981;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">⛺</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Mercat i Paradetes</h3>
+                    <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Reserva el teu espai al carrer per exposar i vendre la teva artesania d'autor davant milers de visitants.</p>
+                    <a href="docs/PLUJA D'ART-BASES PARADETES 2026 definitu.docx" download class="btn-secondary w-100" style="margin-bottom: 0.5rem;">📥 Descarregar Bases Paradetes</a>
+                </div>
+
+                <!-- Foodtrucks -->
+                <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid #f59e0b;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌮</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Zona Gastronòmica (Foodtrucks)</h3>
+                    <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Aquesta àrea està gestionada exclusivament per l'Ajuntament de Sant Jordi Desvalls.</p>
+                    <a href="https://santjordidesvalls.cat/" target="_blank" rel="noopener" class="btn-secondary w-100" style="margin-bottom: 0.5rem; border-color: #f59e0b; color: #f59e0b;">🌐 Sol·licituds a l'Ajuntament</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulari Unificat Cridaner -->
+    <section id="form-inscripcio" class="section dark-section">
+        <div class="container text-center">
+            <h2 class="section-title text-light" style="margin-bottom: 1rem;">Formalitza la teva Proposta</h2>
+            <p style="color: #a1a1aa; max-width: 600px; margin: 0 auto 2rem;">Selecciona la teva categoria per obrir el formulari específic requerit a les bases.</p>
+            
+            <!-- Pestanyes -->
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formGenerals', this)" style="background: transparent; border-color: var(--primary); color: var(--primary);">Arts Generals</button>
+                <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formResidencia', this)" style="background: transparent; border-color: #f43f5e; color: #f43f5e;">Residència Bòlit</button>
+                <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formParadetes', this)" style="background: transparent; border-color: #10b981; color: #10b981;">Mercat/Paradetes</button>
+            </div>
+
+            <div class="form-container">
+                <div class="glass-panel" style="background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.1);">
+                    
+                    <!-- FORMULARI 1: GENERALS -->
+                    <form id="formGenerals" class="plujaForm" style="display: none; text-align: left;">
+                        <input type="hidden" name="Categoria" value="Arts Generals">
+                        <h3 style="color: var(--primary); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">A. Dades d'Identificació</h3>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Nom de l'artista/companyia *</label><input type="text" name="Companyia" required></div>
+                            <div class="form-group"><label>Nom representant *</label><input type="text" name="Nom_Representant" required></div>
+                            <div class="form-group"><label>Pronoms</label><select name="Pronoms"><option>ella</option><option>ell</option><option>elli</option><option>altres</option></select></div>
+                            <div class="form-group"><label>Identitat Gènere</label><select name="Genere"><option>Dona (cis/trans)</option><option>Home (cis/trans)</option><option>No binària</option><option>Altres</option><option>Prefereixo no contestar</option></select></div>
+                            <div class="form-group"><label>DNI/NIF *</label><input type="url" name="DNI_URL" required></div>
+                            <div class="form-group"><label>Municipi de residència *</label><input type="text" name="Municipi" required></div>
+                            <div class="form-group"><label>Correu *</label><input type="email" name="Email" required></div>
+                            <div class="form-group"><label>Telèfon *</label><input type="tel" name="Telefon" required></div>
+                        </div>
+
+                        <h3 style="color: var(--primary); margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">B. Projecte i Detalls</h3>
+                        <div class="form-group"><label>Modalitat *</label><select name="Modalitat" required><option>Arts Plàstiques (Pintura, Escultura, Fotografia, Instal·lació, Il·lustració...)</option><option>Arts Vives (Teatre, Circ, Dansa, Música experimental, Performance...)</option><option>Art Lumínic</option></select></div>
+                        <div class="form-group"><label>Títol de l'obra *</label><input type="text" name="Titol_Obra" required></div>
+                        <div class="form-group"><label>Descripció (Max 300 par) *</label><textarea name="Descripcio" rows="4" required></textarea></div>
+                        <div class="form-group"><label>Enllaç Dossier PDF (Drive/WeTransfer) *</label><input type="url" name="Dossier_URL" required placeholder="https://..."></div>
+                        <div class="form-group"><label>Xarxes Socials i Portafolis *</label><textarea name="Xarxes" rows="3" required></textarea></div>
+
+                        <h3 style="color: var(--primary); margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">C. Tècnica i Logística</h3>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Necessitats d'espai (m2) *</label><input type="text" name="Espai_m2" required></div>
+                            <div class="form-group"><label>Potència elèctrica W/kW *</label><input type="text" name="Electrica_W" required></div>
+                            <div class="form-group"><label>Total persones equip *</label><input type="number" name="Persones_Equip" required></div>
+                            <div class="form-group"><label>Edats</label><input type="text" name="Edats_Equip"></div>
+                        </div>
+                        <div class="form-group"><label>Intoleràncies / Dietes (Dinar inclòs)</label><input type="text" name="Dietes"></div>
+                        <div class="form-group"><label>Altres necessitats tècniques o d'accessibilitat</label><textarea name="Acessibilitat" rows="2"></textarea></div>
+
+                        <div class="checkbox-group mt-3">
+                            <label><input type="checkbox" required> Accepto expressament les Bases Generals Fira Pluja d'Art 2026 i la Política de Privadesa per a cedir els drets d'imatge i l'avaluació de la proposta.</label>
+                        </div>
+                        <button type="submit" class="btn-primary w-100" style="margin-top: 1.5rem; padding: 1rem;">Confirmar Inscripció General</button>
+                    </form>
+
+                    <!-- FORMULARI 2: RESIDÈNCIA -->
+                    <form id="formResidencia" class="plujaForm" style="display: none; text-align: left;">
+                        <input type="hidden" name="Categoria" value="Residència Bòlit">
+                        <h3 style="color: #f43f5e; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades Personals (Residència)</h3>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Nom candidat/a *</label><input type="text" name="Nom_Representant" required></div>
+                            <div class="form-group"><label>DNI/NIF *</label><input type="url" name="DNI_URL" required></div>
+                            <div class="form-group"><label>Pronoms i Gènere *</label><input type="text" name="Genere" required></div>
+                            <div class="form-group"><label>Municipi *</label><input type="text" name="Municipi" required></div>
+                            <div class="form-group"><label>Correu *</label><input type="email" name="Email" required></div>
+                            <div class="form-group"><label>Telèfon *</label><input type="tel" name="Telefon" required></div>
+                        </div>
+
+                        <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dossier Metodològic i Cures</h3>
+                        <div class="form-group"><label>Títol de la proposta *</label><input type="text" name="Titol_Obra" required></div>
+                        <div class="form-group"><label>Enllaç núvol Dossier Tècnic PDF (Metodologia+Objectius) *</label><input type="url" name="Dossier_URL" required></div>
+                        <div class="form-group"><label>Enllaç núvol Portafoli/CV Artístic PDF *</label><input type="url" name="Portafoli_URL" required></div>
+                        <div class="form-group"><label>Requeriments Alimentaris i Accessibilitat (Dinar/Allotjament)</label><textarea name="Dietes" rows="2"></textarea></div>
+
+                        <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Declaracions Legals (Obligatòries)</h3>
+                        <div class="checkbox-group" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <label><input type="checkbox" required> Acceptació expressa de les Bases Residència 2026 i resolució inapel·lable de Jurat.</label>
+                            <label><input type="checkbox" required> Acceptació legal IRPF i gestió de factura de 900€ per la part d'honoraris i material.</label>
+                            <label><input type="checkbox" required> Compromís exprés d'Art Efímer i Residu Zero patrimonial un cop acabada la intervenció.</label>
+                            <label><input type="checkbox" required> Veracitat possessió (o tràmit) del Certificat Negatiu de Delictes Sexuals per acció en menor.</label>
+                            <label><input type="checkbox" required> Cessió de drets d'imatge i Política de Privadesa per promoció local i Bòlit.</label>
+                        </div>
+                        <button type="submit" class="btn-primary w-100" style="margin-top: 1.5rem; padding: 1rem; background: #f43f5e; border-color: #f43f5e;">Aplicar a Residència Artística</button>
+                    </form>
+
+                    <!-- FORMULARI 3: PARADETES -->
+                    <form id="formParadetes" class="plujaForm" style="display: none; text-align: left;">
+                        <input type="hidden" name="Categoria" value="Paradetes i Artesania">
+                        <h3 style="color: #10b981; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades per a Fira d'Artesania</h3>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Nom Titular Paradeta *</label><input type="text" name="Nom_Representant" required></div>
+                            <div class="form-group"><label>Nom de la Marca / Producte *</label><input type="text" name="Companyia" required></div>
+                            <div class="form-group"><label>Correu electrònic *</label><input type="email" name="Email" required></div>
+                            <div class="form-group"><label>Telèfon mòbil *</label><input type="tel" name="Telefon" required></div>
+                        </div>
+
+                        <div class="form-group mt-3"><label>Què vens? (Descripció ecologia/km0/proximitat) *</label><textarea name="Descripcio" rows="3" required></textarea></div>
+                        
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                            <div class="form-group"><label>Necessites llum a 230V? *</label><select name="Electricitat"><option>Sí (Portaré allargador preparat)</option><option>No, vinc sense llum</option></select></div>
+                            <div class="form-group"><label>Manipulació d'aliments?</label><select name="Carnet_Alimentari"><option>No porto alimentació</option><option>Sí, adjuntaré carnet de manipulador</option></select></div>
+                        </div>
+
+                        <div class="form-group mt-3"><label>Faràs demostració in-situ a la parada? Quants metres extra?</label><input type="text" name="Demostracio_Espai" placeholder="Ex: Sí, necessito 1 metre extra al costat de la carpa 3x3"></div>
+
+                        <div class="checkbox-group mt-3">
+                            <label><input type="checkbox" required> Accepto i em comprometo al Dipòsit de Fiança (60€) dins dels 15 dies següents a l'aprovació, entenent que 30€ se'm retornaran segons l'estipulat a les Bases de Paradetes Fira Pluja 2026.</label>
+                        </div>
+                        <button type="submit" class="btn-primary w-100" style="margin-top: 1.5rem; padding: 1rem; background: #10b981; border-color: #10b981;">Aprovar Sol·licitud de Parada</button>
+                    </form>
+
+                    <!-- Feedbacks de Google Sheets -->
+                    <div id="formFeedback" class="form-message" style="margin-top: 1.5rem; text-align: center; border-radius: 8px; padding: 1rem; display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JS Formularis -->
+    <style>
+        .plujaForm input, .plujaForm select, .plujaForm textarea {
+            width: 100%; padding: 0.75rem 1rem; border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 0.5rem; background: rgba(255,255,255,0.1); color: white;
+            transition: all 0.3s;
+        }
+        .plujaForm select option { color: black; }
+        .plujaForm label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #e2e8f0; }
+        .mt-3 { margin-top: 1.5rem; }
+        
+        .form-tab-btn.active-tab {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+    </style>
+    <!-- Formulari Backend Sheets Logic -->
+
+    <!-- Footer Simple -->
+    <footer>
+        <div class="container text-center">
+            <p style="color: var(--dark-muted);">&copy; 2026 Associació Cultura Sant Jordi Desvalls. | <a href="https://github.com/desvallscultura/desvallsweb" target="_blank" style="color: var(--primary); text-decoration: none;">Codi a GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- JS Formularis Backend Logic -->
+    <script>
+    // Pestanyes Logica
+    function showForm(formId, btnElement) {
+        document.querySelectorAll('.plujaForm').forEach(f => f.style.display = 'none');
+        document.querySelectorAll('.form-tab-btn').forEach(b => {
+            b.style.background = 'transparent';
+            b.style.color = b.style.borderColor;
+        });
+
+        const selectedForm = document.getElementById(formId);
+        if (selectedForm) selectedForm.style.display = 'block';
+
+        if(btnElement) {
+            btnElement.style.background = btnElement.style.borderColor;
+            btnElement.style.color = 'white';
+        }
+    }
+    // Obre la primera pestanya per defecte en carregar
+    document.addEventListener("DOMContentLoaded", () => {
+        const firstBtn = document.querySelector('.form-tab-btn');
+        showForm('formGenerals', firstBtn);
+    });
+
+    // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/POSA_LA_TEVA_URL_AQUI/exec';
+
+    const handleSubmission = function(e) {
+        e.preventDefault();
+        const form = this;
+        const btn = form.querySelector('button[type="submit"]');
+        const feedback = document.getElementById('formFeedback');
+        
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Enviant...';
+        btn.disabled = true;
+
+        const formData = new FormData(form);
+        const searchParams = new URLSearchParams();
+        for (const pair of formData) { searchParams.append(pair[0], pair[1]); }
+
+        if (GOOGLE_SCRIPT_URL.includes('POSA_LA_TEVA_URL_AQUI')) {
+            setTimeout(() => {
+                feedback.className = 'form-message success';
+                feedback.innerHTML = `✨ <strong>Formulari Funcionant! (Mode Prova)</strong><br>Tens el sistema tècnic de pestanyes actiu. Ara falta que insereixis la URL del teu Google Script.`;
+                feedback.style.display = 'block';
+                form.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1000);
+            return;
+        }
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: searchParams
+        })
+        .then(response => response.json())
+        .then(data => {
+            feedback.className = 'form-message success';
+            feedback.innerHTML = `✨ <strong>Inscripció rebuda correctament!</strong> Gràcies per participar a Pluja d'Art.`;
+            feedback.style.display = 'block';
+            form.reset();
+        })
+        .catch(error => {
+            feedback.className = 'form-message error';
+            feedback.innerHTML = `❌ <strong>Error de servidor:</strong> Hi ha hagut un problema tècnic asíncron. Intenta-ho més tard.`;
+            feedback.style.display = 'block';
+        })
+        .finally(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+    };
+
+    document.querySelectorAll('.plujaForm').forEach(f => f.addEventListener('submit', handleSubmission));
+    </script>
+</body>
+</html>
