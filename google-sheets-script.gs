@@ -22,8 +22,20 @@ function doPost(e) {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
     var data = e.parameter;
     
-    // TRIEM EL FULL SEGONS LA CATEGORIA (Si no n'hi ha, usem un genèric)
+    // 1. SEGURETAT: PROTECCIÓ HONEPOT (Si el bot ha omplert el camp trampa, ignorem)
+    if (data.website_hp && data.website_hp.length > 0) {
+      return ContentService.createTextOutput("Bot detected").setMimeType(ContentService.MimeType.TEXT);
+    }
+
+    // 2. SEGURETAT: LLISTA BLANCA DE CATEGORIES (Evita creació de pestanyes falses)
+    var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Bòlit", "Paradetes i Artesania", "Associat"];
     var categoryName = data.Categoria || "Inscripcions2026";
+    
+    if (ALLOWED_CATEGORIES.indexOf(categoryName) === -1 && categoryName !== "Inscripcions2026") {
+       return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": "Invalid category"}))
+             .setMimeType(ContentService.MimeType.JSON);
+    }
+
     var sheet = doc.getSheetByName(categoryName);
     
     // Si el full no existeix, el creem automàticament
@@ -70,7 +82,11 @@ function doPost(e) {
     for (var i = 1; i < headers.length; i++) {
         var headerName = headers[i];
         if (data[headerName] !== undefined) {
-            rowData[i] = data[headerName];
+            // SEGURETAT: Sanitització bàsica de text per evitar scripts injectats
+            var cleanValue = data[headerName].toString()
+                             .replace(/<[^>]*>?/gm, '') // Treu HTML tags
+                             .trim();
+            rowData[i] = cleanValue;
         }
     }
     

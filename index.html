@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.googleusercontent.com; connect-src https://script.google.com https://script.googleusercontent.com;">
     <meta name="description" content="Sant Jordi Desvalls: l'únic municipi de Catalunya amb el nom del patró, capital de les lletres i les arts. Descobreix els festivals Pluja d'Art i Pluja de Lletres.">
     <meta name="keywords" content="Desvalls Cultura, Sant Jordi Desvalls, Pluja d'Art, Pluja de Lletres, Cultura Rural, Girona, Art, Literatura">
     <title>Desvalls Cultura | Capital de les Lletres i les Arts</title>
@@ -314,6 +315,12 @@
             
             <div class="form-container glass-panel">
                 <form id="associationForm" class="contact-form">
+                    <!-- Campo Honeypot (Seguretat anti-bot) -->
+                    <div style="display:none !important;">
+                        <label>Si ets humà, deixa aquest camp buit:</label>
+                        <input type="text" name="website_hp" autocomplete="off">
+                    </div>
+                    <input type="hidden" name="Categoria" value="Associat">
                     <div class="form-group">
                         <label for="nom">Nom i Cognoms</label>
                         <input type="text" id="nom" name="nom" required placeholder="Ex. Joan Fabrellas">

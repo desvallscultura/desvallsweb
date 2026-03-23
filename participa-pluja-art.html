@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.googleusercontent.com; connect-src https://script.google.com https://script.googleusercontent.com;">
     <title>Participa - Pluja d'Art 2026 | Desvalls Cultura</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,6 +122,8 @@
                     
                     <!-- FORMULARI 1: GENERALS -->
                     <form id="formGenerals" class="plujaForm" style="display: none; text-align: left;">
+                        <!-- Honeypot -->
+                        <div style="display:none !important;"><input type="text" name="website_hp"></div>
                         <input type="hidden" name="Categoria" value="Arts Generals">
                         <h3 style="color: var(--primary); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">A. Dades d'Identificació</h3>
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -159,6 +162,8 @@
 
                     <!-- FORMULARI 2: RESIDÈNCIA -->
                     <form id="formResidencia" class="plujaForm" style="display: none; text-align: left;">
+                        <!-- Honeypot -->
+                        <div style="display:none !important;"><input type="text" name="website_hp"></div>
                         <input type="hidden" name="Categoria" value="Residència Bòlit">
                         <h3 style="color: #f43f5e; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades Personals (Residència)</h3>
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -189,6 +194,8 @@
 
                     <!-- FORMULARI 3: PARADETES -->
                     <form id="formParadetes" class="plujaForm" style="display: none; text-align: left;">
+                        <!-- Honeypot -->
+                        <div style="display:none !important;"><input type="text" name="website_hp"></div>
                         <input type="hidden" name="Categoria" value="Paradetes i Artesania">
                         <h3 style="color: #10b981; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades per a Fira d'Artesania</h3>
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -270,7 +277,7 @@
     });
 
     // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlz1CV4Lnc4ZmMf0-e5Tg64gZbFqJ5W9mhqDqp8qlHJ2fc4t7qDlD4zAvOi4lO8MaJ9Q/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-e48PGJj9AJ_fRvokpbwg-Rm9-T5k_AAVgzHio3LsQnfB2M0XPKJn3p6Psr90X-EZDw/exec';
 
     const handleSubmission = function(e) {
         e.preventDefault();
