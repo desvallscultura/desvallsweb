@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // MOCK URL: Aquest URL s'hauria de substituir per l'URL del Deploy del teu Google Apps Script
     // Desplega l'script "google-apps-script-code.js" a Google Apps Script i substitueix l'URL aquí.
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-e48PGJj9AJ_fRvokpbwg-Rm9-T5k_AAVgzHio3LsQnfB2M0XPKJn3p6Psr90X-EZDw/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxERgyXY4ib6D7gh5OjoUmX3nWTN0oVXMyYknwcxh0P-vn-JUHHNu7bV9TMve4-qpE6iQ/exec'; 
 
     if(form) {
         form.addEventListener('submit', async (e) => {

@@ -131,7 +131,7 @@
                             <div class="form-group"><label>Nom representant *</label><input type="text" name="Nom_Representant" required></div>
                             <div class="form-group"><label>Pronoms</label><select name="Pronoms"><option>ella</option><option>ell</option><option>elli</option><option>altres</option></select></div>
                             <div class="form-group"><label>Identitat Gènere</label><select name="Genere"><option>Dona (cis/trans)</option><option>Home (cis/trans)</option><option>No binària</option><option>Altres</option><option>Prefereixo no contestar</option></select></div>
-                            <div class="form-group"><label>DNI/NIF *</label><input type="url" name="DNI_URL" required></div>
+                            <div class="form-group"><label>DNI/NIF *</label><input type="text" name="DNI_URL" required placeholder="Ex. 12345678X"></div>
                             <div class="form-group"><label>Municipi de residència *</label><input type="text" name="Municipi" required></div>
                             <div class="form-group"><label>Correu *</label><input type="email" name="Email" required></div>
                             <div class="form-group"><label>Telèfon *</label><input type="tel" name="Telefon" required></div>
@@ -141,7 +141,7 @@
                         <div class="form-group"><label>Modalitat *</label><select name="Modalitat" required><option>Arts Plàstiques (Pintura, Escultura, Fotografia, Instal·lació, Il·lustració...)</option><option>Arts Vives (Teatre, Circ, Dansa, Música experimental, Performance...)</option><option>Art Lumínic</option></select></div>
                         <div class="form-group"><label>Títol de l'obra *</label><input type="text" name="Titol_Obra" required></div>
                         <div class="form-group"><label>Descripció (Max 300 par) *</label><textarea name="Descripcio" rows="4" required></textarea></div>
-                        <div class="form-group"><label>Enllaç Dossier PDF (Drive/WeTransfer) *</label><input type="url" name="Dossier_URL" required placeholder="https://..."></div>
+                        <div class="form-group"><label>Adjuntar Dossier PDF (Max 10MB) *</label><input type="file" name="Dossier_File" accept=".pdf,.doc,.docx" required></div>
                         <div class="form-group"><label>Xarxes Socials i Portafolis *</label><textarea name="Xarxes" rows="3" required></textarea></div>
 
                         <h3 style="color: var(--primary); margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">C. Tècnica i Logística</h3>
@@ -168,7 +168,7 @@
                         <h3 style="color: #f43f5e; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades Personals (Residència)</h3>
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group"><label>Nom candidat/a *</label><input type="text" name="Nom_Representant" required></div>
-                            <div class="form-group"><label>DNI/NIF *</label><input type="url" name="DNI_URL" required></div>
+                            <div class="form-group"><label>DNI/NIF *</label><input type="text" name="DNI_URL" required placeholder="Ex. 12345678X"></div>
                             <div class="form-group"><label>Pronoms i Gènere *</label><input type="text" name="Genere" required></div>
                             <div class="form-group"><label>Municipi *</label><input type="text" name="Municipi" required></div>
                             <div class="form-group"><label>Correu *</label><input type="email" name="Email" required></div>
@@ -177,8 +177,8 @@
 
                         <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dossier Metodològic i Cures</h3>
                         <div class="form-group"><label>Títol de la proposta *</label><input type="text" name="Titol_Obra" required></div>
-                        <div class="form-group"><label>Enllaç núvol Dossier Tècnic PDF (Metodologia+Objectius) *</label><input type="url" name="Dossier_URL" required></div>
-                        <div class="form-group"><label>Enllaç núvol Portafoli/CV Artístic PDF *</label><input type="url" name="Portafoli_URL" required></div>
+                        <div class="form-group"><label>Adjuntar Dossier Tècnic PDF (Metodologia+Objectius) *</label><input type="file" name="Dossier_File" accept=".pdf,.doc,.docx" required></div>
+                        <div class="form-group"><label>Adjuntar Portafoli/CV Artístic PDF *</label><input type="file" name="Portafoli_File" accept=".pdf" required></div>
                         <div class="form-group"><label>Requeriments Alimentaris i Accessibilitat (Dinar/Allotjament)</label><textarea name="Dietes" rows="2"></textarea></div>
 
                         <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Declaracions Legals (Obligatòries)</h3>
@@ -277,7 +277,7 @@
     });
 
     // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-e48PGJj9AJ_fRvokpbwg-Rm9-T5k_AAVgzHio3LsQnfB2M0XPKJn3p6Psr90X-EZDw/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxERgyXY4ib6D7gh5OjoUmX3nWTN0oVXMyYknwcxh0P-vn-JUHHNu7bV9TMve4-qpE6iQ/exec';
 
     const handleSubmission = function(e) {
         e.preventDefault();
@@ -286,45 +286,63 @@
         const feedback = document.getElementById('formFeedback');
         
         const originalText = btn.innerHTML;
-        btn.innerHTML = 'Enviant...';
+        btn.innerHTML = 'Pujant fitxers i enviant...';
         btn.disabled = true;
 
         const formData = new FormData(form);
-        const searchParams = new URLSearchParams();
-        for (const pair of formData) { searchParams.append(pair[0], pair[1]); }
+        const fileInput = form.querySelector('input[type="file"]');
+        
+        const processSubmission = async (fileData = null, fileName = null, fileType = null) => {
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key !== 'Dossier_File' && key !== 'Portafoli_File') {
+                    data[key] = value;
+                }
+            });
 
-        if (GOOGLE_SCRIPT_URL.includes('POSA_LA_TEVA_URL_AQUI')) {
-            setTimeout(() => {
+            if (fileData) {
+                data.fileData = fileData;
+                data.fileName = fileName;
+                data.fileType = fileType;
+            }
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data).toString()
+                });
+
                 feedback.className = 'form-message success';
-                feedback.innerHTML = `✨ <strong>Formulari Funcionant! (Mode Prova)</strong><br>Tens el sistema tècnic de pestanyes actiu. Ara falta que insereixis la URL del teu Google Script.`;
+                feedback.innerHTML = `✨ <strong>Inscripció rebuda!</strong><br>Hem guardat les teves dades i el teu dossier correctament. Rebràs notícies nostres aviat.`;
                 feedback.style.display = 'block';
                 form.reset();
+                window.scrollTo({ top: feedback.offsetTop - 100, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Error:', error);
+                feedback.className = 'form-message error';
+                feedback.textContent = 'Hi ha hagut un error en la pujada. Si el fitxer és molt gran, intenta reduir-ne el pes.';
+                feedback.style.display = 'block';
+            } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
-            }, 1000);
-            return;
-        }
+            }
+        };
 
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: searchParams
-        })
-        .then(response => response.json())
-        .then(data => {
-            feedback.className = 'form-message success';
-            feedback.innerHTML = `✨ <strong>Inscripció rebuda correctament!</strong> Gràcies per participar a Pluja d'Art.`;
-            feedback.style.display = 'block';
-            form.reset();
-        })
-        .catch(error => {
-            feedback.className = 'form-message error';
-            feedback.innerHTML = `❌ <strong>Error de servidor:</strong> Hi ha hagut un problema tècnic asíncron. Intenta-ho més tard.`;
-            feedback.style.display = 'block';
-        })
-        .finally(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        });
+        if (fileInput && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result.split(',')[1];
+                processSubmission(base64, file.name, file.type);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            processSubmission();
+        }
     };
 
     document.querySelectorAll('.plujaForm').forEach(f => f.addEventListener('submit', handleSubmission));

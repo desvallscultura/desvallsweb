@@ -1,20 +1,15 @@
 /** 
- * DESVALLS CULTURA - GOOGLE SHEETS BACKEND CONNECTOR (MULTI-SHEET VERSION)
+ * DESVALLS CULTURA - GOOGLE SHEETS & DRIVE BACKEND (FILE UPLOAD VERSION)
  * 
- * INSTRUCCIONS PELS ADMINISTRADORS (PAS A PAS):
- * 1. Obre el teu full de càlcul de Google (Google Sheets).
- * 2. Ves al menú superior: "Extensions" > "Apps Script".
- * 3. S'obrirà una nova pestanya amb un editor de codi. 
- * 4. Esborra tot el que hi hagi i enganxa EXACTAMENT tot aquest codi.
- * 5. Fes clic a la icona del disquet (Guardar) i posa-li de nom "Backend Pluja Art".
- * 6. Fes clic al botó blau: "Desplega" (Deploy) > "Nou Desplegament" (New deployment).
- * 7. Tria el tipus: "Aplicació Web" (Web App).
- * 8. Descripció: "Versió 2 - Pestanyes Separades".
- * 9. Executar com: "Tu" (Me).
- * 10. Qui té accés: "Qualsevol" (Anyone). IMPORTANT!
- * 11. Fes clic a "Desplega". Si et demana autorització, accepta tots els permisos.
- * 12. COPIA LA "URL de l'aplicació web" que et donarà (acaba en /exec).
- * 13. Enganxa aquesta URL a la línia 272 de l'arxiu HTML (participa-pluja-art.html).
+ * INSTRUCCIONS PELS ADMINISTRADORS:
+ * 1. Obre el teu Google Sheet.
+ * 2. Ves a Extensions > Apps Script.
+ * 3. Esborra tot el contingut i enganxa ESTE CODI.
+ * 4. Fes clic a la icona del disquet per Guardar.
+ * 5. Fes clic a "Desplega" > "Nou Desplegament".
+ * 6. Tria "Aplicació Web", Executar com "Tu", Qui té accés "Qualsevol".
+ * 7. IMPORTANT: Si et demana autorització per "Google Drive", accepta-la.
+ * 8. Copia la URL que et doni i actualitza-la al web si ha canviat.
  */
 
 function doPost(e) {
@@ -22,12 +17,12 @@ function doPost(e) {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
     var data = e.parameter;
     
-    // 1. SEGURETAT: PROTECCIÓ HONEPOT (Si el bot ha omplert el camp trampa, ignorem)
+    // 1. SEGURETAT: PROTECCIÓ HONEPOT
     if (data.website_hp && data.website_hp.length > 0) {
       return ContentService.createTextOutput("Bot detected").setMimeType(ContentService.MimeType.TEXT);
     }
 
-    // 2. SEGURETAT: LLISTA BLANCA DE CATEGORIES (Evita creació de pestanyes falses)
+    // 2. SEGURETAT: LLISTA BLANCA DE CATEGORIES
     var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Bòlit", "Paradetes i Artesania", "Associat"];
     var categoryName = data.Categoria || "Inscripcions2026";
     
@@ -37,71 +32,80 @@ function doPost(e) {
     }
 
     var sheet = doc.getSheetByName(categoryName);
+    if(!sheet) sheet = doc.insertSheet(categoryName);
     
-    // Si el full no existeix, el creem automàticament
-    if(!sheet) {
-      sheet = doc.insertSheet(categoryName);
+    // 3. GESTIÓ DE FITXERS (DRIVE)
+    // Si ens arriba un fitxer en base64, el guardem al Drive
+    var fileUrl = "";
+    if (data.fileData && data.fileName) {
+      var folder = getOrCreateFolder("Dossiers Pluja Art 2026");
+      var contentType = data.fileType || "application/octet-stream";
+      var decodedData = Utilities.base64Decode(data.fileData);
+      var blob = Utilities.newBlob(decodedData, contentType, data.fileName);
+      var file = folder.createFile(blob);
+      fileUrl = file.getUrl();
     }
-    
-    // Obtenim els encapçalaments actuals del full triat
+
+    // Obtenim encapçalaments
     var headers = [];
     if (sheet.getLastRow() > 0) {
       headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     } else {
-      headers = ["Data d'Alta"]; // Columna inicial per defecte
+      headers = ["Data d'Alta"];
     }
     
-    // Identifiquem totes les claus (camps) que ens arriben del formulari
     var keys = Object.keys(data);
-    
-    // Si ens arriben camps que no tenen columna, les afegim al moment
     var newHeadersFound = false;
     for (var i = 0; i < keys.length; i++) {
+        // No afegim el camp de dades del fitxer com a columna, només la URL
+        if (keys[i] === "fileData" || keys[i] === "website_hp") continue;
         if (headers.indexOf(keys[i]) === -1) {
             headers.push(keys[i]);
             newHeadersFound = true;
         }
     }
     
-    // Si hem afegit columnes, actualitzem la fila 1 (els títols) amb estil
+    // Afegim columna per la URL del fitxer si s'ha pujat
+    if (fileUrl && headers.indexOf("URL_Dossier_Drive") === -1) {
+      headers.push("URL_Dossier_Drive");
+      newHeadersFound = true;
+    }
+
     if (newHeadersFound || sheet.getLastRow() === 0) {
        sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-       sheet.getRange(1, 1, 1, headers.length)
-            .setFontWeight("bold")
-            .setBackground("#12a298")
-            .setFontColor("white")
-            .setVerticalAlignment("middle")
-            .setHorizontalAlignment("center");
-       sheet.setFrozenRows(1); // Deixem la primera fila fixa
+       sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold").setBackground("#12a298").setFontColor("white");
+       sheet.setFrozenRows(1);
     }
     
-    // Preparem la fila de dades respectant l'ordre de les columnes
     var rowData = new Array(headers.length).fill("");
-    rowData[0] = new Date(); // Registre de temps
+    rowData[0] = new Date();
     
     for (var i = 1; i < headers.length; i++) {
         var headerName = headers[i];
-        if (data[headerName] !== undefined) {
-            // SEGURETAT: Sanitització bàsica de text per evitar scripts injectats
-            var cleanValue = data[headerName].toString()
-                             .replace(/<[^>]*>?/gm, '') // Treu HTML tags
-                             .trim();
-            rowData[i] = cleanValue;
+        if (headerName === "URL_Dossier_Drive") {
+          rowData[i] = fileUrl;
+        } else if (data[headerName] !== undefined) {
+            rowData[i] = data[headerName].toString().replace(/<[^>]*>?/gm, '').trim();
         }
     }
     
-    // Afegim la fila al full corresponent
     sheet.appendRow(rowData);
     
-    // Resposta d'èxit per al navegador
-    return ContentService
-          .createTextOutput(JSON.stringify({"result":"success", "category": categoryName}))
+    return ContentService.createTextOutput(JSON.stringify({"result":"success", "fileUrl": fileUrl}))
           .setMimeType(ContentService.MimeType.JSON);
           
   } catch (error) {
-    // Resposta d'error
-    return ContentService
-          .createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
+    return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
           .setMimeType(ContentService.MimeType.JSON);
   }
 }
+
+function getOrCreateFolder(folderName) {
+  var folders = DriveApp.getFoldersByName(folderName);
+  if (folders.hasNext()) {
+    return folders.next();
+  } else {
+    return DriveApp.createFolder(folderName);
+  }
+}
+
