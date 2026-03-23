@@ -113,7 +113,7 @@
             <!-- Pestanyes -->
             <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
                 <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formGenerals', this)" style="background: transparent; border-color: var(--primary); color: var(--primary);">Arts Generals</button>
-                <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formResidencia', this)" style="background: transparent; border-color: #f43f5e; color: #f43f5e;">Residència Bòlit</button>
+                <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formResidencia', this)" style="background: transparent; border-color: #f43f5e; color: #f43f5e;">Residència Artística</button>
                 <button type="button" class="btn-primary form-tab-btn" onclick="showForm('formParadetes', this)" style="background: transparent; border-color: #10b981; color: #10b981;">Mercat/Paradetes</button>
             </div>
 
@@ -129,7 +129,6 @@
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group"><label>Nom de l'artista/companyia *</label><input type="text" name="Companyia" required></div>
                             <div class="form-group"><label>Nom representant *</label><input type="text" name="Nom_Representant" required></div>
-                            <div class="form-group"><label>Pronoms</label><select name="Pronoms"><option>ella</option><option>ell</option><option>elli</option><option>altres</option></select></div>
                             <div class="form-group"><label>Identitat Gènere</label><select name="Genere"><option>Dona (cis/trans)</option><option>Home (cis/trans)</option><option>No binària</option><option>Altres</option><option>Prefereixo no contestar</option></select></div>
                             <div class="form-group"><label>DNI/NIF *</label><input type="text" name="DNI_URL" required placeholder="Ex. 12345678X"></div>
                             <div class="form-group"><label>Municipi de residència *</label><input type="text" name="Municipi" required></div>
@@ -164,12 +163,18 @@
                     <form id="formResidencia" class="plujaForm" style="display: none; text-align: left;">
                         <!-- Honeypot -->
                         <div style="display:none !important;"><input type="text" name="website_hp"></div>
-                        <input type="hidden" name="Categoria" value="Residència Bòlit">
+                        <input type="hidden" name="Categoria" value="Residència Artística">
+                        <h2 style="color: #f43f5e; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="background: #f43f5e; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">2</span>
+                            Residència Artística 2026
+                        </h2>
+                        <p style="background: rgba(244, 63, 94, 0.1); border-left: 4px solid #f43f5e; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.6;">
+                            <strong>Convocatòria Residència Artística:</strong> Aquesta modalitat implica estada al poble i presentació de resultats. Tancament: 31 de Maig.
+                        </p>
                         <h3 style="color: #f43f5e; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dades Personals (Residència)</h3>
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group"><label>Nom candidat/a *</label><input type="text" name="Nom_Representant" required></div>
-                            <div class="form-group"><label>DNI/NIF *</label><input type="text" name="DNI_URL" required placeholder="Ex. 12345678X"></div>
-                            <div class="form-group"><label>Pronoms i Gènere *</label><input type="text" name="Genere" required></div>
+                            <div class="form-group"><label>Identitat Gènere</label><select name="Genere"><option>Dona (cis/trans)</option><option>Home (cis/trans)</option><option>No binària</option><option>Altres</option><option>Prefereixo no contestar</option></select></div>
                             <div class="form-group"><label>Municipi *</label><input type="text" name="Municipi" required></div>
                             <div class="form-group"><label>Correu *</label><input type="email" name="Email" required></div>
                             <div class="form-group"><label>Telèfon *</label><input type="tel" name="Telefon" required></div>
@@ -177,8 +182,14 @@
 
                         <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Dossier Metodològic i Cures</h3>
                         <div class="form-group"><label>Títol de la proposta *</label><input type="text" name="Titol_Obra" required></div>
-                        <div class="form-group"><label>Adjuntar Dossier Tècnic PDF (Metodologia+Objectius) *</label><input type="file" name="Dossier_File" accept=".pdf,.doc,.docx" required></div>
-                        <div class="form-group"><label>Adjuntar Portafoli/CV Artístic PDF *</label><input type="file" name="Portafoli_File" accept=".pdf" required></div>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Adjuntar Dossier Tècnic (PDF) *</label><input type="file" name="Dossier" accept=".pdf" required></div>
+                            <div class="form-group"><label>Adjuntar Portafoli/CV Artístic (PDF) *</label><input type="file" name="Portafoli" accept=".pdf" required></div>
+                        </div>
+                        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group"><label>Adjuntar Calendari d'execució *</label><input type="file" name="Calendari" accept=".pdf,.doc,.docx" required></div>
+                            <div class="form-group"><label>Adjuntar Pressupost desglossat *</label><input type="file" name="Pressupost" accept=".pdf,.xls,.xlsx" required></div>
+                        </div>
                         <div class="form-group"><label>Requeriments Alimentaris i Accessibilitat (Dinar/Allotjament)</label><textarea name="Dietes" rows="2"></textarea></div>
 
                         <h3 style="color: #f43f5e; margin-top: 2rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Declaracions Legals (Obligatòries)</h3>
@@ -277,7 +288,7 @@
     });
 
     // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwO_qYvUpjcQdehPTbq4tKkCaMGLgIK3GPpdbH0LdQcvLAEuaBBRI4XImmVqtcltm3YCg/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx8IkGUbYwDLOb4Gi6cDUHKpWe2ynEktkvQJCangQzSm2KQh6DLWTiNawoWCKYwGdM7Eg/exec';
 
     const handleSubmission = function(e) {
         e.preventDefault();
@@ -290,20 +301,18 @@
         btn.disabled = true;
 
         const formData = new FormData(form);
-        const fileInput = form.querySelector('input[type="file"]');
+        const fileInputs = form.querySelectorAll('input[type="file"]');
         
-        const processSubmission = async (fileData = null, fileName = null, fileType = null) => {
+        const processSubmission = async (filesData = {}) => {
             const data = {};
             formData.forEach((value, key) => {
-                if (key !== 'Dossier_File' && key !== 'Portafoli_File') {
+                if (!(value instanceof File)) {
                     data[key] = value;
                 }
             });
 
-            if (fileData) {
-                data.fileData = fileData;
-                data.fileName = fileName;
-                data.fileType = fileType;
+            if (Object.keys(filesData).length > 0) {
+                data.files = filesData;
             }
 
             try {
@@ -331,14 +340,28 @@
             }
         };
 
-        if (fileInput && fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64 = e.target.result.split(',')[1];
-                processSubmission(base64, file.name, file.type);
-            };
-            reader.readAsDataURL(file);
+        if (fileInputs.length > 0) {
+            const filesData = {};
+            const promises = Array.from(fileInputs).map(input => {
+                return new Promise((resolve) => {
+                    if (input.files.length > 0) {
+                        const file = input.files[0];
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            filesData[input.name] = {
+                                data: e.target.result.split(',')[1],
+                                name: file.name,
+                                type: file.type
+                            };
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            Promise.all(promises).then(() => processSubmission(filesData));
         } else {
             processSubmission();
         }

@@ -27,7 +27,7 @@ function doPost(e) {
     }
 
     // 2. SEGURETAT: LLISTA BLANCA DE CATEGORIES
-    var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Bòlit", "Paradetes i Artesania", "Associat"];
+    var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Artística", "Paradetes i Artesania", "Associat"];
     var categoryName = data.Categoria || "Inscripcions2026";
     
     if (ALLOWED_CATEGORIES.indexOf(categoryName) === -1 && categoryName !== "Inscripcions2026") {
@@ -38,23 +38,20 @@ function doPost(e) {
     var sheet = doc.getSheetByName(categoryName);
     if(!sheet) sheet = doc.insertSheet(categoryName);
     
-    // 3. GESTIÓ DE FITXERS (DRIVE)
-    var fileUrl = "";
-    if (data.fileData && data.fileName) {
-      logError("Intentant crear fitxer: " + data.fileName);
+    // 3. GESTIÓ DE FITXERS (DRIVE) - Suport per a múltiples fitxers
+    var fileLinks = {};
+    if (data.files && typeof data.files === 'object') {
       var folder = getOrCreateFolder("Dossiers Pluja Art 2026");
-      logError("Carpeta obtinguda/creada: " + folder.getName());
-      
-      var contentType = data.fileType || "application/octet-stream";
-      var decodedData = Utilities.base64Decode(data.fileData);
-      logError("Dades Base64 descodificades correctament.");
-      
-      var blob = Utilities.newBlob(decodedData, contentType, data.fileName);
-      var file = folder.createFile(blob);
-      fileUrl = file.getUrl();
-      logError("Fitxer creat amb èxit. URL: " + fileUrl);
-    } else {
-      logError("No s'ha rebut cap fitxer (fileData/fileName buits).");
+      for (var fieldName in data.files) {
+        var fileInfo = data.files[fieldName];
+        if (fileInfo.data && fileInfo.name) {
+          logError("Creant fitxer pel camp: " + fieldName + " (" + fileInfo.name + ")");
+          var decodedData = Utilities.base64Decode(fileInfo.data);
+          var blob = Utilities.newBlob(decodedData, fileInfo.type || "application/octet-stream", fileInfo.name);
+          var file = folder.createFile(blob);
+          fileLinks[fieldName] = file.getUrl();
+        }
+      }
     }
 
     // Obtenim encapçalaments
@@ -68,18 +65,21 @@ function doPost(e) {
     var keys = Object.keys(data);
     var newHeadersFound = false;
     for (var i = 0; i < keys.length; i++) {
-        // No afegim el camp de dades del fitxer com a columna, només la URL
-        if (keys[i] === "fileData" || keys[i] === "website_hp") continue;
+        // Ignorem el camp d'arxius binaris i el trampa
+        if (keys[i] === "files" || keys[i] === "website_hp") continue;
         if (headers.indexOf(keys[i]) === -1) {
             headers.push(keys[i]);
             newHeadersFound = true;
         }
     }
     
-    // Afegim columna per la URL del fitxer si s'ha pujat
-    if (fileUrl && headers.indexOf("URL_Dossier_Drive") === -1) {
-      headers.push("URL_Dossier_Drive");
-      newHeadersFound = true;
+    // Afegim columnes pels enllaços dels fitxers
+    for (var fieldName in fileLinks) {
+      var linkHeader = "URL_" + fieldName;
+      if (headers.indexOf(linkHeader) === -1) {
+        headers.push(linkHeader);
+        newHeadersFound = true;
+      }
     }
 
     if (newHeadersFound || sheet.getLastRow() === 0) {
@@ -93,8 +93,9 @@ function doPost(e) {
     
     for (var i = 1; i < headers.length; i++) {
         var headerName = headers[i];
-        if (headerName === "URL_Dossier_Drive") {
-          rowData[i] = fileUrl;
+        if (headerName.indexOf("URL_") === 0) {
+          var fieldKey = headerName.substring(4);
+          rowData[i] = fileLinks[fieldKey] || "";
         } else if (data[headerName] !== undefined) {
             rowData[i] = data[headerName].toString().replace(/<[^>]*>?/gm, '').trim();
         }
