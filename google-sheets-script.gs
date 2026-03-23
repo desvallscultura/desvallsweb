@@ -38,16 +38,22 @@ function doPost(e) {
     var sheet = doc.getSheetByName(categoryName);
     if(!sheet) sheet = doc.insertSheet(categoryName);
     
-    // 3. GESTIÓ DE FITXERS (DRIVE) - Suport per a múltiples fitxers
+    // 3. GESTIÓ DE FITXERS (DRIVE) - Suport per a múltiples fitxers i noms únics
     var fileLinks = {};
     if (data.files && typeof data.files === 'object') {
       var folder = getOrCreateFolder("Dossiers Pluja Art 2026");
+      var userIdentifier = (data.DNI_URL || data.Email || "ANON").toString().replace(/[^a-z0-9]/gi, '_');
+
       for (var fieldName in data.files) {
         var fileInfo = data.files[fieldName];
         if (fileInfo.data && fileInfo.name) {
-          logError("Creant fitxer pel camp: " + fieldName + " (" + fileInfo.name + ")");
+          // Generem nom únic: Camp_DNI_NomOriginal.pdf (i gestionem duplicats)
+          var baseName = fieldName + "_" + userIdentifier + "_" + fileInfo.name;
+          var uniqueName = getUniqueFileName(folder, baseName);
+          
+          logError("Creant fitxer únic: " + uniqueName);
           var decodedData = Utilities.base64Decode(fileInfo.data);
-          var blob = Utilities.newBlob(decodedData, fileInfo.type || "application/octet-stream", fileInfo.name);
+          var blob = Utilities.newBlob(decodedData, fileInfo.type || "application/octet-stream", uniqueName);
           var file = folder.createFile(blob);
           fileLinks[fieldName] = file.getUrl();
         }
@@ -103,7 +109,7 @@ function doPost(e) {
     
     sheet.appendRow(rowData);
     
-    return ContentService.createTextOutput(JSON.stringify({"result":"success", "fileUrl": fileUrl}))
+    return ContentService.createTextOutput(JSON.stringify({"result":"success", "links": fileLinks}))
           .setMimeType(ContentService.MimeType.JSON);
           
   } catch (error) {
@@ -111,6 +117,23 @@ function doPost(e) {
     return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
           .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function getUniqueFileName(folder, fileName) {
+  var name = fileName;
+  var extension = "";
+  if (fileName.indexOf(".") !== -1) {
+    extension = fileName.substring(fileName.lastIndexOf("."));
+    name = fileName.substring(0, fileName.lastIndexOf("."));
+  }
+  
+  var finalName = fileName;
+  var counter = 1;
+  while (folder.getFilesByName(finalName).hasNext()) {
+    finalName = name + "_v" + counter + extension;
+    counter++;
+  }
+  return finalName;
 }
 
 function getOrCreateFolder(folderName) {
