@@ -1,26 +1,23 @@
-/** 
- * DESVALLS CULTURA - GOOGLE SHEETS & DRIVE BACKEND (FILE UPLOAD VERSION)
- * 
- * INSTRUCCIONS PELS ADMINISTRADORS:
- * 1. Obre el teu Google Sheet.
- * 2. Ves a Extensions > Apps Script.
- * 3. Esborra tot el contingut i enganxa ESTE CODI.
- * 4. Fes clic a la icona del disquet per Guardar.
- * 5. Fes clic a "Desplega" > "Nou Desplegament".
- * 6. Tria "Aplicació Web", Executar com "Tu", Qui té accés "Qualsevol".
- * 7. IMPORTANT: Si et demana autorització per "Google Drive", accepta-la.
- * 8. Copia la URL que et doni i actualitza-la al web si ha canviat.
- */
+function logError(msg) {
+  try {
+    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = doc.getSheetByName("DEBUG_LOGS");
+    if(!sheet) sheet = doc.insertSheet("DEBUG_LOGS");
+    sheet.appendRow([new Date(), msg]);
+  } catch(e) {}
+}
 
 function doPost(e) {
+  logError("Inici doPost. postData: " + (e.postData ? "SI" : "NO"));
   try {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
     var data;
     
-    // Suport per a enviament JSON (més robust per a fitxers grans) o paràmetres estàndard
     if (e.postData && e.postData.contents) {
+      logError("Rebent JSON: " + e.postData.contents.substring(0, 100) + "...");
       data = JSON.parse(e.postData.contents);
     } else {
+      logError("Rebent parameters estàndard: " + JSON.stringify(e.parameter).substring(0,100));
       data = e.parameter;
     }
     
@@ -42,15 +39,22 @@ function doPost(e) {
     if(!sheet) sheet = doc.insertSheet(categoryName);
     
     // 3. GESTIÓ DE FITXERS (DRIVE)
-    // Si ens arriba un fitxer en base64, el guardem al Drive
     var fileUrl = "";
     if (data.fileData && data.fileName) {
+      logError("Intentant crear fitxer: " + data.fileName);
       var folder = getOrCreateFolder("Dossiers Pluja Art 2026");
+      logError("Carpeta obtinguda/creada: " + folder.getName());
+      
       var contentType = data.fileType || "application/octet-stream";
       var decodedData = Utilities.base64Decode(data.fileData);
+      logError("Dades Base64 descodificades correctament.");
+      
       var blob = Utilities.newBlob(decodedData, contentType, data.fileName);
       var file = folder.createFile(blob);
       fileUrl = file.getUrl();
+      logError("Fitxer creat amb èxit. URL: " + fileUrl);
+    } else {
+      logError("No s'ha rebut cap fitxer (fileData/fileName buits).");
     }
 
     // Obtenim encapçalaments
@@ -102,6 +106,7 @@ function doPost(e) {
           .setMimeType(ContentService.MimeType.JSON);
           
   } catch (error) {
+    logError("ERROR CRÍTIC: " + error.toString());
     return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
           .setMimeType(ContentService.MimeType.JSON);
   }
