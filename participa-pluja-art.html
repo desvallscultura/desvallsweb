@@ -10,7 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css?v=2.2026.4">
+    <link rel="stylesheet" href="css/style.css?v=2.2026.5">
+    <script src="js/main.js?v=2.2026.5"></script>
     <style>
         .hero-participa {
             min-height: 60vh;
@@ -79,7 +80,7 @@
                 <!-- Residència Bòlit -->
                 <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid #f43f5e;">
                     <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧑‍🎨</div>
-                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Residència i Treball de Camp</h3>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Residència artística</h3>
                     <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Un projecte de col·laboració comunitària. <strong>Avís:</strong> El Bòlit Centre d'Art Contemporani participarà com a part del jurat en la selecció del projecte guanyador. La difusió del projecte guanyador es realitzarà durant la fira, així com a través dels canals de difusió de la fira. El Bòlit en farà difusió a través dels seus canals online.</p>
                     <a href="docs/Bases Residència 2026.pdf" download class="btn-secondary w-100" style="margin-bottom: 0.5rem;">📥 Descarregar Bases Residència (PDF)</a>
                 </div>
@@ -97,7 +98,7 @@
                     <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌮</div>
                     <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Zona Gastronòmica (Foodtrucks)</h3>
                     <p style="color: var(--dark-muted); margin-bottom: 1.5rem; font-size: 0.95rem;">Aquesta àrea està gestionada exclusivament per l'Ajuntament de Sant Jordi Desvalls.</p>
-                    <a href="https://santjordidesvalls.cat/" target="_blank" rel="noopener" class="btn-secondary w-100" style="margin-bottom: 0.5rem; border-color: #f59e0b; color: #f59e0b;">🌐 Sol·licituds a l'Ajuntament</a>
+                    <a href="https://santjordidesvalls.cat/parentpage/festival-pluja-dart-de-sant-jordi/" target="_blank" rel="noopener" class="btn-secondary w-100" style="margin-bottom: 0.5rem; border-color: #f59e0b; color: #f59e0b;">🌐 Sol·licituds a l'Ajuntament</a>
                 </div>
 
             </div>
@@ -209,6 +210,7 @@
                         <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group"><label>Nom Titular Paradeta *</label><input type="text" name="Nom_Representant" required></div>
                             <div class="form-group"><label>Nom de la Marca / Producte *</label><input type="text" name="Companyia" required></div>
+                            <div class="form-group"><label>Quantitat de parcel·les (de 3x3m) * (mínim 1)</label><input type="number" name="Parcel_les" value="1" min="1" required></div>
                             <div class="form-group"><label>Correu electrònic *</label><input type="email" name="Email" required></div>
                             <div class="form-group"><label>Telèfon mòbil *</label><input type="tel" name="Telefon" required></div>
                         </div>
@@ -260,7 +262,7 @@
             <div style="display: flex; gap: 4rem; justify-content: center; align-items: center; margin-bottom: 5rem; flex-wrap: wrap;">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <img src="img/ajuntament.png" alt="Ajuntament de Sant Jordi Desvalls" style="height: 80px; width: auto;">
-                    <p style="color: white; font-size: 0.85rem; font-weight: 600; margin: 0;">Ajuntament de Sant Jordi Desvalls</p>
+                    <p style="color: white; font-size: 0.85rem; font-weight: 600; margin: 0;">Ajuntament de<br>Sant Jordi Desvalls</p>
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                     <img src="img/associacio.jpg" alt="Desvalls Cultura" style="height: 80px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
@@ -276,6 +278,14 @@
                 <img src="img/diputacio.jpg" alt="Diputació de Girona" style="height: 55px; border-radius: 4px;">
                 <img src="img/generalitat.png" alt="Generalitat de Catalunya" style="height: 55px; border-radius: 4px;">
                 <img src="img/consell.png" alt="Consell Comarcal" style="height: 55px; border-radius: 4px;">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); width: 60px; margin: 0 auto 4rem auto;">
+
+            <!-- Col·labora -->
+            <p style="color: #e2e8f0; font-size: 0.85rem; margin-bottom: 2.5rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Col·labora:</p>
+            <div style="display: flex; gap: 4rem; justify-content: center; align-items: center; margin-bottom: 5rem; flex-wrap: wrap;">
+                <img src="img/colaboradors_art.jpg" alt="Col·laboradors del Pluja d'Art: Bòlit, Ajuntament de Girona i Generalitat de Catalunya" style="height: 95px; width: auto; background: white; padding: 1rem 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); max-width: 90%; object-fit: contain;">
             </div>
 
             <p style="color: rgba(255,255,255,0.3); font-size: 0.85rem; margin-top: 4rem; font-family: sans-serif;">&copy; 2026 Associació Desvalls Cultura - Sant Jordi Desvalls.</p>

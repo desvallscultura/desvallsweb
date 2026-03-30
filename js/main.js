@@ -123,4 +123,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // 6. Welcome Lletres Modal
+    const welcomeModal = document.getElementById('welcomeLletresModal');
+    const closeLletresModal = document.getElementById('closeLletresModal');
+
+    if (welcomeModal && !localStorage.getItem('lletresModalSeen')) {
+        // Show after a small delay for better UX
+        setTimeout(() => {
+            welcomeModal.style.display = 'flex';
+            // Trigger reflow for transition
+            welcomeModal.offsetHeight;
+            welcomeModal.style.opacity = '1';
+            const modalContent = welcomeModal.querySelector('div');
+            if (modalContent) modalContent.style.transform = 'translateY(0)';
+        }, 1000);
+    }
+
+    if (closeLletresModal && welcomeModal) {
+        closeLletresModal.addEventListener('click', () => {
+            welcomeModal.style.opacity = '0';
+            const modalContent = welcomeModal.querySelector('div');
+            if (modalContent) modalContent.style.transform = 'translateY(-20px)';
+            
+            setTimeout(() => {
+                welcomeModal.style.display = 'none';
+                localStorage.setItem('lletresModalSeen', 'true');
+            }, 500);
+        });
+    }
 });

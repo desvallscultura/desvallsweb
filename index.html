@@ -25,6 +25,7 @@
                 <span class="logo-text">Desvalls</span> Cultura
             </a>
             <ul class="nav-links">
+                <li><a href="pluja-lletres-2026.html" style="color: var(--primary); font-weight: bold;">Pluja de Lletres 2026</a></li>
                 <li><a href="#festivals">Festivals</a></li>
                 <li><a href="#agenda">Agenda</a></li>
                 <li><a href="#associa-t">Fes-te Soci</a></li>
@@ -63,9 +64,10 @@
                 <article class="glass-card" style="padding: 3rem 2rem; border-left: 4px solid var(--primary); position: relative; overflow: hidden;">
                     <span style="position: absolute; top: -20px; right: -20px; font-size: 8rem; opacity: 0.05;">📚</span>
                     <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem;">Pluja de Lletres</h3>
-                    <p style="color: var(--primary); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 1rem;">🗓️ Abril</p>
+                    <p style="color: var(--primary); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 1rem;">🗓️ 10 i 11 d'Abril</p>
                     <p style="color: var(--white); font-weight: bold; margin-bottom: 1rem;">La literatura com a motor.</p>
-                    <p>Un cap de setmana on els carrers esclaten de lletres contra la regressió dels hàbits lectors. Rutes, maratons de clàssics (Rodoreda, Martorell), Jocs Florals i poesia en viu sense excepcions per a cap edat.</p>
+                    <p style="margin-bottom: 1.5rem;">Un cap de setmana on els carrers esclaten de lletres contra la regressió dels hàbits lectors. Rutes, maratons de clàssics (Rodoreda, Martorell), Jocs Florals i poesia en viu sense excepcions per a cap edat.</p>
+                    <a href="pluja-lletres-2026.html" class="btn-primary" style="display: inline-block;">Veure Programa 2026</a>
                 </article>
 
                 <!-- Pluja d'Art -->
@@ -74,7 +76,8 @@
                     <h3 style="color: var(--secondary); font-size: 1.8rem; margin-bottom: 0.5rem;">Pluja d'Art</h3>
                     <p style="color: var(--secondary); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; margin-bottom: 1rem;">🗓️ Setembre</p>
                     <p style="color: var(--white); font-weight: bold; margin-bottom: 1rem;">El punt de trobada de l'art en totes les seves formes.</p>
-                    <p>El gran altaveu per a creadors multidisciplinaris, tant amateurs com professionals. La iniciativa ofereix una residència artística —amb un jurat que compta amb la participació del Bòlit, Centre d'Art Contemporani—, un màgic Festival de Llum i diverses propostes d'arts plàstiques i escèniques on la participació activa del poble n'és la protagonista.</p>
+                    <p style="margin-bottom: 1.5rem;">El gran altaveu per a creadors multidisciplinaris, tant amateurs com professionals. La iniciativa ofereix una residència artística —amb un jurat que compta amb la participació del Bòlit, Centre d'Art Contemporani—, un màgic Festival de Llum i diverses propostes d'arts plàstiques i escèniques on la participació activa del poble n'és la protagonista.</p>
+                    <a href="participa-pluja-art.html" class="btn-primary" style="display: inline-block; background: var(--secondary); border-color: var(--secondary);">Participa. Inscripcions obertes</a>
                 </article>
             </div>
         </div>
@@ -393,10 +396,22 @@
 
     <!-- Cookie Banner -->
     <div id="cookieConsent" class="cookie-banner" style="display: none;">
-        <p>Aquest lloc web utilitza galetes essencials per garantir-ne el bon funcionament. <a href="legal.html#cookies">Més informació</a>.</p>
+        <p>Aquest lloc web utilitza galetes per millorar l'experiència. Vols acceptar-les?</p>
         <button id="acceptCookies" class="btn-primary" style="padding: 0.5rem 1rem;">D'acord</button>
     </div>
 
-    <script src="js/main.js?v=2.2026.4"></script>
+    <!-- Welcome Modal Pluja de Lletres -->
+    <div id="welcomeLletresModal" class="modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; padding: 1rem; opacity: 0; transition: opacity 0.5s ease;">
+        <div style="background: rgba(15, 23, 42, 0.95); border: 2px solid var(--primary); border-radius: 1rem; max-width: 500px; width: 100%; text-align: center; position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(45, 212, 191, 0.2); transform: translateY(-20px); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <button id="closeLletresModal" style="position: absolute; top: 1rem; right: 1rem; display:flex; justify-content:center; align-items:center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.1); color: white; border: none; font-size: 1.5rem; cursor: pointer; transition: 0.3s; z-index: 2;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">&times;</button>
+            <div style="padding: 2.5rem 1.5rem;">
+                <h3 style="color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1.5rem; font-style: italic;">La pluja que ho floreix tot, ja arriba!</h3>
+                <img src="img/cartell pluja de lletres.jpeg" alt="Cartell Pluja de Lletres 2026" style="width: 100%; max-height: 480px; object-fit: contain; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                <a href="pluja-lletres-2026.html" class="btn-primary" style="display: block; width: 100%; font-size: 1.1rem; padding: 1rem;">Llegeix el Programa Aquí</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js?v=2.2026.5"></script>
 </body>
 </html>
