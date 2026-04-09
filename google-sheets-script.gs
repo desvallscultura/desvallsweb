@@ -148,6 +148,27 @@ function getOrCreateFolder(folderName) {
 function doGet(e) {
   try {
     var doc = SpreadsheetApp.getActiveSpreadsheet();
+    if (!doc) {
+      return ContentService.createTextOutput(JSON.stringify({"error": "No active spreadsheet found. Script might be standalone."}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // DEBUG MODE: Return all sheet names and their row counts
+    var sheets = doc.getSheets();
+    var debugInfo = {
+      spreadsheetName: doc.getName(),
+      tabsFound: []
+    };
+    
+    for (var i = 0; i < sheets.length; i++) {
+        var s = sheets[i];
+        debugInfo.tabsFound.push({
+            name: s.getName(),
+            numRows: s.getLastRow(),
+            numCols: s.getLastColumn()
+        });
+    }
+
     var categories = ["Arts Generals", "Residència Artística", "Paradetes i Artesania"];
     var allData = [];
     
@@ -179,6 +200,7 @@ function doGet(e) {
               if (headObj === "URL_Portafoli") headObj = "Portafoli";
               if (headObj === "URL_Calendari") headObj = "Calendari";
               if (headObj === "URL_Pressupost") headObj = "Pressupost";
+              if (headObj && headObj.startsWith("Nom_Represen")) headObj = "Nom_Representant"; // Arregla el nom curt
               
               obj[headObj] = valueObj;
             }
@@ -186,6 +208,12 @@ function doGet(e) {
           }
         }
       }
+    }
+    
+    // Si allData està buit, enviem el contingut de DEBUG per saber perquè
+    if (allData.length === 0) {
+        return ContentService.createTextOutput(JSON.stringify(debugInfo))
+            .setMimeType(ContentService.MimeType.JSON);
     }
     
     // Configurar per permetre CORS correctament
@@ -199,3 +227,4 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
+

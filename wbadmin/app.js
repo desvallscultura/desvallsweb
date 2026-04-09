@@ -14,7 +14,7 @@ const SUPABASE_KEY = 'la-teva-anon-key-publica';
 // const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ALERTA: Aquesta és la URL del Apps Script quan programis la funció doGet()
-const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnR8__pzNm4UukYCixWzEWMpC0EZWUy474ChHRHhwxIn1QZc18j5QqphmVr97G0UvDzg/exec';
+const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgxLlIpnmTf6nHuZnDPUD2MxnQEuLYSc0URMUrujYr92YlfbCuH4NuFpNZeolcKZY9bA/exec';
 
 // ==========================================
 // 2. DADES MOCK (Fins que connectis tot)
