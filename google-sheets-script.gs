@@ -47,7 +47,6 @@ function doPost(e) {
       for (var fieldName in data.files) {
         var fileInfo = data.files[fieldName];
         if (fileInfo.data && fileInfo.name) {
-          // Generem nom únic: Camp_DNI_NomOriginal.pdf (i gestionem duplicats)
           var baseName = fieldName + "_" + userIdentifier + "_" + fileInfo.name;
           var uniqueName = getUniqueFileName(folder, baseName);
           
@@ -71,7 +70,6 @@ function doPost(e) {
     var keys = Object.keys(data);
     var newHeadersFound = false;
     for (var i = 0; i < keys.length; i++) {
-        // Ignorem el camp d'arxius binaris i el trampa
         if (keys[i] === "files" || keys[i] === "website_hp") continue;
         if (headers.indexOf(keys[i]) === -1) {
             headers.push(keys[i]);
@@ -79,7 +77,6 @@ function doPost(e) {
         }
     }
     
-    // Afegim columnes pels enllaços dels fitxers
     for (var fieldName in fileLinks) {
       var linkHeader = "URL_" + fieldName;
       if (headers.indexOf(linkHeader) === -1) {
@@ -145,3 +142,60 @@ function getOrCreateFolder(folderName) {
   }
 }
 
+// =========================================================================
+// NOU: FUNCIÓ PER LLEGIR TOTES LES DADES DES DEL DASHBOARD WBADMIN
+// =========================================================================
+function doGet(e) {
+  try {
+    var doc = SpreadsheetApp.getActiveSpreadsheet();
+    var categories = ["Arts Generals", "Residència Artística", "Paradetes i Artesania"];
+    var allData = [];
+    
+    for (var c = 0; c < categories.length; c++) {
+      var catName = categories[c];
+      var sheet = doc.getSheetByName(catName);
+      
+      if (sheet) {
+        var data = sheet.getDataRange().getValues();
+        if (data.length > 1) {
+          var headers = data[0];
+          
+          for (var i = 1; i < data.length; i++) {
+            var rowData = data[i];
+            var obj = {};
+            
+            // Generem ID únic amagant el nom de la pestanya i numero de fila
+            obj['id'] = catName.substring(0,4) + "_" + i; 
+            obj['Categoria'] = catName; // Forcem la categoria
+            
+            for (var j = 0; j < headers.length; j++) {
+              // Mapeig específic d'URLs per fer-ho fàcil de llegir al JS
+              var headObj = headers[j];
+              var valueObj = rowData[j];
+              
+              if (headObj === "Data d'Alta") headObj = "Timestamp";
+              if (headObj === "URL_Dossier_File") headObj = "Dossier_File";
+              if (headObj === "URL_Dossier") headObj = "Dossier";
+              if (headObj === "URL_Portafoli") headObj = "Portafoli";
+              if (headObj === "URL_Calendari") headObj = "Calendari";
+              if (headObj === "URL_Pressupost") headObj = "Pressupost";
+              
+              obj[headObj] = valueObj;
+            }
+            allData.push(obj);
+          }
+        }
+      }
+    }
+    
+    // Configurar per permetre CORS correctament
+    var output = ContentService.createTextOutput(JSON.stringify(allData))
+      .setMimeType(ContentService.MimeType.JSON);
+    
+    return output;
+    
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({"error": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}

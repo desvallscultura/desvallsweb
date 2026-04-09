@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pluja d'Art | Admin Dashboard</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="admin.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- PANTALLA DE LOGIN -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Gestió Pluja d'Art</h2>
+            <div class="form-group">
+                <label>Correu electrònic</label>
+                <input type="email" id="auth-email" placeholder="admin@desvallscultura.cat">
+            </div>
+            <div class="form-group">
+                <label>Contrasenya</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+            <button class="btn-primary" id="btn-login">Inicia Sessió</button>
+            <div id="auth-error">Credencials incorrectes.</div>
+            
+            <p style="margin-top: 2rem; font-size: 0.8rem; color: #64748b; text-align: left;">
+                * Per configurar un nou compte, requereix accés a la consola de Supabase. Aquest entorn és restringit.
+            </p>
+        </div>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL DASHBOARD -->
+    <div id="dashboard">
+        <div class="topbar">
+            <div class="topbar-logo">
+                <span>Pluja</span> Admin
+            </div>
+            <div class="topbar-actions">
+                <span id="user-email" style="margin-right: 1rem; color: #94a3b8; font-size: 0.9rem;"></span>
+                <button class="btn-logout" id="btn-logout">Tanca sessió</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="refresh-bar">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <h2 style="margin: 0;">Resum de Sol·licituds 2026</h2>
+                    <button id="btn-refresh" class="btn-primary" style="padding: 0.4rem 1rem; width: auto; font-size: 0.85rem;">↻ Recarregar Dades de Google</button>
+                    <span class="loader-data" id="loader-data">Carregant dades...</span>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-title">Total Sol·licituds</div>
+                    <div class="kpi-value" id="kpi-total">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Pendents (Noves)</div>
+                    <div class="kpi-value" id="kpi-noves" style="color: #60a5fa;">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">Aprovades</div>
+                    <div class="kpi-value" id="kpi-aprovades" style="color: #4ade80;">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">En Procés</div>
+                    <div class="kpi-value" id="kpi-proces" style="color: #facc15;">-</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('arts')">Arts Generals</button>
+                <button class="tab-btn" onclick="switchTab('residencia')">Residència</button>
+                <button class="tab-btn" onclick="switchTab('paradetes')">Paradetes</button>
+            </div>
+
+            <!-- Taula Arts -->
+            <div id="tab-arts" class="data-tab active">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Artista / CIA</th>
+                                <th>Contacte</th>
+                                <th>Projecte</th>
+                                <th>Dossier</th>
+                                <th style="width: 150px;">Estat</th>
+                                <th>Acció</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-arts">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Taula Residència -->
+            <div id="tab-residencia" class="data-tab">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Candidat/a</th>
+                                <th>Contacte</th>
+                                <th>Proposta</th>
+                                <th>Adjunts (Drive)</th>
+                                <th style="width: 150px;">Estat</th>
+                                <th>Acció</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-residencia">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Taula Paradetes -->
+            <div id="tab-paradetes" class="data-tab">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Titular / Marca</th>
+                                <th>Contacte</th>
+                                <th>Producte i Necessitats</th>
+                                <th style="width: 150px;">Estat</th>
+                                <th>Acció</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-paradetes">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
