@@ -148,32 +148,47 @@ body {
     padding: 2rem;
 }
 
-/* KPIs */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.kpi-card {
+/* Stats Overview */
+.stats-overview {
     background: var(--dark-muted);
-    padding: 1.5rem;
     border-radius: 8px;
     border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow: hidden;
 }
 
-.kpi-title {
-    font-size: 0.85rem;
+.stats-overview table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-overview th, .stats-overview td {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.stats-overview th {
+    background: rgba(0,0,0,0.1);
     color: #94a3b8;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
 }
 
-.kpi-value {
-    font-size: 2rem;
+.stats-overview tr:last-child td {
+    border-bottom: none;
+}
+
+.stats-overview td {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.stats-overview td:first-child {
     font-weight: 700;
-    color: var(--white);
+    color: var(--primary);
+    background: rgba(18, 162, 152, 0.05);
 }
 
 /* Tabs */
@@ -278,6 +293,31 @@ tr:hover {
     color: var(--dark);
 }
 
+/* Bulk Copy Button */
+.btn-copy-all {
+    background: #60a5fa20;
+    border: 1px solid #60a5fa40;
+    color: #60a5fa;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.btn-copy-all:hover {
+    background: #60a5fa;
+    color: white;
+}
+
+.btn-copy-all.success {
+    background: #4ade80;
+    color: white;
+    border-color: #22c55e;
+}
+
 /* Drive Links */
 .drive-link {
     display: inline-flex;
@@ -295,6 +335,49 @@ tr:hover {
 .drive-link:hover {
     background: #10b981;
     color: white;
+}
+
+/* Bulk Actions Bar */
+.bulk-bar {
+    background: #1e293b;
+    border: 2px solid var(--primary);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bulk-info {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.bulk-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bulk-controls label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+/* Custom Checkbox styles */
+input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
 }
 
 /* Refresh Control */
