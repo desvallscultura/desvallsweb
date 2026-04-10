@@ -145,8 +145,22 @@ function getOrCreateFolder(folderName) {
 // =========================================================================
 // NOU: FUNCIÓ PER LLEGIR TOTES LES DADES DES DEL DASHBOARD WBADMIN
 // =========================================================================
+var CONFIG = {
+  API_SECRET: 'v3rt1c4l-pluj4-4rt-2026' // Ha de coincidir amb app.js
+};
+
 function doGet(e) {
   try {
+    // 0. VERIFICACIÓ DE SEGURETAT (TOKEN)
+    var userToken = e.parameter.token;
+    if (userToken !== CONFIG.API_SECRET) {
+      return ContentService.createTextOutput(JSON.stringify({
+        "result": "error",
+        "error": "Accés denegat: Token de seguretat no vàlid o inexistent."
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+    }
+
     var doc = SpreadsheetApp.getActiveSpreadsheet();
     if (!doc) {
       return ContentService.createTextOutput(JSON.stringify({"error": "No active spreadsheet found. Script might be standalone."}))

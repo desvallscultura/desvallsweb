@@ -25,6 +25,20 @@ if (window.location.protocol === 'file:') {
 
 // ALERTA: Aquesta és la URL del Apps Script quan programis la funció doGet()
 const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgxLlIpnmTf6nHuZnDPUD2MxnQEuLYSc0URMUrujYr92YlfbCuH4NuFpNZeolcKZY9bA/exec';
+const API_SECRET_TOKEN = 'v3rt1c4l-pluj4-4rt-2026'; // Token de seguretat admès pel script
+
+// Helper per evitar atacs XSS sanititzant els textos
+function escapeHTML(str) {
+    if (!str) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(str).replace(/[&<>"']/g, function(m) { return map[m]; });
+}
 
 // ==========================================
 // 2. ESTAT LOCAL
@@ -135,8 +149,9 @@ async function fetchDataFromGoogle() {
     loader.style.display = 'inline-block';
     
     try {
-        // 1. Obtenim dades de Google
-        const response = await fetch(GOOGLE_APP_SCRIPT_URL);
+        // 1. Obtenim dades de Google amb Token de seguretat
+        const urlWithAuth = `${GOOGLE_APP_SCRIPT_URL}?token=${API_SECRET_TOKEN}`;
+        const response = await fetch(urlWithAuth);
         const googleData = await response.json();
         
         // 2. Obtenim els estats guardats a Supabase
@@ -424,14 +439,14 @@ function renderAllTables() {
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
                 <td>${formatDate(r.Timestamp)}</td>
-                <td><strong>${r.Companyia || '-'}</strong><br><small>${r.Nom_Representant || ''}</small></td>
-                <td>${r.Municipi || '-'}</td>
-                <td><a href="mailto:${r.Email}" style="color:#60a5fa">${r.Email}</a><br><small>${r.Telefon || ''}</small></td>
-                <td><strong>${r.Titol_Obra || '-'}</strong><br><small>${r.Modalitat || ''}</small></td>
-                <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? r.Descripcio.replace(/\\n/g, '<br>') : '-'}</div></td>
-                <td><small><strong>Espai:</strong> <span style="white-space: pre-wrap;">${r.Espai_m2 || '-'}</span><br><strong>Llum:</strong> ${r.Electrica_W || '-'}<br><strong>Equip:</strong> ${r.Persones_Equip || '-'}</small></td>
-                <td><div style="font-size: 0.85em; min-width: 150px; white-space: pre-wrap;">${formatSocialLinks(r.Xarxes)}</div></td>
-                <td><div style="font-size: 0.85em;">${r.Acessibilitat || '-'}</div></td>
+                <td><strong>${escapeHTML(r.Companyia) || '-'}</strong><br><small>${escapeHTML(r.Nom_Representant) || ''}</small></td>
+                <td>${escapeHTML(r.Municipi) || '-'}</td>
+                <td><a href="mailto:${escapeHTML(r.Email)}" style="color:#60a5fa">${escapeHTML(r.Email)}</a><br><small>${escapeHTML(r.Telefon) || ''}</small></td>
+                <td><strong>${escapeHTML(r.Titol_Obra) || '-'}</strong><br><small>${escapeHTML(r.Modalitat) || ''}</small></td>
+                <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? escapeHTML(r.Descripcio).replace(/\n/g, '<br>') : '-'}</div></td>
+                <td><small><strong>Espai:</strong> <span style="white-space: pre-wrap;">${escapeHTML(r.Espai_m2) || '-'}</span><br><strong>Llum:</strong> ${escapeHTML(r.Electrica_W) || '-'}<br><strong>Equip:</strong> ${escapeHTML(r.Persones_Equip) || '-'}</small></td>
+                <td><div style="font-size: 0.85em; min-width: 150px; white-space: pre-wrap;">${formatSocialLinks(escapeHTML(r.Xarxes))}</div></td>
+                <td><div style="font-size: 0.85em;">${escapeHTML(r.Acessibilitat) || '-'}</div></td>
                 <td>${linkDrive(r.Dossier_File, 'Dossier')}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
@@ -454,10 +469,10 @@ function renderAllTables() {
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
                 <td>${formatDate(r.Timestamp)}</td>
-                <td><strong>${r.Nom_Representant || r.Companyia || '-'}</strong><br><small style="color:#64748b">${r.Municipi || ''}</small></td>
-                <td><a href="mailto:${r.Email}" style="color:#60a5fa">${r.Email}</a><br><small>${r.Telefon || ''}</small></td>
-                <td><strong>${r.Titol_Obra || '-'}</strong></td>
-                <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? r.Descripcio.replace(/\\n/g, '<br>') : '-'}</div></td>
+                <td><strong>${escapeHTML(r.Nom_Representant) || escapeHTML(r.Companyia) || '-'}</strong><br><small style="color:#64748b">${escapeHTML(r.Municipi) || ''}</small></td>
+                <td><a href="mailto:${escapeHTML(r.Email)}" style="color:#60a5fa">${escapeHTML(r.Email)}</a><br><small>${escapeHTML(r.Telefon) || ''}</small></td>
+                <td><strong>${escapeHTML(r.Titol_Obra) || '-'}</strong></td>
+                <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? escapeHTML(r.Descripcio).replace(/\n/g, '<br>') : '-'}</div></td>
                 <td style="display:flex; flex-wrap:wrap; gap:5px;">${driveLinks || '-'}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
@@ -474,10 +489,10 @@ function renderAllTables() {
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
                 <td>${formatDate(r.Timestamp)}</td>
-                <td><strong>${r.Companyia || '-'}</strong><br><small>${r.Nom_Representant || ''}</small></td>
-                <td><a href="mailto:${r.Email}" style="color:#60a5fa">${r.Email}</a><br><small>${r.Telefon || ''}</small></td>
-                <td><div style="font-size: 0.85em; margin-bottom: 5px;">${r.Descripcio || '-'}</div>
-                    <small><strong>Llocs:</strong> ${r.Parcel_les || 1} | <strong>Llum:</strong> ${r.Electricitat || '-'} | <strong>Food:</strong> ${r.Carnet_Alimentari || '-'}</small></td>
+                <td><strong>${escapeHTML(r.Companyia) || '-'}</strong><br><small>${escapeHTML(r.Nom_Representant) || ''}</small></td>
+                <td><a href="mailto:${escapeHTML(r.Email)}" style="color:#60a5fa">${escapeHTML(r.Email)}</a><br><small>${escapeHTML(r.Telefon) || ''}</small></td>
+                <td><div style="font-size: 0.85em; margin-bottom: 5px;">${escapeHTML(r.Descripcio) || '-'}</div>
+                    <small><strong>Llocs:</strong> ${escapeHTML(r.Parcel_les) || 1} | <strong>Llum:</strong> ${escapeHTML(r.Electricitat) || '-'} | <strong>Food:</strong> ${escapeHTML(r.Carnet_Alimentari) || '-'}</small></td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
