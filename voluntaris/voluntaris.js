@@ -523,93 +523,93 @@ async function handleBatchApply() {
 }
 
 async function handlePrint() {
-    // 1. Generar contingut HTML per a la impressió
-    const dies = ['divendres', 'dissabte', 'diumenge'];
-    const diesMap = { 'divendres': 'Divendres 26 setembre', 'dissabte': 'Dissabte 27 setembre', 'diumenge': 'Diumenge 28 setembre' };
+    try {
+        console.log("Iniciant procés d'impressió PDF...");
+        
+        // 1. Generar contingut HTML
+        const dies = ['Divendres', 'Dissabte', 'Diumenge'];
+        const diesMap = { 'Divendres': 'Divendres 26 setembre', 'Dissabte': 'Dissabte 27 setembre', 'Diumenge': 'Diumenge 28 setembre' };
 
-    let printHtml = `
-    <html>
-    <head>
-        <title>Pluja d'Art 2026 - Control Voluntaris</title>
-        <style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: black; background: white; padding: 20px; }
-            h1, h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 30px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 30px; table-layout: fixed; }
-            th, td { border: 1px solid #ccc; padding: 6px; text-align: left; font-size: 11px; vertical-align: top; overflow: hidden; }
-            th { background: #f0f0f0; }
-            .hora-col { width: 60px; font-weight: bold; }
-            .necessaris { font-weight: bold; color: #444; }
-            .noms { color: #666; display: block; margin-top: 3px; }
-            .complet { background-color: #f9f9f9; }
-            @media print {
-                .page-break { page-break-after: always; }
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Pluja d'Art 2026 - Control de Voluntaris</h1>
-    `;
+        let printHtml = `
+        <html>
+        <head>
+            <title>Pluja d'Art 2026 - Control Voluntaris</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: black; background: white; padding: 20px; }
+                h1, h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 30px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                th, td { border: 1px solid #ccc; padding: 6px; text-align: left; font-size: 11px; vertical-align: top; }
+                th { background: #f0f0f0; font-weight: bold; }
+                .hora-col { width: 60px; font-weight: bold; }
+                .necessaris { font-weight: bold; }
+                .noms { color: #444; display: block; margin-top: 3px; }
+                @media print { .page-break { page-break-after: always; } }
+            </style>
+        </head>
+        <body>
+            <h1>Pluja d'Art 2026 - Control de Voluntaris</h1>
+        `;
 
-    // Graelles de cada dia
-    dies.forEach(dia => {
-        printHtml += `<h2>${diesMap[dia]}</h2>`;
-        printHtml += `<table><thead><tr><th class="hora-col">Hora</th>`;
-        allEspais.forEach(e => {
-            printHtml += `<th>${e.nom}</th>`;
-        });
-        printHtml += `</tr></thead><tbody>`;
+        dies.forEach(dia => {
+            printHtml += `<h2>${diesMap[dia]}</h2>`;
+            printHtml += `<table><thead><tr><th class="hora-col">Hora</th>`;
+            allEspais.forEach(e => { printHtml += `<th>${e.nom}</th>`; });
+            printHtml += `</tr></thead><tbody>`;
 
-        const hours = DAY_HOURS[dia];
-        hours.forEach(h => {
-            printHtml += `<tr><td class="hora-col">${h.toString().padStart(2, '0')}:00</td>`;
-            allEspais.forEach(espai => {
-                const config = allConfig.find(c => c.dia === dia && c.hora === h && c.espai_id === espai.id);
-                const assignats = allAssignacions.filter(a => a.dia === dia && a.hora === h && a.espai_id === espai.id);
-                const necessaris = config ? config.necessaris : 0;
-                
-                if (necessaris > 0) {
-                    const noms = assignats.map(a => {
-                        const v = allVoluntaris.find(vol => vol.id === a.voluntari_id);
-                        return v ? `${v.nom} ${v.cognom}` : '';
-                    }).join(", ");
-                    printHtml += `<td><span class="necessaris">${statusText(assignats.length, necessaris)}</span><br><span class="noms">${noms}</span></td>`;
-                } else {
-                    printHtml += `<td>-</td>`;
-                }
+            const hores = DAY_HOURS[dia] || [];
+            hores.forEach(h => {
+                printHtml += `<tr><td class="hora-col">${h.toString().padStart(2, '0')}:00</td>`;
+                allEspais.forEach(espai => {
+                    const config = allConfig.find(c => c.dia === dia && c.hora === h && c.espai_id === espai.id);
+                    const assignats = allAssignacions.filter(a => a.dia === dia && a.hora === h && a.espai_id === espai.id);
+                    const necessaris = config ? config.necessaris : 0;
+                    
+                    if (necessaris > 0) {
+                        const noms = assignats.map(a => {
+                            const v = allVoluntaris.find(vol => vol.id === a.voluntari_id);
+                            return v ? `${v.nom} ${v.cognom}` : '';
+                        }).filter(n => n !== '').join(", ");
+                        printHtml += `<td><span class="necessaris">${assignats.length} / ${necessaris}</span><br><span class="noms">${noms}</span></td>`;
+                    } else {
+                        printHtml += `<td>-</td>`;
+                    }
+                });
+                printHtml += `</tr>`;
             });
-            printHtml += `</tr>`;
+            printHtml += `</tbody></table><div class="page-break"></div>`;
         });
-        printHtml += `</tbody></table><div class="page-break"></div>`;
-    });
 
-    // Llistat de Contactes
-    printHtml += `<h2>Llistat de Contactes de Voluntaris</h2>`;
-    printHtml += `<table><thead><tr><th>Nom i Cognoms</th><th>Telèfon</th></tr></thead><tbody>`;
-    [...allVoluntaris].sort((a,b) => a.nom.localeCompare(b.nom)).forEach(v => {
-        printHtml += `<tr><td>${v.nom} ${v.cognom}</td><td>${v.telefon}</td></tr>`;
-    });
-    printHtml += `</tbody></table></body></html>`;
+        printHtml += `<h2>Llistat de Contactes de Voluntaris</h2>`;
+        printHtml += `<table><thead><tr><th>Nom i Cognoms</th><th>Telèfon</th></tr></thead><tbody>`;
+        const sortedVoluntaris = [...allVoluntaris].sort((a,b) => (a.nom || '').localeCompare(b.nom || ''));
+        sortedVoluntaris.forEach(v => {
+            printHtml += `<tr><td>${v.nom} ${v.cognom}</td><td>${v.telefon}</td></tr>`;
+        });
+        printHtml += `</tbody></table></body></html>`;
 
-    // Funció auxiliar per al text d'estat
-    function statusText(count, total) {
-        return `${count} / ${total}`;
+        // 2. Usar o crear IFRAME al vol
+        let iframe = document.getElementById('print-iframe');
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.id = 'print-iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+
+        const pri = iframe.contentWindow;
+        pri.document.open();
+        pri.document.write(printHtml);
+        pri.document.close();
+
+        setTimeout(() => {
+            pri.focus();
+            pri.print();
+            console.log("Impressió enviada.");
+        }, 600);
+    } catch (err) {
+        console.error("Error en imprimir:", err);
+        alert("S'ha produït un error en generar el PDF. Revisa la consola.");
     }
-
-    // 2. Obrir finestra nova i imprimir
-    const win = window.open('', '_blank');
-    win.document.write(printHtml);
-    win.document.close();
-    
-    // Esperar a que carregui i cridar imprimir
-    win.onload = function() {
-        win.print();
-        // win.close(); // Opcional: tancar automàticament
-    };
-    
-    // Per si l'onload no es dispara en alguns navegadors en obrir finestra buida
-    setTimeout(() => {
-        if (!win.closed) win.print();
-    }, 1000);
 }
 
 // ==========================================

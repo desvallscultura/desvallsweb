@@ -154,7 +154,7 @@ body {
     border-radius: 8px;
     border: 1px solid var(--border);
     margin-bottom: 2rem;
-    overflow: hidden;
+    overflow-x: auto; /* Permet desplaçament lateral en mòbil */
 }
 
 .stats-overview table {

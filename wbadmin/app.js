@@ -496,12 +496,14 @@ function updateKPIs() {
         const data = appData.filter(r => r.Categoria === catName);
         
         const total = data.length;
-        const noves = data.filter(r => r.Estat === 'Nou' || r.Estat === 'Pendent Documentació').length;
+        const noves = data.filter(r => r.Estat === 'Nou').length;
+        const pendent = data.filter(r => r.Estat === 'Pendent Documentació').length;
         const process = data.filter(r => r.Estat === 'En Procés').length;
         const aprovades = data.filter(r => r.Estat === 'Aprovat').length;
 
         document.getElementById(`stats-${prefix}-total`).innerText = total;
         document.getElementById(`stats-${prefix}-noves`).innerText = noves;
+        document.getElementById(`stats-${prefix}-pendent`).innerText = pendent;
         document.getElementById(`stats-${prefix}-proces`).innerText = process;
         document.getElementById(`stats-${prefix}-aprovades`).innerText = aprovades;
     });
