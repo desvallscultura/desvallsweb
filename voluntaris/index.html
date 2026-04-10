@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voluntaris | Pluja d'Art 2026</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="voluntaris.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- NAV / HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo">Pluja <span>Voluntaris</span></div>
+            <div class="header-actions">
+                <button id="btn-export-csv" class="btn-ghost" title="Exportar dades a Excel">📊 Exportar CSV</button>
+                <button id="btn-print-pdf" class="btn-ghost">📄 Imprimir PDF</button>
+                <button id="btn-admin-login-toggle" class="btn-ghost">Accés Administrador</button>
+                <div id="admin-indicator" class="admin-badge" style="display: none;">Mode Administrador</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO / IDENTIFICACIÓ -->
+        <section id="auth-section" class="card glass">
+            <h1>Participa al Festival!</h1>
+            <p>Tria el teu nom de la llista o registra't per començar a ajudar.</p>
+            
+            <div class="auth-box">
+                <div class="field-group">
+                    <label>Ets a la llista?</label>
+                    <select id="select-voluntari-existent">
+                        <option value="">-- Tria el teu nom --</option>
+                        <!-- Injected via JS -->
+                    </select>
+                </div>
+                <div class="divider"><span>O</span></div>
+                <div class="new-vol-form">
+                    <div class="field-row">
+                        <input type="text" id="new-vol-nom" placeholder="Nom">
+                        <input type="text" id="new-vol-cognom" placeholder="Cognoms">
+                    </div>
+                    <input type="tel" id="new-vol-tel" placeholder="Telèfon">
+                    <button id="btn-registre-voluntari" class="btn-primary">Dona'm d'alta i participa</button>
+                </div>
+            </div>
+
+            <div id="welcome-message" style="display: none;">
+                <p>Hola, <strong id="current-user-name">...</strong>! Ara ja pots apuntar-te als torns disponibles.</p>
+                <button id="btn-logout-vol" class="btn-small">Canvia d'usuari</button>
+            </div>
+        </section>
+
+        <!-- CALENDARI SECTION -->
+        <section id="calendar-section" class="calendar-container">
+            <div class="day-selector">
+                <button class="day-btn active" data-day="Divendres">Divendres</button>
+                <button class="day-btn" data-day="Dissabte">Dissabte</button>
+                <button class="day-btn" data-day="Diumenge">Diumenge</button>
+            </div>
+
+            <div class="calendar-overflow">
+                <table id="calendar-table">
+                    <thead>
+                        <tr id="calendar-header">
+                            <th class="sticky-col">Hora</th>
+                            <!-- Spaces injected via JS -->
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body">
+                        <!-- Slots injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECCIÓ PER IMPRIMIR (INVISIBLE AL WEB) -->
+        <section id="print-section" class="print-only">
+            <h2>Llistat de Contactes de Voluntaris</h2>
+            <table id="print-vol-table">
+                <thead>
+                    <tr>
+                        <th>Nom i Cognoms</th>
+                        <th>Telèfon</th>
+                    </tr>
+                </thead>
+                <tbody id="print-vol-tbody">
+                    <!-- Injected via JS -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="modal-admin" class="modal">
+        <div class="modal-content glass">
+            <h2>Accés Administrador</h2>
+            <p>Entra amb les teves credencials de Pluja d'Art.</p>
+            <div class="field-group">
+                <label>Correu</label>
+                <input type="email" id="admin-email" placeholder="admin@email.com">
+            </div>
+            <div class="field-group">
+                <label>Contrasenya</label>
+                <input type="password" id="admin-pass" placeholder="••••••••">
+            </div>
+            <div id="admin-auth-error" class="error-msg" style="display: none;"></div>
+            <div class="modal-buttons">
+                <button id="btn-cancel-admin" class="btn-ghost">Cancel·la</button>
+                <button id="btn-do-admin-login" class="btn-primary">Entra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GESTIÓ ESPAIS (ADMIN) -->
+    <div id="modal-espais" class="modal">
+        <div class="modal-content glass">
+            <h2>Gestionar Espais / Feines</h2>
+            <div class="espais-list" id="espais-admin-list">
+                <!-- Injected via JS -->
+            </div>
+            <div class="new-espai-form">
+                <input type="text" id="new-espai-nom" placeholder="Nou espai o feina...">
+                <button id="btn-add-espai" class="btn-primary">+</button>
+            </div>
+            <button id="btn-close-espais" class="btn-ghost" style="margin-top: 1rem;">Tanca</button>
+        </div>
+    </div>
+
+    <!-- BARRA EDICIÓ MASSIVA (ADMIN) -->
+    <div id="batch-edit-bar" class="batch-bar">
+        <div class="batch-info"><span id="batch-selected-count">0</span> cel·les triades</div>
+        <div class="batch-controls">
+            <label>Nº Voluntaris:</label>
+            <input type="number" id="batch-input-value" value="2" min="0">
+            <button id="btn-apply-batch" class="btn-primary">Aplica a tot</button>
+            <button id="btn-cancel-batch" class="btn-ghost" style="border-radius: 50px;">×</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Pluja d'Art - Associació Desvalls Cultura</p>
+    </footer>
+
+    <!-- JS -->
+    <script src="voluntaris.js"></script>
+</body>
+</html>

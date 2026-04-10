@@ -9,8 +9,19 @@
 const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
 
-// Inicialització de Supabase
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Inicialització de Supabase amb control d'errors
+let supabaseClient;
+try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {
+    console.error("Error inicialitzant Supabase:", e);
+    alert("Error crític: No s'ha pogut carregar la llibreria de Supabase. Revisa la connexió a Internet.");
+}
+
+// Alerta de Protocol Local
+if (window.location.protocol === 'file:') {
+    console.warn("Estàs obrint el fitxer directament (file://). El login de Supabase podria fallar.");
+}
 
 // ALERTA: Aquesta és la URL del Apps Script quan programis la funció doGet()
 const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgxLlIpnmTf6nHuZnDPUD2MxnQEuLYSc0URMUrujYr92YlfbCuH4NuFpNZeolcKZY9bA/exec';
@@ -30,8 +41,8 @@ function switchTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.data-tab').forEach(tab => tab.classList.remove('active'));
     
-    if(event && event.target) {
-        event.target.classList.add('active');
+    if(window.event && window.event.target) {
+        window.event.target.classList.add('active');
     }
     document.getElementById(`tab-${tabName}`).classList.add('active');
 
@@ -52,19 +63,24 @@ const btnLogout = document.getElementById('btn-logout');
 const errorMsg = document.getElementById('auth-error');
 
 // Escoltador d'estat d'autenticació
-supabaseClient.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' || session) {
-        console.log("Sessió iniciada:", session.user.email);
-        document.getElementById('user-email').innerText = session.user.email;
-        loginScreen.style.display = 'none';
-        dashboard.style.display = 'block';
-        fetchDataFromGoogle(); // Carrega dades automàticament en entrar
-    } else if (event === 'SIGNED_OUT') {
-        console.log("Sessió tancada");
-        loginScreen.style.display = 'flex';
-        dashboard.style.display = 'none';
-    }
-});
+if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        try {
+            if (event === 'SIGNED_IN' || session) {
+                console.log("Sessió iniciada:", session.user.email);
+                document.getElementById('user-email').innerText = session.user.email;
+                loginScreen.style.display = 'none';
+                dashboard.style.display = 'block';
+                fetchDataFromGoogle();
+            } else if (event === 'SIGNED_OUT') {
+                loginScreen.style.display = 'flex';
+                dashboard.style.display = 'none';
+            }
+        } catch (e) {
+            console.error("Error en canvi d'estat d'auth:", e);
+        }
+    });
+}
 
 btnLogin.addEventListener('click', async () => {
     const email = document.getElementById('auth-email').value;
@@ -77,29 +93,32 @@ btnLogin.addEventListener('click', async () => {
     }
 
     btnLogin.innerText = 'Verificant...';
+    btnLogin.disabled = true;
     errorMsg.style.display = 'none';
     
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-    
-    if(error) {
-        console.error("Error Login:", error.message, error.status);
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         
-        let customMsg = "Error d'accés: " + error.message;
+        if(error) {
+            console.error("Error Login:", error.message, error.status);
+            
+            let customMsg = "Error d'accés: " + error.message;
 
-        // Mapatge d'errors comuns de Supabase a Català
-        if (error.message.includes("Invalid login credentials") || error.status === 400) {
-            customMsg = "L'usuari o la contrasenya no són correctes. Revisa que les dades siguin exactes.";
-        } else if (error.message.includes("Email not confirmed")) {
-            customMsg = "El correu encara no s'ha confirmat. Revisa la teva bústia d'entrada.";
-        } else if (error.message.includes("User not found")) {
-            customMsg = "Aquest usuari no existeix al sistema.";
-        } else if (error.status === 429) {
-            customMsg = "Massa intents fallits. Espera uns minuts i torna-ho a provar.";
+            if (error.message.includes("Invalid login credentials") || error.status === 400) {
+                customMsg = "L'usuari o la contrasenya no són correctes.";
+            } else if (error.status === 429) {
+                customMsg = "Massa intents. Espera uns minuts.";
+            }
+
+            errorMsg.innerText = customMsg;
+            errorMsg.style.display = 'block';
         }
-
-        errorMsg.innerText = customMsg;
-        errorMsg.style.display = 'block';
+    } catch (err) {
+        console.error("Error inesperat en login:", err);
+        alert("S'ha produït un error inesperat de connexió. Revisa la consola o prova des d'un servidor local (localhost).");
+    } finally {
         btnLogin.innerText = 'Inicia Sessió';
+        btnLogin.disabled = false;
     }
 });
 
@@ -296,7 +315,7 @@ window.copyDisplayedEmails = async function(category) {
         
     } catch (err) {
         console.error('Error copiant al porta-retalls:', err);
-        alert('No s'ha pogut copiar automàticament.');
+        alert("No s'ha pogut copiar automàticament.");
     }
 };
 
@@ -369,6 +388,22 @@ function linkDrive(url, label) {
     return `<a href="${url}" target="_blank" class="drive-link">📄 ${label}</a>`;
 }
 
+// Formatar links de xarxes socials
+function formatSocialLinks(text) {
+    if(!text || text === '-') return '-';
+    
+    // Regex per trobar URLs (comencin per http o www o dominis comuns)
+    const urlPattern = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9.-]+\.(?:com|net|org|cat|es|me)\/[^\s,;]*)/gi;
+    
+    return text.replace(urlPattern, (url) => {
+        let href = url;
+        if (!url.startsWith('http')) {
+            href = 'https://' + url;
+        }
+        return `<a href="${href}" target="_blank" style="color:var(--primary); text-decoration:underline; word-break: break-all;">${url}</a>`;
+    });
+}
+
 function renderAllTables() {
     // Funció genèrica de filtratge
     const getFilteredData = (cat) => {
@@ -389,14 +424,16 @@ function renderAllTables() {
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
                 <td>${formatDate(r.Timestamp)}</td>
-                <td><strong>${r.Companyia || '-'}</strong><br><small>${r.Nom_Representant || ''}</small><br><small style="color:#64748b">${r.Municipi || ''}</small></td>
+                <td><strong>${r.Companyia || '-'}</strong><br><small>${r.Nom_Representant || ''}</small></td>
+                <td>${r.Municipi || '-'}</td>
                 <td><a href="mailto:${r.Email}" style="color:#60a5fa">${r.Email}</a><br><small>${r.Telefon || ''}</small></td>
                 <td><strong>${r.Titol_Obra || '-'}</strong><br><small>${r.Modalitat || ''}</small></td>
                 <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? r.Descripcio.replace(/\\n/g, '<br>') : '-'}</div></td>
-                <td><small><strong>Espai:</strong> <span style="white-space: pre-wrap;">${r.Espai_m2 || '-'}</span><br><strong>Llum:</strong> ${r.Electrica_W || '-'}<br><strong>Equip:</strong> ${r.Persones_Equip || '-'} pers.<br><strong>Dietes:</strong> ${r.Dietes || '-'}</small></td>
+                <td><small><strong>Espai:</strong> <span style="white-space: pre-wrap;">${r.Espai_m2 || '-'}</span><br><strong>Llum:</strong> ${r.Electrica_W || '-'}<br><strong>Equip:</strong> ${r.Persones_Equip || '-'}</small></td>
+                <td><div style="font-size: 0.85em; min-width: 150px; white-space: pre-wrap;">${formatSocialLinks(r.Xarxes)}</div></td>
+                <td><div style="font-size: 0.85em;">${r.Acessibilitat || '-'}</div></td>
                 <td>${linkDrive(r.Dossier_File, 'Dossier')}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
-                <td>${generateMailto(r.Email, r.Companyia || r.Nom_Representant, r.Categoria)}</td>
             </tr>
         `;
     });
@@ -423,7 +460,6 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? r.Descripcio.replace(/\\n/g, '<br>') : '-'}</div></td>
                 <td style="display:flex; flex-wrap:wrap; gap:5px;">${driveLinks || '-'}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
-                <td>${generateMailto(r.Email, r.Nom_Representant || r.Companyia, r.Categoria)}</td>
             </tr>
         `;
     });
@@ -443,7 +479,6 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em; margin-bottom: 5px;">${r.Descripcio || '-'}</div>
                     <small><strong>Llocs:</strong> ${r.Parcel_les || 1} | <strong>Llum:</strong> ${r.Electricitat || '-'} | <strong>Food:</strong> ${r.Carnet_Alimentari || '-'}</small></td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
-                <td>${generateMailto(r.Email, r.Nom_Representant || r.Companyia, 'Paradeta')}</td>
             </tr>
         `;
     });
