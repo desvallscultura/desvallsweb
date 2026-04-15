@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pluja d'Art | Admin Dashboard</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="admin.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- PANTALLA DE LOGIN -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Gestió Pluja d'Art</h2>
+            <div class="form-group">
+                <label>Correu electrònic</label>
+                <input type="email" id="auth-email" placeholder="admin@desvallscultura.cat">
+            </div>
+            <div class="form-group">
+                <label>Contrasenya</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+            <button class="btn-primary" id="btn-login">Inicia Sessió</button>
+            <div id="auth-error">Credencials incorrectes.</div>
+            
+            <p style="margin-top: 2rem; font-size: 0.8rem; color: #64748b; text-align: left;">
+                * Per configurar un nou compte, requereix accés a la consola de Supabase. Aquest entorn és restringit.
+            </p>
+        </div>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL DASHBOARD -->
+    <div id="dashboard">
+        <div class="topbar">
+            <div class="topbar-logo">
+                <span>Pluja</span> Admin
+            </div>
+            <div class="topbar-actions">
+                <span id="user-email" style="margin-right: 1rem; color: #94a3b8; font-size: 0.9rem;"></span>
+                <button class="btn-logout" id="btn-logout">Tanca sessió</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="refresh-bar">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <h2 style="margin: 0;" id="kpi-title-h2">Resum: Arts Generals 2026</h2>
+                    <button id="btn-refresh" class="btn-primary" style="padding: 0.4rem 1rem; width: auto; font-size: 0.85rem;">↻ Recarregar Dades de Google</button>
+                    <span class="loader-data" id="loader-data">Carregant dades...</span>
+                </div>
+            </div>
+
+            <!-- Resum per Categories -->
+            <div class="stats-overview">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Secció</th>
+                            <th>Total</th>
+                            <th>Noves</th>
+                            <th>Pendents</th>
+                            <th>En Procés</th>
+                            <th>Aprovades</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summary-body">
+                        <tr>
+                            <td style="text-align: left;">Arts Generals</td>
+                            <td id="stats-arts-total">-</td>
+                            <td id="stats-arts-noves" style="color: #60a5fa;">-</td>
+                            <td id="stats-arts-pendent" style="color: #fb923c;">-</td>
+                            <td id="stats-arts-proces" style="color: #facc15;">-</td>
+                            <td id="stats-arts-aprovades" style="color: #4ade80;">-</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Residència Artística</td>
+                            <td id="stats-res-total">-</td>
+                            <td id="stats-res-noves" style="color: #60a5fa;">-</td>
+                            <td id="stats-res-pendent" style="color: #fb923c;">-</td>
+                            <td id="stats-res-proces" style="color: #facc15;">-</td>
+                            <td id="stats-res-aprovades" style="color: #4ade80;">-</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Paradetes i Artesania</td>
+                            <td id="stats-para-total">-</td>
+                            <td id="stats-para-noves" style="color: #60a5fa;">-</td>
+                            <td id="stats-para-pendent" style="color: #fb923c;">-</td>
+                            <td id="stats-para-proces" style="color: #facc15;">-</td>
+                            <td id="stats-para-aprovades" style="color: #4ade80;">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Barra d'Accions Massives -->
+            <div id="bulk-actions-bar" class="bulk-bar" style="display: none;">
+                <div class="bulk-info">
+                    <span id="bulk-count">0</span> registres seleccionats
+                </div>
+                <div class="bulk-controls">
+                    <label>Canvia l'estat a:</label>
+                    <select id="bulk-status-select" class="select-status" style="width: auto;">
+                        <option value="Nou">Nou</option>
+                        <option value="Pendent Documentació">Pendent Documentació</option>
+                        <option value="En Procés">En Procés</option>
+                        <option value="Aprovat">Aprovat</option>
+                        <option value="Descartat">Descartat</option>
+                    </select>
+                    <button id="btn-apply-bulk" class="btn-primary" style="width: auto; padding: 0.5rem 1rem;">Aplica massivament</button>
+                    <button id="btn-clear-selection" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; text-decoration:underline;">Cancel·la</button>
+                </div>
+            </div>
+
+            <div class="tabs-container" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); margin-bottom: 1rem;">
+                <div class="tabs" style="border-bottom: none; margin-bottom: 0;">
+                    <button class="tab-btn active" onclick="switchTab('arts')">Arts Generals</button>
+                    <button class="tab-btn" onclick="switchTab('residencia')">Residència</button>
+                    <button class="tab-btn" onclick="switchTab('paradetes')">Paradetes</button>
+                </div>
+                <div class="table-controls">
+                    <label for="filter-status" style="font-size: 0.85rem; color: #94a3b8; margin-right: 0.5rem;">Filtra per estat:</label>
+                    <select id="filter-status" class="select-status" style="width: auto; min-width: 150px;">
+                        <option value="Tots">Tots els estats</option>
+                        <option value="Nou">Nou</option>
+                        <option value="Pendent Documentació">Pendent Documentació</option>
+                        <option value="En Procés">En Procés</option>
+                        <option value="Aprovat">Aprovat</option>
+                        <option value="Descartat">Descartat</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Taula Arts -->
+            <div id="tab-arts" class="data-tab active">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="select-all-arts" onclick="toggleSelectAll('Arts Generals')"></th>
+                                <th>Data</th>
+                                <th>Artista / CIA</th>
+                                <th>Municipi</th>
+                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Arts Generals')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th>Projecte</th>
+                                <th style="width: 15%">Descripció</th>
+                                <th>Tècnica / Espai</th>
+                                <th>Xarxes</th>
+                                <th>Accesibilitat</th>
+                                <th>Adjunts</th>
+                                <th style="width: 140px;">Estat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-arts">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Taula Residència -->
+            <div id="tab-residencia" class="data-tab">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="select-all-residencia" onclick="toggleSelectAll('Residència Artística')"></th>
+                                <th>Data</th>
+                                <th>Candidat/a</th>
+                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Residència Artística')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th>Proposta</th>
+                                <th style="width: 30%">Descripció</th>
+                                <th>Adjunts (Drive)</th>
+                                <th style="width: 140px;">Estat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-residencia">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Taula Paradetes -->
+            <div id="tab-paradetes" class="data-tab">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="select-all-paradetes" onclick="toggleSelectAll('Paradetes i Artesania')"></th>
+                                <th>Data</th>
+                                <th>Sol·licitant</th>
+                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Paradetes i Artesania')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th style="width: 35%">Descripció i Necessitats</th>
+                                <th style="width: 140px;">Estat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-paradetes">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

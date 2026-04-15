@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, follow">
+    <title>Tèrmens Legals | Desvalls Cultura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .legal-content {
+            padding-top: 8rem;
+            padding-bottom: 4rem;
+            max-width: 800px;
+        }
+        .legal-content h2 { margin-top: 3rem; color: var(--primary); }
+        .legal-content h3 { margin-top: 1.5rem; font-size: 1.25rem; }
+        .legal-content p, .legal-content ul { margin-bottom: 1rem; color: var(--dark-muted); }
+        .legal-content ul { padding-left: 2rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">&larr; Tornar a l'Inici</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container legal-content">
+        <h1 class="section-title">Polítiques Legals</h1>
+        <p>Aquesta pàgina detalla les polítiques de privacitat, l'avís legal i la política de galetes de l'associació Desvalls Cultura per garantir el compliment del Reglament General de Protecció de Dades (RGPD).</p>
+
+        <!-- Secció: Avís Legal -->
+        <section id="avis-legal">
+            <h2>Avís Legal</h2>
+            <p>En compliment de la Llei 34/2002, d'11 de juliol, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), s'informa que aquest lloc web és titularitat de:</p>
+            <ul>
+                <li><strong>Nom:</strong> Associació Desvalls Cultura</li>
+                <li><strong>Domicili:</strong> Sant Jordi Desvalls (Gironès)</li>
+                <li><strong>Contacte:</strong> desvallscultura@gmail.com o a través dels perfils oficials d'Instagram (@desvallscultura).</li>
+            </ul>
+            <p>L'associació té com a finalitat promoure i democratitzar l'activitat cultural i artística al municipi.</p>
+        </section>
+
+        <!-- Secció: Política de Privacitat -->
+        <section id="privacitat">
+            <h2>Política de Privacitat</h2>
+            <h3>1. Responsable del tractament i finalitat</h3>
+            <p>De conformitat amb el Reglament (UE) 2016/679 (RGPD) i la LOPDGDD 3/2018, les dades de caràcter personal (nom, telèfon, email) que envieu a través del formulari "Fes-te Soci o Voluntari", s'incorporen als fitxers de Desvalls Cultura amb l'única finalitat de gestionar les inscripcions a l'associació, atendre les vostres sol·licituds i contactar-vos per a l'organització d'actes com la Pluja d'Art o la Pluja de Lletres.</p>
+            
+            <h3>2. Base legitimadora i conservació</h3>
+            <p>La base legal per al tractament és el consentiment inequívoc que doneu en marcar la casella corresponent i fer clic al botó d'enviar. Les dades es conservaran mentre duri la relació amb l'associació o fins que en sol·liciteu la supressió.</p>
+            
+            <h3>3. Els vostres drets</h3>
+            <p>Podeu exercir els vostres drets d'accés, rectificació, cancel·lació, oposició i portabilitat comunicant-vos dirigint-vos als òrgans directius de l'entitat de forma presencial o mitjançant les xarxes socials corporatives.</p>
+        </section>
+
+        <!-- Secció: Política de Galetes -->
+        <section id="cookies">
+            <h2>Política de Galetes (Cookies)</h2>
+            <p>El web de Desvalls Cultura és essencialment estàtic. Si utilitzem galetes, únicament ho fem amb finalitats tècniques elementals o per analítica bàsica anonimitzada mitjançant Google Analytics 4 (sense recollir perfils publicitaris creuats).</p>
+            <h3>Què és una galeta?</h3>
+            <p>És un petit fitxer que el servidor del web envia al navegador per enregistrar certa activitat de l'usuari.</p>
+            <h3>Acceptació</h3>
+            <p>L'usuari d'aquest lloc web accepta la política de galetes sempre que ignori l'avís previ o seleccioni l'opció pertinent al rètol de consentiment habilitat.</p>
+        </section>
+
+    </main>
+
+    <!-- Footer Simple -->
+    <footer>
+        <div class="container copy" style="border-top: none; padding-bottom: 2rem;">
+             &copy; <span id="year"></span> Desvalls Cultura. Tots els drets reservats.
+        </div>
+    </footer>
+    <script> document.getElementById('year').textContent = new Date().getFullYear(); </script>
+</body>
+</html>

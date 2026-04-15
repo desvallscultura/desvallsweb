@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.googleusercontent.com; connect-src https://script.google.com https://script.googleusercontent.com;">
+    <meta name="description" content="Programa oficial del festival Pluja de Lletres 2026 a Sant Jordi Desvalls.">
+    
+    <!-- OpenGraph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://desvallscultura.cat/pluja-lletres-2026.html">
+    <meta property="og:title" content="Pluja de Lletres 2026 | Programa Oficial">
+    <meta property="og:description" content="Consulta totes les activitats, clubs de lectura i tallers literaris a Sant Jordi Desvalls (10 i 11 d'Abril).">
+    <meta property="og:image" content="https://desvallscultura.cat/img/logo.jpg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pluja de Lletres 2026">
+    <meta name="twitter:description" content="El festival literari de Sant Jordi Desvalls.">
+    <meta name="twitter:image" content="https://desvallscultura.cat/img/logo.jpg">
+
+    <title>Pluja de Lletres 2026 | Desvalls Cultura</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css?v=2.2026.5">
+    <style>
+        .hero-lletres {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            padding: 8rem 0 4rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(45, 212, 191, 0.15) 0%, rgba(15, 23, 42, 1) 70%);
+        }
+        .hero-lletres-shapes .shape {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary), transparent);
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.25;
+            z-index: 0;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+        .day-title {
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin: 4rem 0 2rem;
+            text-align: left;
+            border-bottom: 2px solid rgba(45, 212, 191, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        .event-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        .event-card:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .event-time {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .event-title {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .event-desc {
+            color: #e2e8f0;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        .event-loc {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .gimcana-card {
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(45, 212, 191, 0.02));
+            border: 2px solid rgba(45, 212, 191, 0.5);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .gimcana-card::before {
+            content: "🕵️‍♂️";
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.05;
+            top: -20px;
+            right: -20px;
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="container">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 40px; border-radius: 6px; mix-blend-mode: multiply;">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links">
+                <li><a href="pluja-lletres-2026.html" style="color: var(--primary); font-weight: bold;">Pluja de Lletres 2026</a></li>
+                <li><a href="index.html#festivals">Festivals</a></li>
+                <li><a href="index.html#agenda">Agenda</a></li>
+                <li><a href="index.html#associa-t">Fes-te Soci</a></li>
+                <li><a href="participa-pluja-art.html" class="btn-primary" style="background: var(--dark); border-color: var(--dark); color: white;">Participa a Pluja d'Art 2026</a></li>
+            </ul>
+            <div class="mobile-menu-icon" id="mobileMenuIcon">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-lletres">
+        <div class="hero-lletres-shapes">
+            <div class="shape" style="top: 10%; left: 20%; width: 400px; height: 400px;"></div>
+            <div class="shape" style="bottom: 10%; right: 10%; width: 400px; height: 400px; animation-delay: -5s;"></div>
+        </div>
+        <div class="container hero-content" style="z-index: 1;">
+            <p style="color: var(--primary); font-weight: bold; letter-spacing: 0.2rem; text-transform: uppercase; margin-bottom: 1rem;">10 i 11 d'Abril 2026</p>
+            <h1 class="hero-title" style="font-size: clamp(3rem, 6vw, 5rem); color: white;">PLUJA DE LLETRES</h1>
+            <p class="hero-subtitle" style="color: #e2e8f0; max-width: 600px; margin: 0 auto; line-height: 1.6; font-size: 1.25rem; font-weight: 400;">El cap de setmana on els carrers de Sant Jordi Desvalls esclaten de literatura i cultura per a totes les edats.</p>
+        </div>
+    </section>
+
+    <!-- Programa Section -->
+    <section class="section" style="background: var(--dark);">
+        <div class="container" style="max-width: 800px;">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <a href="img/programa pluja de lletres.jpeg" target="_blank" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>🖼️</span> Descarrega el Cartell Original
+                </a>
+            </div>
+
+            <!-- Divendres 10 -->
+            <h2 class="day-title">Divendres 10 d'Abril</h2>
+            
+            <div class="event-card">
+                <span class="event-time">18.30 h</span>
+                <h3 class="event-title">Pregó Inaugural</h3>
+                <p class="event-desc">A càrrec de la incombustible <strong>Lola Muxach</strong>.</p>
+                <div class="event-loc">📍 Plaça de l'U d'Octubre</div>
+            </div>
+
+            <div class="event-card">
+                <span class="event-time">19.30 h</span>
+                <h3 class="event-title">Club de Lectura: "La drecera"</h3>
+                <p class="event-desc">Sessió especial dedicada a la novel·la <em>La drecera</em> de <strong>Miquel Martín</strong>, i atenció, comptarem amb la inestimable <strong>participació de l'autor</strong> per compartir l'experiència!</p>
+                <div class="event-loc">📍 Can Burcet</div>
+            </div>
+
+            <!-- Dissabte 11 -->
+            <h2 class="day-title">Dissabte 11 d'Abril</h2>
+            
+            <div class="event-card">
+                <span class="event-time">10.30 a 11.30 h</span>
+                <h3 class="event-title">Presentació Infantil: <em>La cuinera de notícies</em></h3>
+                <p class="event-desc">Presentació d'aquest meravellós llibre de literatura infantil amb la presència de l'autora i la il·lustradora, <strong>Nina i Míriam Bofill</strong>.</p>
+                <div class="event-loc">📍 Plaça de l'U d'Octubre</div>
+            </div>
+
+            <div class="event-card">
+                <span class="event-time">12.00 a 13.00 h</span>
+                <h3 class="event-title">Taller d'Acròstics</h3>
+                <p class="event-desc">Activitat familiar, apta per a tots els públics (no us quedeu a casa!). Dirigit per <strong>Lola Muxach, Ia Bernal i Carlos Gámez</strong>.</p>
+                <div class="event-loc">📍 Bar Social</div>
+            </div>
+
+            <div class="event-card">
+                <span class="event-time">13.30 a 14.00 h</span>
+                <h3 class="event-title">Vermut Literari</h3>
+                <p class="event-desc">Moments relaxats per gaudir de l'art amb una exposició i lectura dels acròstics creats al taller.</p>
+                <div class="event-loc">📍 Bar Social</div>
+            </div>
+
+            <div class="event-card">
+                <span class="event-time">17.00 a 18.00 h</span>
+                <h3 class="event-title">Taula Rodona: <em>La llengua és elàstica</em></h3>
+                <p class="event-desc">Acompanyant la presentació del llibre d'<strong>Antoni Beltran</strong>, <em>Ensenya'm la llengua</em>. Els participants a la taula seran: Antoni Beltran, Raül Muxach, Carlos Gámez i Margarida Codina.</p>
+                <div class="event-loc">📍 Can Burcet</div>
+            </div>
+
+            <div class="event-card">
+                <span class="event-time">18.30 a 19.30 h</span>
+                <h3 class="event-title">Presentació de Llibres (Triple sessió)</h3>
+                <p class="event-desc" style="line-height: 1.8;">
+                    <strong>Mar Camps</strong> amb <em>Sense mans pel camí fondo</em><br>
+                    <strong>Xavier Vidal</strong> amb <em>Set bales en la nit</em><br>
+                    <strong>Bàrbara Julbe</strong> amb <em>On em portin els ametllers</em>
+                </p>
+                <div class="event-loc">📍 Can Burcet</div>
+            </div>
+
+            <!-- ACTIVITAT LITERÀRIA SORPRESA -->
+            <div class="gimcana-card">
+                <span style="display: inline-block; background: var(--primary); color: var(--dark); font-weight: 800; padding: 0.5rem 1rem; border-radius: 2rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.1rem; font-size: 0.85rem;">🔥 Activitat Sorpresa ✨</span>
+                <h3 style="color: white; font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; font-style: italic;">La Gimcana Literària!</h3>
+                <div class="event-time" style="font-size: 1.5rem; margin-bottom: 1rem; display: block;">20.30 h</div>
+                <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.7; max-width: 600px; margin: 0 auto 2rem;">La història s'ha fragmentat pels racons del poble. Ets prou sagaç per seguir les pistes clàssiques i resoldre l'enigma abans de la posta de sol? Forma el teu equip humanístic, posa a prova la teva perspicàcia literària i uneix-te a la Gimcana pel poble com a cloenda de l'esdeveniment.</p>
+                <div class="event-loc" style="justify-content: center; font-size: 1rem; color: white;">📍 Punt de Troblada: Plaça de l'U d'Octubre</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Institucional -->
+    <footer style="padding: 5rem 0; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.4);">
+        <div class="container text-center">
+            <!-- Organitza -->
+            <p style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Organitza:</p>
+            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 5rem;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <img src="img/associacio.jpg" alt="Desvalls Cultura" style="height: 100px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                    <p style="color: #f1f5f9; font-size: 1rem; font-weight: 600; margin: 0;">Associació Desvalls Cultura</p>
+                </div>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); width: 60px; margin: 0 auto 4rem auto;">
+
+            <!-- Suport -->
+            <p style="color: #e2e8f0; font-size: 1.1rem; margin-bottom: 2.5rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Amb el suport de:</p>
+            <div style="display: flex; gap: 4rem; justify-content: center; align-items: center; margin-bottom: 5rem; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                    <img src="img/ajuntament.png" alt="Ajuntament de Sant Jordi Desvalls" style="height: 60px; width: auto; max-width: 100%;">
+                    <p style="color: #cbd5e1; font-size: 0.8rem; font-weight: bold; margin: 0; text-align: center;">Ajuntament de Sant Jordi Desvalls</p>
+                </div>
+                <img src="img/diputacio.jpg" alt="Diputació de Girona" style="height: 55px; border-radius: 4px;">
+                <img src="img/generalitat.png" alt="Generalitat de Catalunya" style="height: 55px; border-radius: 4px;">
+                <img src="img/consell.png" alt="Consell Comarcal" style="height: 55px; border-radius: 4px;">
+            </div>
+
+            <p style="color: rgba(255,255,255,0.3); font-size: 0.85rem; margin-top: 4rem; font-family: sans-serif;">&copy; 2026 Associació Desvalls Cultura - Sant Jordi Desvalls.</p>
+        </div>
+    </footer>
+
+    <!-- Cookie Banner (from main.js logic) -->
+    <div id="cookieConsent" class="cookie-banner" style="display: none;">
+        <p>Aquest lloc web utilitza galetes per millorar l'experiència. Vols acceptar-les?</p>
+        <button id="acceptCookies" class="btn-primary" style="padding: 0.5rem 1rem;">D'acord</button>
+    </div>
+
+    <!-- Main Script -->
+    <script src="js/seo-schema.js"></script>
+    <script src="js/main.js?v=2.2026.5"></script>
+</body>
+</html>
