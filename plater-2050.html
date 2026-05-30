@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard d'Injustícia Energètica - PLATER 2050</title>
+    
+    <!-- Fonts de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js per a gràfics interactius -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --bg-main: #080c14;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            
+            --color-solar: #f97316;
+            --color-solar-grad: linear-gradient(135deg, #f97316, #fb923c);
+            --color-eolic: #06b6d4;
+            --color-eolic-grad: linear-gradient(135deg, #06b6d4, #22d3ee);
+            --color-prop: #a855f7;
+            --color-prop-grad: linear-gradient(135deg, #a855f7, #c084fc);
+            --color-alert: #ef4444;
+            --color-success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 27, 75, 0.5) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(8, 47, 73, 0.5) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 40px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+                align-items: center;
+            }
+        }
+
+        .logo-area h1 {
+            font-size: 2rem;
+            background: linear-gradient(to right, #f3f4f6, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-area p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* SEARCH AREA */
+        .search-container {
+            position: relative;
+            width: 340px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 24px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: var(--color-eolic);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+        .autocomplete-list {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            display: none;
+        }
+        .autocomplete-item {
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            justify-content: space-between;
+        }
+        .autocomplete-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--color-eolic);
+        }
+        .autocomplete-item .comarca {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* SECTION NAV / TABS */
+        .tab-menu {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .tab-btn.active {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--color-eolic);
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* MAIN GRID */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 26px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* KPIs */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+        @media (max-width: 768px) {
+            .kpi-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .kpi-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .kpi-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .kpi-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* SPECIFIC KPI HIGHLIGHT */
+        .highlight-value {
+            background: linear-gradient(135deg, var(--color-alert), #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .normal-value {
+            color: var(--color-success);
+        }
+
+        /* COMPARISON SECTION */
+        .comparison-layout {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 22px;
+        }
+        @media (max-width: 768px) {
+            .comparison-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* BAR ARCHITECTURE */
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 10px;
+        }
+        .bar-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .bar-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+        }
+        .bar-track {
+            height: 26px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 14px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .bg-solar { background: var(--color-solar-grad); }
+        .bg-eolic { background: var(--color-eolic-grad); }
+        .bg-prop { background: var(--color-prop-grad); }
+
+        /* FINANCE MODEL SECTION */
+        .finance-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .finance-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+        .finance-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--color-success);
+        }
+
+        /* GLOBAL IMPACT / ANALYSIS */
+        .impact-card {
+            grid-column: 1 / -1;
+        }
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 26px;
+        }
+        @media (max-width: 900px) {
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .analysis-text p {
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .analysis-text strong {
+            color: var(--text-main);
+        }
+
+        /* TABLES */
+        table.custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            text-align: left;
+            margin-top: 10px;
+        }
+        table.custom-table th, table.custom-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        table.custom-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+        table.custom-table th:hover {
+            color: var(--text-main);
+        }
+        table.custom-table tr.highlight-tr {
+            background: rgba(6, 182, 212, 0.08);
+            border-left: 3px solid var(--color-eolic);
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+        /* FLOATING ALERT BOX */
+        .alert-box {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 26px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .alert-icon {
+            font-size: 2.2rem;
+            color: var(--color-alert);
+        }
+        .alert-text h4 {
+            color: #f87171;
+            margin-bottom: 4px;
+        }
+        .alert-text p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* MICROPOBLE ANALYSIS STYLING */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+        @media (max-width: 1024px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .chart-box {
+            background: rgba(30, 41, 59, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 350px;
+        }
+        .chart-box h4 {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .chart-container-inner {
+            position: relative;
+            width: 100%;
+            height: 240px;
+        }
+
+        /* TOP LIST STYLING */
+        .top-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .top-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.88rem;
+        }
+        .top-list-item:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .top-muni-name {
+            font-weight: 600;
+        }
+        .top-muni-val {
+            color: var(--color-solar);
+            font-weight: 700;
+        }
+        .top-muni-pct {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-success);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- HEADER -->
+    <header>
+        <div class="logo-area">
+            <h1>Transició Energètica a Catalunya 2050</h1>
+            <p>Balanç territorial de potència: Planificació del PLATER vs. Repartiment per Població</p>
+        </div>
+        
+        <!-- SEARCH -->
+        <div class="search-container">
+            <input type="text" class="search-input" id="muniSearch" placeholder="Cerca un municipi (Ex. Sant Jordi)...">
+            <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+    </header>
+
+    <!-- SECCIÓ INTRODUCTÒRIA -->
+    <div class="card intro-card" style="margin-bottom: 24px; background: rgba(17, 24, 39, 0.5); border-left: 4px solid var(--color-prop);">
+        <h2 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--text-main); font-family: 'Outfit', sans-serif;">
+            El Cost de la Llum Verda: Solidaritat o Escletxa Territorial?
+        </h2>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 14px;">
+            Catalunya ha iniciat una carrera contrarrellotge per descarbonitzar la seva economia i assolir prop de 58.000 MW de potència renovable per al 2050 (PROENCAT). Tanmateix, la implantació física sobre el mapa rural està obrint una profunda esquerda amb les ciutats. El Pla Territorial Sectorial de les Energies Renovables (PLATER) distribueix la potència segons criteris d'aptitud física i proximitat de connexió elèctrica per a les empreses promotores, desvinculant-ho del pes demogràfic dels municipis.
+        </p>
+        <div style="background: rgba(168, 85, 247, 0.06); border: 1px solid rgba(168, 85, 247, 0.15); border-radius: 10px; padding: 16px;">
+            <h4 style="color: var(--color-prop); font-size: 0.95rem; margin-bottom: 6px; font-weight: 600;">
+                📢 La Paradoxa de l'Equitat: El Topall del 5% del Sòl Municipal
+            </h4>
+            <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-muted);">
+                Per evitar la saturació, el PLATER imposa una limitació per la qual cap municipi pot tenir ocupat més del <strong>5% del seu terme municipal</strong> per a plantes de generació. Sobre el paper sembla equitatiu, però en relació a la demografia, la realitat és una paradoxa: mentre a les grans capitals (com Barcelona) l'ocupació és del <strong>0% (0 m² de sòl rústic)</strong>, a municipis rurals com <strong>Viladasens</strong> o <strong>Vilademuls</strong>, el topall del 5% permet cobrir de plaques i turbines més de <strong>3.400 m² per cada habitant</strong>, provocant una industrialització massiva que desdibuixa el paisatge local.
+            </p>
+        </div>
+    </div>
+
+    <!-- TAB MENU -->
+    <div class="tab-menu">
+        <button class="tab-btn active" onclick="switchTab('muni-tab', this)">Anàlisi per Municipi</button>
+        <button class="tab-btn" onclick="switchTab('global-tab', this)">Anàlisi Global de Micropobles</button>
+    </div>
+
+    <!-- ==================== TAB 1: MUNICIPAL ANALYSIS ==================== -->
+    <div id="muni-tab" class="tab-content active">
+        <!-- ALERT GENERAL -->
+        <div class="alert-box">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-text">
+                <h4>El Dèficit de la Solidaritat Territorial</h4>
+                <p>Mentre que la mitjana teòrica catalana és de <strong>6,9 kW/hab</strong> per assolir la neutralitat de carboni, la planificació del PLATER concentra la instal·lació de megaparcs en petits nuclis rurals. Això genera sobredimensions de fins a <strong>1.000 vegades</strong> per habitant respecte a la ciutat de Barcelona.</p>
+            </div>
+        </div>
+
+        <!-- MUNICIPAL NAME DYNAMIC -->
+        <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 2.2rem; display: inline-block;" id="selectedMuniName">Sant Jordi Desvalls</h2>
+            <span style="font-size: 1.1rem; color: var(--text-muted); margin-left: 12px; font-weight: 300;" id="selectedComarca">Comarca: Gironès</span>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Població</div>
+                <div class="kpi-value" id="kpiPop">881</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Imposat per habitant</div>
+                <div class="kpi-value highlight-value" id="kpiPerHab">48,0 kW</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Mitjana Catalunya</div>
+                <div class="kpi-value" style="color: var(--text-muted);">6,9 kW</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Índex de sobrecàrrega</div>
+                <div class="kpi-value highlight-value" id="kpiOverburden">6,9x</div>
+            </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="dashboard-grid">
+            
+            <!-- CARD 1: COMPARATIVA PLATER VS PROPORCIONAL -->
+            <div class="card">
+                <div class="card-title">
+                    <h3>Objectius de Potència: PLATER vs. Població</h3>
+                    <span class="badge badge-red" id="muniTotalMW">42.30 MW totals</span>
+                </div>
+                
+                <div class="bar-container">
+                    <!-- SOLAR PLATER -->
+                    <div class="bar-row">
+                        <div class="bar-label-row">
+                            <span>Solar FV (PLATER actual)</span>
+                            <strong id="labelSolarPlater">27.60 MW</strong>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bg-solar" id="barSolarPlater" style="width: 100%">27.6 MW</div>
+                        </div>
+                    </div>
+                    
+                    <!-- SOLAR PROPORCIONAL -->
+                    <div class="bar-row">
+                        <div class="bar-label-row">
+                            <span>Solar FV (Necessitat teòrica per població)</span>
+                            <strong id="labelSolarProp">3.60 MW</strong>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bg-prop" id="barSolarProp" style="width: 13%">3.6 MW</div>
+                        </div>
+                    </div>
+                    
+                    <!-- EOLICA PLATER -->
+                    <div class="bar-row">
+                        <div class="bar-label-row">
+                            <span>Eòlica (PLATER actual)</span>
+                            <strong id="labelEolicPlater">14.70 MW</strong>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bg-eolic" id="barEolicPlater" style="width: 53%">14.7 MW</div>
+                        </div>
+                    </div>
+                    
+                    <!-- EOLICA PROPORCIONAL -->
+                    <div class="bar-row">
+                        <div class="bar-label-row">
+                            <span>Eòlica (Necessitat teòrica per població)</span>
+                            <strong id="labelEolicProp">2.51 MW</strong>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill bg-prop" id="barEolicProp" style="width: 9%">2.5 MW</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: RETORN FISCAL I PRESSUPOST PER HABITANT -->
+            <div class="card">
+                <div class="card-title">
+                    <h3>Retorn Fiscal i Pressupost per Habitant</h3>
+                    <span class="badge badge-green">Optimització de Taxes</span>
+                </div>
+                
+                <div class="comparison-layout">
+                    <div class="finance-details">
+                        <div class="finance-item">
+                            <span>ICIO Estimats (Obra única)</span>
+                            <strong id="valIcio">-- €</strong>
+                        </div>
+                        <div class="finance-item">
+                            <span>Total Taxes Recurrents Anuals</span>
+                            <strong id="valTotalAnual">-- €/any</strong>
+                        </div>
+                        <div class="finance-item">
+                            <span>Pressupost Actual per Habitant (est.)</span>
+                            <strong id="valPressupostActual" style="color: var(--text-muted);">-- €/hab</strong>
+                        </div>
+                        <div class="finance-item">
+                            <span>Pressupost Futur per Habitant (est.)</span>
+                            <strong id="valPressupostFutur" style="color: var(--color-success);">-- €/hab</strong>
+                        </div>
+                        <div class="finance-item">
+                            <span>Increment de Pressupost</span>
+                            <strong id="valPctIncrement" style="color: var(--color-success);">+-- %</strong>
+                        </div>
+                    </div>
+                    
+                    <!-- DADES ACUMULADES -->
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(255,255,255,0.02); border-radius: 12px; padding: 18px; border: 1px solid var(--border-color);">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); text-align: center; margin-bottom: 8px;">Acumulat 30 anys</span>
+                        <h3 style="font-size: 1.8rem; color: var(--color-success); font-weight: 700;" id="valAcumulat">-- M€</h3>
+                        <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 8px; line-height: 1.3;">
+                            Diferència acumulada per a inversions municipals.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: TAULA DE COMPARATIVA D'INJUSTÍCIA TERRITORIAL -->
+            <div class="card impact-card">
+                <div class="card-title">
+                    <h3>El Contrast: Les Capitals de Província vs. Els Micropobles Sacrificats</h3>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-text">
+                        <p>
+                            Aquesta taula contraposa els objectius imposats pel PLATER i la disparitat que provoca en els pressupostos municipals.
+                        </p>
+                        <p>
+                            <strong>El greuge del finançament p.h.:</strong> Els micropobles amb macroprojectes veuran els seus pressupostos de despesa per habitant multiplicats de manera astronòmica, passant de valors de 1.000 €/hab a més de 10.000 €/hab (o fins a 37.000 €/hab a Pinós).
+                        </p>
+                        <p>
+                            Mentrestant, les grans capitals, que pràcticament no reben cap projecte que consumeixi sòl rústic, mantindran els seus pressupostos de despesa per habitant inalterats (<strong>0% d'increment</strong>).
+                        </p>
+                        <p>
+                            Aquesta riquesa sobtada en un grapat de pobles és l'argument que utilitzen els partidaris de la industrialització. Però la pagesia i els veïns denuncien que cap injecció de pressupost compensa la destrucció del sòl agrari, el paisatge local i l'amenaça a la **sobirania alimentària**.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <table class="custom-table" id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th id="th-Municipi" onclick="sortTable('Municipi')">Municipi</th>
+                                    <th id="th-Poblacio" onclick="sortTable('Poblacio')">Població</th>
+                                    <th id="th-TotalPlater" onclick="sortTable('TotalPlater')">MW Total</th>
+                                    <th id="th-MWRustic" onclick="sortTable('MWRustic')">MW Rústic</th>
+                                    <th id="th-kW_hab" onclick="sortTable('kW_hab')">kW/hab</th>
+                                    <th id="th-PctMitjana" onclick="sortTable('PctMitjana')">% s/mitjana</th>
+                                    <th id="th-PressupostActual" onclick="sortTable('PressupostActual')">Pressupost Actual p.h.</th>
+                                    <th id="th-PressupostFutur" onclick="sortTable('PressupostFutur')">Pressupost Futur p.h.</th>
+                                    <th id="th-PctIncrement" onclick="sortTable('PctIncrement')">% Increment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dades inserides dinàmicament per JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== TAB 2: GLOBAL ANALYSIS ==================== -->
+    <div id="global-tab" class="tab-content">
+        <!-- GLOBAL KPIs -->
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Micropobles (&lt; 1000 hab)</div>
+                <div class="kpi-value">476</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Amb Projectes Rústics</div>
+                <div class="kpi-value" style="color: var(--color-success);">458</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">% Micropobles Afectats</div>
+                <div class="kpi-value highlight-value">96,2%</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Potència Total Assignada</div>
+                <div class="kpi-value" style="color: var(--color-eolic);">23.136 MW</div>
+            </div>
+        </div>
+
+        <!-- CHARTS GRID -->
+        <div class="chart-grid">
+            <!-- CHART 1: DOUGHNUT REPARTIMENT -->
+            <div class="chart-box">
+                <h4>Distribució de Projectes a Micropobles</h4>
+                <div class="chart-container-inner">
+                    <canvas id="chartProjects"></canvas>
+                </div>
+            </div>
+
+            <!-- CHART 2: BAR BUDGET INCREASES -->
+            <div class="chart-box">
+                <h4>Percentatge (%) de Micropobles per Bracket d'Increment</h4>
+                <div class="chart-container-inner">
+                    <canvas id="chartBudgetPercentage"></canvas>
+                </div>
+            </div>
+
+            <!-- CHART 3: TOP 5 CASE EXTREMES -->
+            <div class="chart-box">
+                <h4>Casos Extrems: Pressupost futur per habitant</h4>
+                <div class="top-list">
+                    <div class="top-list-item">
+                        <div>
+                            <span class="top-muni-name">Pinós</span>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Pop 274 | 551,7 MW</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="top-muni-val">37.292 €/hab</div>
+                            <span class="top-muni-pct">+3.101%</span>
+                        </div>
+                    </div>
+                    <div class="top-list-item">
+                        <div>
+                            <span class="top-muni-name">Biosca</span>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Pop 185 | 250,7 MW</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="top-muni-val">24.314 €/hab</div>
+                            <span class="top-muni-pct">+1.814%</span>
+                        </div>
+                    </div>
+                    <div class="top-list-item">
+                        <div>
+                            <span class="top-muni-name">Pinell de Solsonès</span>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Pop 198 | 231,2 MW</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="top-muni-val">20.951 €/hab</div>
+                            <span class="top-muni-pct">+1.605%</span>
+                        </div>
+                    </div>
+                    <div class="top-list-item">
+                        <div>
+                            <span class="top-muni-name">Veciana</span>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Pop 170 | 210,3 MW</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="top-muni-val">22.196 €/hab</div>
+                            <span class="top-muni-pct">+1.599%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARETO AND RURAL CONCENTRATION CARD -->
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-title">
+                <h3>La Desigualtat de la Riquesa Energètica: La Concentració del MW</h3>
+            </div>
+            <div class="analysis-grid">
+                <div>
+                    <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 16px;">
+                        L'argument favorable a la transició industrial sovint promet que les renovables enriquiran les arques municipals dels micropobles, ajudant a revertir el despoblament i a millorar els serveis. No obstant això, una anàlisi de les dades oficials del PLATER revela una realitat molt diferent: <strong>l'enriquiment energètic està hiperconcentrat</strong>.
+                    </p>
+                    <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 16px;">
+                        De la potència total assignada als 476 micropobles de Catalunya (<strong>23.136 MW</strong>, que representa el <strong>41,1%</strong> de l'objectiu global de Catalunya de 56.287,90 MW, deixant el <strong>58,9%</strong> restant per a la resta de municipis on es concentra el 97,5% de la població):
+                    </p>
+                    <ul>
+                        <li style="margin-left: 20px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-muted);">
+                            El <strong>top 10% dels micropobles més afectats</strong> (només 47 municipis) concentra el **41,5%** de tota la potència (<strong>9.593 MW</strong>). Aquests pobles veuran els seus pressupostos multiplicats per factors d'entre el 15x i el 31x, a costa de quedar completament industrialitzats i desdibuixats.
+                        </li>
+                        <li style="margin-left: 20px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-muted);">
+                            El <strong>top 20% dels micropobles</strong> (95 municipis) acapara el **63,4%** de la potència (<strong>14.663 MW</strong>).
+                        </li>
+                        <li style="margin-left: 20px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-muted);">
+                            Mentrestant, hi ha municipis que rebran **0 € de retorn fiscal** (un 3,8% sense projectes i un 10,5% amb projectes inferiors al 10% del seu pressupost), assumint part dels impactes visuals, però sense cap eina d'inversió local.
+                        </li>
+                    </ul>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div style="position: relative; width: 100%; height: 260px;">
+                        <canvas id="chartConcentration"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW CARD: ALL MICROPOBLES RANKING TABLE -->
+        <div class="card" style="margin-top: 24px; grid-column: 1 / -1;">
+            <div class="card-title">
+                <h3>Rànquing Complet de Micropobles (&lt; 1.000 hab.) per Increment de Pressupost</h3>
+                <span class="badge badge-green">476 municipis ordenats de + a -</span>
+            </div>
+            
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4;">
+                Consulta la llista completa dels 476 municipis amb menys de 1.000 habitants a Catalunya. La taula mostra el pressupost actual estimatiu (fórmula demogràfica: `Població * 800 € + 100.000 €`), el retorn anual recurrent de les taxes de renovables (model *Renovem-nos* d'uns `17.942,50 €` anuals per cada MW en sòl rústic/eòlic), el pressupost per habitant resultant i la ràtio final d'increment de pressupost.
+            </p>
+
+            <div style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2);">
+                <table class="custom-table" id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th style="position: sticky; top: 0; background: #0f172a; z-index: 10; user-select: none;">Posició</th>
+                            <th id="th-rank-muni" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('muni')">Municipi</th>
+                            <th id="th-rank-pop" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('pop')">Població</th>
+                            <th id="th-rank-mw" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('mw')">MW Total</th>
+                            <th id="th-rank-mw_rustic" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('mw_rustic')">MW Rústic</th>
+                            <th id="th-rank-kw_hab" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('kw_hab')">kW/hab</th>
+                            <th id="th-rank-pct_mitjana" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('pct_mitjana')">% s/mitjana</th>
+                            <th id="th-rank-actual_ph" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('actual_ph')">Pressupost Actual p.h.</th>
+                            <th id="th-rank-futur_ph" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('futur_ph')">Pressupost Futur p.h.</th>
+                            <th id="th-rank-pct" style="position: sticky; top: 0; background: #0f172a; z-index: 10; cursor: pointer; user-select: none;" onclick="sortRanking('pct')">Increment %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dades inserides dinàmicament per JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DATA SCRIPT -->
+<script src="municipis_objectius.js"></script>
+
+<script>
+    // Paràmetres per al model fiscal (Renovem-nos per cada 10 MW)
+    const TAXES_MODEL = {
+        icio_per_mw: 18200,
+        ibi_per_mw: 2112.5,
+        iae_per_mw: 11510,
+        taxes_per_mw: 4320,
+        recurrent_per_mw: 17942.5
+    };
+
+    // Referències del DOM
+    const searchInput = document.getElementById('muniSearch');
+    const autocompleteList = document.getElementById('autocompleteList');
+    
+    const selectedMuniName = document.getElementById('selectedMuniName');
+    const selectedComarca = document.getElementById('selectedComarca');
+    const kpiPop = document.getElementById('kpiPop');
+    const kpiPerHab = document.getElementById('kpiPerHab');
+    const kpiOverburden = document.getElementById('kpiOverburden');
+    
+    const muniTotalMW = document.getElementById('muniTotalMW');
+    const labelSolarPlater = document.getElementById('labelSolarPlater');
+    const labelSolarProp = document.getElementById('labelSolarProp');
+    const labelEolicPlater = document.getElementById('labelEolicPlater');
+    const labelEolicProp = document.getElementById('labelEolicProp');
+    
+    const barSolarPlater = document.getElementById('barSolarPlater');
+    const barSolarProp = document.getElementById('barSolarProp');
+    const barEolicPlater = document.getElementById('barEolicPlater');
+    const barEolicProp = document.getElementById('barEolicProp');
+    
+    const valIcio = document.getElementById('valIcio');
+    const valTotalAnual = document.getElementById('valTotalAnual');
+    const valPressupostActual = document.getElementById('valPressupostActual');
+    const valPressupostFutur = document.getElementById('valPressupostFutur');
+    const valPctIncrement = document.getElementById('valPctIncrement');
+    const valAcumulat = document.getElementById('valAcumulat');
+    
+    const comparisonTableBody = document.querySelector('#comparisonTable tbody');
+    const rankingTableBody = document.querySelector('#rankingTable tbody');
+
+    // Inicialitzar dades
+    let currentMuni = MUNICIPIS_DATA.find(m => m.Municipi === "Sant Jordi Desvalls") || MUNICIPIS_DATA[0];
+
+    // Funcions de normalització
+    function normalizeStr(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    // Autocomplete Search
+    searchInput.addEventListener('input', function() {
+        const val = this.value;
+        autocompleteList.innerHTML = '';
+        if (!val) {
+            autocompleteList.style.display = 'none';
+            return;
+        }
+        
+        const normVal = normalizeStr(val);
+        const matches = MUNICIPIS_DATA.filter(m => normalizeStr(m.Municipi).includes(normVal)).slice(0, 10);
+        
+        if (matches.length > 0) {
+            matches.forEach(match => {
+                const item = document.createElement('div');
+                item.className = 'autocomplete-item';
+                item.innerHTML = `<span>${match.Municipi}</span><span class="comarca">${match.Poblacio} hab</span>`;
+                item.addEventListener('click', () => {
+                    currentMuni = match;
+                    updateDashboard();
+                    searchInput.value = '';
+                    autocompleteList.style.display = 'none';
+                });
+                autocompleteList.appendChild(item);
+            });
+            autocompleteList.style.display = 'block';
+        } else {
+            autocompleteList.style.display = 'none';
+        }
+    });
+
+    // Tancar llista de cerca en clicar fora
+    document.addEventListener('click', function(e) {
+        if (e.target !== searchInput) {
+            autocompleteList.style.display = 'none';
+        }
+    });
+
+    // Actualitzar Dashboard
+    function updateDashboard() {
+        selectedMuniName.innerText = currentMuni.Municipi;
+        selectedComarca.innerText = `Objectiu de potència del PLATER per al 2050`;
+        
+        kpiPop.innerText = currentMuni.Poblacio.toLocaleString('ca-ES');
+        
+        const perHab = currentMuni.Total_per_habitant_kW;
+        kpiPerHab.innerText = `${perHab.toFixed(1)} kW`;
+        
+        const ratio = perHab / 6.92;
+        kpiOverburden.innerText = `${ratio.toFixed(1)}x`;
+        if (ratio > 1) {
+            kpiPerHab.className = "kpi-value highlight-value";
+            kpiOverburden.className = "kpi-value highlight-value";
+        } else {
+            kpiPerHab.className = "kpi-value normal-value";
+            kpiOverburden.className = "kpi-value normal-value";
+        }
+        
+        const maxVal = Math.max(
+            currentMuni.FV_Total_MW, 
+            currentMuni.FV_Total_necessitat_per_poblacio_MW, 
+            currentMuni.Eolica_MW, 
+            currentMuni.Eolica_necessitat_per_poblacio_MW, 
+            1
+        );
+        
+        muniTotalMW.innerText = `${(currentMuni.FV_Total_MW + currentMuni.Eolica_MW).toFixed(2)} MW totals`;
+        
+        labelSolarPlater.innerText = `${currentMuni.FV_Total_MW.toFixed(2)} MW`;
+        barSolarPlater.style.width = `${(currentMuni.FV_Total_MW / maxVal * 100).toFixed(0)}%`;
+        barSolarPlater.innerText = `${currentMuni.FV_Total_MW.toFixed(1)} MW`;
+        
+        labelSolarProp.innerText = `${currentMuni.FV_Total_necessitat_per_poblacio_MW.toFixed(2)} MW`;
+        barSolarProp.style.width = `${(currentMuni.FV_Total_necessitat_per_poblacio_MW / maxVal * 100).toFixed(0)}%`;
+        barSolarProp.innerText = `${currentMuni.FV_Total_necessitat_per_poblacio_MW.toFixed(1)} MW`;
+        
+        labelEolicPlater.innerText = `${currentMuni.Eolica_MW.toFixed(2)} MW`;
+        barEolicPlater.style.width = `${(currentMuni.Eolica_MW / maxVal * 100).toFixed(0)}%`;
+        barEolicPlater.innerText = `${currentMuni.Eolica_MW.toFixed(1)} MW`;
+        
+        labelEolicProp.innerText = `${currentMuni.Eolica_necessitat_per_poblacio_MW.toFixed(2)} MW`;
+        barEolicProp.style.width = `${(currentMuni.Eolica_necessitat_per_poblacio_MW / maxVal * 100).toFixed(0)}%`;
+        barEolicProp.innerText = `${currentMuni.Eolica_necessitat_per_poblacio_MW.toFixed(1)} MW`;
+
+        const mw_rustics = currentMuni.FV_No_Artificialitzat_MW + currentMuni.Eolica_MW;
+        
+        const icio = mw_rustics * TAXES_MODEL.icio_per_mw;
+        const totalAnual = mw_rustics * TAXES_MODEL.recurrent_per_mw;
+        const totalAcumulat = icio + (totalAnual * 30);
+        
+        // Estimar pressupostos municipals
+        const base_budget = currentMuni.Poblacio * 800 + 100000;
+        const actual_ph = base_budget / currentMuni.Poblacio;
+        const futur_ph = (base_budget + totalAnual) / currentMuni.Poblacio;
+        const pct_inc = (totalAnual / base_budget) * 100;
+        
+        valIcio.innerText = `${Math.round(icio).toLocaleString('ca-ES')} €`;
+        valTotalAnual.innerText = `${Math.round(totalAnual).toLocaleString('ca-ES')} €/any`;
+        valPressupostActual.innerText = `${Math.round(actual_ph).toLocaleString('ca-ES')} €/hab`;
+        valPressupostFutur.innerText = `${Math.round(futur_ph).toLocaleString('ca-ES')} €/hab`;
+        valPctIncrement.innerText = pct_inc > 0 ? `+${pct_inc.toFixed(1)}%` : '0%';
+        valAcumulat.innerText = `${(totalAcumulat / 1000000).toFixed(2)} M€`;
+        
+        updateTable();
+    }
+
+    const fixedMuniNames = ["Barcelona", "Girona", "Tarragona", "Lleida", "Sant Jordi Desvalls", "Vilademuls", "Viladasens", "Pinós"];
+    let tableSort = { column: 'Municipi', direction: 'asc' };
+
+    function sortTable(column) {
+        if (tableSort.column === column) {
+            tableSort.direction = tableSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            tableSort.column = column;
+            tableSort.direction = 'asc';
+        }
+        updateTable();
+    }
+
+    function updateTableHeaders() {
+        const headers = {
+            'Municipi': 'Municipi',
+            'Poblacio': 'Població',
+            'TotalPlater': 'MW Total',
+            'MWRustic': 'MW Rústic',
+            'kW_hab': 'kW/hab',
+            'PctMitjana': '% s/mitjana',
+            'PressupostActual': 'Pressupost Actual p.h.',
+            'PressupostFutur': 'Pressupost Futur p.h.',
+            'PctIncrement': '% Increment'
+        };
+        
+        for (const [colId, label] of Object.entries(headers)) {
+            const el = document.getElementById('th-' + colId);
+            if (el) {
+                let suffix = '';
+                if (tableSort.column === colId) {
+                    suffix = tableSort.direction === 'asc' ? ' ▲' : ' ▼';
+                }
+                el.innerHTML = label + suffix;
+            }
+        }
+    }
+
+    function updateTable() {
+        updateTableHeaders();
+        comparisonTableBody.innerHTML = '';
+        
+        // Fila de la mitjana de Catalunya (estàtica a dalt de tot)
+        const avgRow = document.createElement('tr');
+        avgRow.style.color = "var(--text-muted)";
+        avgRow.style.fontStyle = "italic";
+        avgRow.innerHTML = `
+            <td>Mitjana Catalunya</td>
+            <td>8.124.126</td>
+            <td>56.287,90</td>
+            <td>42.526,70</td>
+            <td>6,92</td>
+            <td>100%</td>
+            <td>912 €</td>
+            <td>912 €</td>
+            <td><span class="badge" style="background: rgba(255,255,255,0.05); color: #fff;">0%</span></td>
+        `;
+        comparisonTableBody.appendChild(avgRow);
+        
+        const listToDisplay = [...fixedMuniNames];
+        if (currentMuni && !listToDisplay.includes(currentMuni.Municipi)) {
+            listToDisplay.push(currentMuni.Municipi);
+        }
+        
+        // Mapejar i precalcular columnes per ordenar
+        const dataRows = listToDisplay.map(name => {
+            const muni = MUNICIPIS_DATA.find(m => m.Municipi === name);
+            if (!muni) return null;
+            
+            const totalPlater = muni.FV_Total_MW + muni.Eolica_MW;
+            const mw_rustics = muni.FV_No_Artificialitzat_MW + muni.Eolica_MW;
+            const totalAnual = mw_rustics * TAXES_MODEL.recurrent_per_mw;
+            const pop = muni.Poblacio;
+            const base_budget = pop * 800 + 100000;
+            const actual_ph = base_budget / pop;
+            const futur_ph = (base_budget + totalAnual) / pop;
+            const pct = (totalAnual / base_budget) * 100;
+            
+            const kw_hab = muni.Total_per_habitant_kW;
+            const pct_mitjana = (kw_hab / 6.92) * 100;
+            
+            return {
+                muniObj: muni,
+                Municipi: muni.Municipi,
+                Poblacio: pop,
+                TotalPlater: totalPlater,
+                MWRustic: mw_rustics,
+                kW_hab: kw_hab,
+                PctMitjana: pct_mitjana,
+                PressupostActual: actual_ph,
+                PressupostFutur: futur_ph,
+                PctIncrement: pct
+            };
+        }).filter(row => row !== null);
+        
+        // Ordenar
+        dataRows.sort((a, b) => {
+            let valA = a[tableSort.column];
+            let valB = b[tableSort.column];
+            
+            if (typeof valA === 'string') {
+                return tableSort.direction === 'asc' 
+                    ? valA.localeCompare(valB, 'ca') 
+                    : valB.localeCompare(valA, 'ca');
+            } else {
+                return tableSort.direction === 'asc'
+                    ? valA - valB
+                    : valB - valA;
+            }
+        });
+        
+        // Renderitzar files ordenades
+        dataRows.forEach(row => {
+            const muni = row.muniObj;
+            const tr = document.createElement('tr');
+            if (currentMuni && muni.Municipi === currentMuni.Municipi) {
+                tr.className = "highlight-tr";
+            }
+            
+            let badgeClass = "badge-green";
+            if (row.PctIncrement < 10) badgeClass = "badge-red";
+            
+            tr.innerHTML = `
+                <td><strong>${muni.Municipi}</strong></td>
+                <td>${row.Poblacio.toLocaleString('ca-ES')}</td>
+                <td>${row.TotalPlater.toFixed(2)}</td>
+                <td>${row.MWRustic.toFixed(2)}</td>
+                <td>${row.kW_hab.toFixed(2)}</td>
+                <td>${Math.round(row.PctMitjana)}%</td>
+                <td>${Math.round(row.PressupostActual).toLocaleString('ca-ES')} €</td>
+                <td>${Math.round(row.PressupostFutur).toLocaleString('ca-ES')} €</td>
+                <td><span class="badge ${badgeClass}">${row.PctIncrement > 0 ? '+' + row.PctIncrement.toFixed(0) + '%' : '0%'}</span></td>
+            `;
+            comparisonTableBody.appendChild(tr);
+        });
+    }
+
+    // Navegació de pestanyes
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        
+        if (tabId === 'global-tab') {
+            initGlobalCharts();
+            populateRankingTable();
+        }
+    }
+
+    // Omplir Rànquing Complet de Micropobles amb Ordenació i Filtres
+    let rankingSort = { column: 'pct', direction: 'desc' };
+    let rankingDataList = null;
+
+    function sortRanking(column) {
+        if (rankingSort.column === column) {
+            rankingSort.direction = rankingSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            rankingSort.column = column;
+            rankingSort.direction = column === 'muni' ? 'asc' : 'desc';
+        }
+        populateRankingTable(true);
+    }
+
+    function updateRankingTableHeaders() {
+        const headers = {
+            'muni': 'Municipi',
+            'pop': 'Població',
+            'mw': 'MW Total',
+            'mw_rustic': 'MW Rústic',
+            'kw_hab': 'kW/hab',
+            'pct_mitjana': '% s/mitjana',
+            'actual_ph': 'Pressupost Actual p.h.',
+            'futur_ph': 'Pressupost Futur p.h.',
+            'pct': 'Increment %'
+        };
+        
+        for (const [colId, label] of Object.entries(headers)) {
+            const el = document.getElementById('th-rank-' + colId);
+            if (el) {
+                let suffix = '';
+                if (rankingSort.column === colId) {
+                    suffix = rankingSort.direction === 'asc' ? ' ▲' : ' ▼';
+                }
+                el.innerHTML = label + suffix;
+            }
+        }
+    }
+
+    function populateRankingTable(forceRerender = false) {
+        if (rankingTableBody.children.length > 0 && !forceRerender) return;
+        
+        updateRankingTableHeaders();
+        rankingTableBody.innerHTML = '';
+        
+        if (!rankingDataList) {
+            rankingDataList = MUNICIPIS_DATA.filter(m => m.Poblacio < 1000).map(m => {
+                const pop = m.Poblacio;
+                const base_budget = pop * 800 + 100000;
+                const mw_rustics = m.FV_No_Artificialitzat_MW + m.Eolica_MW;
+                const totalAnual = mw_rustics * TAXES_MODEL.recurrent_per_mw;
+                const actual_ph = base_budget / pop;
+                const futur_ph = (base_budget + totalAnual) / pop;
+                const pct = (totalAnual / base_budget) * 100;
+                
+                const kw_hab = m.Total_per_habitant_kW;
+                const pct_mitjana = (kw_hab / 6.92) * 100;
+                
+                const totalPlater = m.FV_Total_MW + m.Eolica_MW;
+                
+                return {
+                    muniObj: m,
+                    muni: m.Municipi,
+                    pop: pop,
+                    mw: totalPlater,
+                    mw_rustic: mw_rustics,
+                    kw_hab: kw_hab,
+                    pct_mitjana: pct_mitjana,
+                    actual_ph: actual_ph,
+                    futur_ph: futur_ph,
+                    pct: pct
+                };
+            });
+        }
+        
+        const listToSort = [...rankingDataList];
+
+        listToSort.sort((a, b) => {
+            let valA = a[rankingSort.column];
+            let valB = b[rankingSort.column];
+            
+            if (typeof valA === 'string') {
+                return rankingSort.direction === 'asc' 
+                    ? valA.localeCompare(valB, 'ca') 
+                    : valB.localeCompare(valA, 'ca');
+            } else {
+                return rankingSort.direction === 'asc'
+                    ? valA - valB
+                    : valB - valA;
+            }
+        });
+
+        listToSort.forEach((m, idx) => {
+            const tr = document.createElement('tr');
+            if (currentMuni && m.muni === currentMuni.Municipi) {
+                tr.className = "highlight-tr";
+            }
+            
+            let badgeClass = "badge-green";
+            if (m.pct < 10) badgeClass = "badge-red";
+            
+            tr.innerHTML = `
+                <td><strong>${idx + 1}</strong></td>
+                <td><strong>${m.muni}</strong></td>
+                <td>${m.pop.toLocaleString('ca-ES')}</td>
+                <td>${m.mw.toFixed(1)} MW</td>
+                <td>${m.mw_rustic.toFixed(1)} MW</td>
+                <td>${m.kw_hab.toFixed(2)}</td>
+                <td>${Math.round(m.pct_mitjana)}%</td>
+                <td>${Math.round(m.actual_ph).toLocaleString('ca-ES')} €</td>
+                <td>${Math.round(m.futur_ph).toLocaleString('ca-ES')} €</td>
+                <td><span class="badge ${badgeClass}">${m.pct > 0 ? '+' + m.pct.toFixed(1) + '%' : '0%'}</span></td>
+            `;
+            rankingTableBody.appendChild(tr);
+        });
+    }
+
+    // Inicialització de Gràfics Globals amb Chart.js
+    let chartsInitialized = false;
+    function initGlobalCharts() {
+        if (chartsInitialized) return;
+        chartsInitialized = true;
+
+        // Gràfic 1: Doughnut Repartiment de Projectes
+        const ctxProjects = document.getElementById('chartProjects').getContext('2d');
+        new Chart(ctxProjects, {
+            type: 'doughnut',
+            data: {
+                labels: ['Amb Projectes Rústics', 'Sense Projectes Rústics'],
+                datasets: [{
+                    data: [458, 18],
+                    backgroundColor: ['#10b981', '#ef4444'],
+                    borderWidth: 1,
+                    borderColor: '#1f2937'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#f3f4f6', font: { family: 'Inter' } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const total = 476;
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return ` ${context.label}: ${percentage}% (${value} micropobles)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gràfic 2: Doughnut Percentatges d'increment de pressupost (Doughnut per fer-ho més visual com ha demanat l'usuari)
+        const ctxBudgetPercentage = document.getElementById('chartBudgetPercentage').getContext('2d');
+        new Chart(ctxBudgetPercentage, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    '0% (Sense projecte)', 
+                    '< 10% (Menor)', 
+                    '10 - 50% (Moderat)', 
+                    '50 - 100% (Alt)', 
+                    '100 - 500% (Extraordinari)', 
+                    '> 500% (Pressupost x5)'
+                ],
+                datasets: [{
+                    data: [18, 50, 95, 63, 179, 71], // Nombre absolut de micropobles (476 en total)
+                    backgroundColor: [
+                        '#ef4444', // Vermell
+                        '#f97316', // Taronja
+                        '#eab308', // Groc
+                        '#06b6d4', // Cian
+                        '#a855f7', // Lila
+                        '#10b981'  // Verd
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#1f2937'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { 
+                            color: '#f3f4f6', 
+                            font: { family: 'Inter', size: 9 },
+                            boxWidth: 12
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const total = 476;
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return ` ${context.label}: ${percentage}% (${value} micropobles)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gràfic 3: Pareto / Concentració del MW
+        const ctxConcentration = document.getElementById('chartConcentration').getContext('2d');
+        new Chart(ctxConcentration, {
+            type: 'bar',
+            data: {
+                labels: ['Top 10% Pobles', 'Top 20% Pobles', 'Resta (80% Pobles)'],
+                datasets: [{
+                    label: 'Percentatge de la Potència Total a Micropobles',
+                    data: [41.5, 63.4, 36.6],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(156, 163, 175, 0.4)'
+                    ],
+                    borderWidth: 1,
+                    borderColor: 'rgba(255,255,255,0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                const index = context.dataIndex;
+                                const counts = [47, 95, 381];
+                                return ` ${value}% de la potència (${counts[index]} micropobles)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: '#9ca3af' }, grid: { display: false } },
+                    y: { 
+                        ticks: { 
+                            color: '#9ca3af',
+                            callback: function(value) { return value + "%"; }
+                        }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' } 
+                    }
+                }
+            }
+        });
+    }
+
+    // Inicialització al carregar la pàgina
+    window.onload = function() {
+        updateDashboard();
+    };
+</script>
+
+</body>
+</html>
