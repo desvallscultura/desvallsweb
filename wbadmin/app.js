@@ -193,6 +193,32 @@ async function fetchDataFromGoogle() {
             return row;
         });
         
+        // 4. Identificació de possibles repetits (per correu o DNI)
+        const emailCounts = {};
+        const dniCounts = {};
+        appData.forEach(row => {
+            const email = (row.Email || '').trim().toLowerCase();
+            const dni = (row.DNI_URL || row.DNI || '').trim().toLowerCase();
+            if (email && email.includes('@')) {
+                emailCounts[email] = (emailCounts[email] || 0) + 1;
+            }
+            if (dni && dni.length > 2) {
+                dniCounts[dni] = (dniCounts[dni] || 0) + 1;
+            }
+        });
+        appData.forEach(row => {
+            const email = (row.Email || '').trim().toLowerCase();
+            const dni = (row.DNI_URL || row.DNI || '').trim().toLowerCase();
+            const emailDup = email && emailCounts[email] > 1;
+            const dniDup = dni && dniCounts[dni] > 1;
+            
+            row.isDuplicate = emailDup || dniDup;
+            row.duplicateReason = [];
+            if (emailDup) row.duplicateReason.push("Correu electrònic duplicat");
+            if (dniDup) row.duplicateReason.push("DNI/NIF duplicat");
+            row.duplicateReason = row.duplicateReason.join(" i ");
+        });
+        
         renderAllTables();
         updateKPIs();
         loader.style.display = 'none';
@@ -470,6 +496,9 @@ function renderAllTables() {
     const artsData = getFilteredData(activeArtsCat);
     artsData.forEach(r => {
         const isChecked = selectedIds.has(r.id) ? 'checked' : '';
+        const dupCell = r.isDuplicate 
+            ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
+            : `<span style="color: #64748b">-</span>`;
         tbodyArts.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -483,6 +512,7 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em; min-width: 150px; white-space: pre-wrap;">${formatSocialLinks(escapeHTML(r.Xarxes))}</div></td>
                 <td><div style="font-size: 0.85em;">${escapeHTML(r.Acessibilitat) || '-'}</div></td>
                 <td>${linkDrive(r.Dossier_File, 'Dossier')}</td>
+                <td style="text-align: center;">${dupCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
@@ -500,6 +530,9 @@ function renderAllTables() {
             ${linkDrive(r.Calendari, 'Calen.')}
             ${linkDrive(r.Pressupost, 'Pressup.')}
         `;
+        const dupCell = r.isDuplicate 
+            ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
+            : `<span style="color: #64748b">-</span>`;
         tbodyRes.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -509,6 +542,7 @@ function renderAllTables() {
                 <td><strong>${escapeHTML(r.Titol_Obra) || '-'}</strong></td>
                 <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? escapeHTML(r.Descripcio).replace(/\n/g, '<br>') : '-'}</div></td>
                 <td style="display:flex; flex-wrap:wrap; gap:5px;">${driveLinks || '-'}</td>
+                <td style="text-align: center;">${dupCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
@@ -520,6 +554,9 @@ function renderAllTables() {
     const parData = getFilteredData('Paradetes i Artesania');
     parData.forEach(r => {
         const isChecked = selectedIds.has(r.id) ? 'checked' : '';
+        const dupCell = r.isDuplicate 
+            ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
+            : `<span style="color: #64748b">-</span>`;
         tbodyPar.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -528,10 +565,13 @@ function renderAllTables() {
                 <td><a href="mailto:${escapeHTML(r.Email)}" style="color:#60a5fa">${escapeHTML(r.Email)}</a><br><small>${escapeHTML(r.Telefon) || ''}</small></td>
                 <td><div style="font-size: 0.85em; margin-bottom: 5px;">${escapeHTML(r.Descripcio) || '-'}</div>
                     <small><strong>Llocs:</strong> ${escapeHTML(r.Parcel_les) || 1} | <strong>Llum:</strong> ${escapeHTML(r.Electricitat) || '-'} | <strong>Food:</strong> ${escapeHTML(r.Carnet_Alimentari) || '-'}</small></td>
+                <td style="text-align: center;">${dupCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
     });
+    
+    updateHeaderSortClasses();
 }
 
 function updateKPIs() {
@@ -569,4 +609,68 @@ function updateKPIs() {
     if (titleEl) {
         titleEl.innerText = 'Resum de Sol·licituds 2026';
     }
+}
+
+// ==========================================
+// 7. ORDENACIÓ DE LES TAULES (SORTING)
+// ==========================================
+let currentSortField = 'Timestamp';
+let currentSortDirection = 'asc';
+
+window.sortTable = function(fieldName) {
+    if (currentSortField === fieldName) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSortField = fieldName;
+        currentSortDirection = 'asc';
+    }
+    
+    appData.sort((a, b) => {
+        let valA = a[fieldName];
+        let valB = b[fieldName];
+        
+        if (valA === undefined || valA === null) valA = '';
+        if (valB === undefined || valB === null) valB = '';
+        
+        if (typeof valA === 'boolean' && typeof valB === 'boolean') {
+            return currentSortDirection === 'asc' 
+                ? (valA === valB ? 0 : (valA ? 1 : -1))
+                : (valA === valB ? 0 : (valA ? -1 : 1));
+        }
+        
+        // Normalize strings for comparison
+        valA = String(valA).toLowerCase().trim();
+        valB = String(valB).toLowerCase().trim();
+        
+        // Check if values are dates
+        const dateA = Date.parse(valA);
+        const dateB = Date.parse(valB);
+        const isDatePattern = /^\d{4}-\d{2}-\d{2}/;
+        if (isDatePattern.test(a[fieldName]) && isDatePattern.test(b[fieldName]) && !isNaN(dateA) && !isNaN(dateB)) {
+            return currentSortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+        }
+        
+        // Check if values are numbers
+        const numA = parseFloat(valA);
+        const numB = parseFloat(valB);
+        if (!isNaN(numA) && !isNaN(numB) && /^\d+$/.test(valA) && /^\d+$/.test(valB)) {
+            return currentSortDirection === 'asc' ? numA - numB : numB - numA;
+        }
+        
+        if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+        return 0;
+    });
+    
+    renderAllTables();
+};
+
+function updateHeaderSortClasses() {
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('asc', 'desc');
+    });
+    
+    document.querySelectorAll(`th[data-sort="${currentSortField}"]`).forEach(th => {
+        th.classList.add(currentSortDirection);
+    });
 }

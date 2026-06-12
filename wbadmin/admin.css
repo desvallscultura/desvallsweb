@@ -392,3 +392,52 @@ input[type="checkbox"] {
     color: var(--primary);
     font-size: 0.9rem;
 }
+
+/* Sorting Styles */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 1.5rem !important;
+    transition: background-color 0.2s, color 0.2s;
+}
+th.sortable:hover {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.05);
+}
+th.sortable::after {
+    content: ' ⇅';
+    opacity: 0.3;
+    font-size: 0.75rem;
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+th.sortable.asc::after {
+    content: ' ▲';
+    opacity: 1;
+    color: var(--primary);
+}
+th.sortable.desc::after {
+    content: ' ▼';
+    opacity: 1;
+    color: var(--primary);
+}
+
+/* Duplicate Badge */
+.badge-duplicate {
+    background: #ef4444;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: help;
+    border: 1px solid #dc2626;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+

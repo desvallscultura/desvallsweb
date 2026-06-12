@@ -162,17 +162,18 @@
                         <thead>
                             <tr>
                                 <th style="width: 40px;"><input type="checkbox" id="select-all-arts" onclick="toggleSelectAll('Arts Generals')"></th>
-                                <th>Data</th>
-                                <th>Artista / CIA</th>
-                                <th>Municipi</th>
-                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Arts Generals')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
-                                <th>Projecte</th>
-                                <th style="width: 15%">Descripció</th>
-                                <th>Tècnica / Espai</th>
-                                <th>Xarxes</th>
-                                <th>Accesibilitat</th>
-                                <th>Adjunts</th>
-                                <th style="width: 140px;">Estat</th>
+                                <th class="sortable" data-sort="Timestamp" onclick="sortTable('Timestamp')">Data</th>
+                                <th class="sortable" data-sort="Companyia" onclick="sortTable('Companyia')">Artista / CIA</th>
+                                <th class="sortable" data-sort="Municipi" onclick="sortTable('Municipi')">Municipi</th>
+                                <th class="sortable" data-sort="Email" onclick="sortTable('Email')">Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Arts Generals')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th class="sortable" data-sort="Titol_Obra" onclick="sortTable('Titol_Obra')">Projecte</th>
+                                <th class="sortable" data-sort="Descripcio" onclick="sortTable('Descripcio')" style="width: 15%">Descripció</th>
+                                <th class="sortable" data-sort="Espai_m2" onclick="sortTable('Espai_m2')">Tècnica / Espai</th>
+                                <th class="sortable" data-sort="Xarxes" onclick="sortTable('Xarxes')">Xarxes</th>
+                                <th class="sortable" data-sort="Acessibilitat" onclick="sortTable('Acessibilitat')">Accesibilitat</th>
+                                <th class="sortable" data-sort="Dossier_File" onclick="sortTable('Dossier_File')">Adjunts</th>
+                                <th class="sortable" data-sort="isDuplicate" onclick="sortTable('isDuplicate')" style="text-align: center;">Duplicat?</th>
+                                <th class="sortable" data-sort="Estat" onclick="sortTable('Estat')" style="width: 140px;">Estat</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-arts">
@@ -189,13 +190,14 @@
                         <thead>
                             <tr>
                                 <th style="width: 40px;"><input type="checkbox" id="select-all-residencia" onclick="toggleSelectAll('Residència Artística')"></th>
-                                <th>Data</th>
-                                <th>Candidat/a</th>
-                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Residència Artística')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
-                                <th>Proposta</th>
-                                <th style="width: 30%">Descripció</th>
+                                <th class="sortable" data-sort="Timestamp" onclick="sortTable('Timestamp')">Data</th>
+                                <th class="sortable" data-sort="Nom_Representant" onclick="sortTable('Nom_Representant')">Candidat/a</th>
+                                <th class="sortable" data-sort="Email" onclick="sortTable('Email')">Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Residència Artística')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th class="sortable" data-sort="Titol_Obra" onclick="sortTable('Titol_Obra')">Proposta</th>
+                                <th class="sortable" data-sort="Descripcio" onclick="sortTable('Descripcio')" style="width: 30%">Descripció</th>
                                 <th>Adjunts (Drive)</th>
-                                <th style="width: 140px;">Estat</th>
+                                <th class="sortable" data-sort="isDuplicate" onclick="sortTable('isDuplicate')" style="text-align: center;">Duplicat?</th>
+                                <th class="sortable" data-sort="Estat" onclick="sortTable('Estat')" style="width: 140px;">Estat</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-residencia">
@@ -212,11 +214,12 @@
                         <thead>
                             <tr>
                                 <th style="width: 40px;"><input type="checkbox" id="select-all-paradetes" onclick="toggleSelectAll('Paradetes i Artesania')"></th>
-                                <th>Data</th>
-                                <th>Sol·licitant</th>
-                                <th>Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Paradetes i Artesania')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
-                                <th style="width: 35%">Descripció i Necessitats</th>
-                                <th style="width: 140px;">Estat</th>
+                                <th class="sortable" data-sort="Timestamp" onclick="sortTable('Timestamp')">Data</th>
+                                <th class="sortable" data-sort="Companyia" onclick="sortTable('Companyia')">Sol·licitant</th>
+                                <th class="sortable" data-sort="Email" onclick="sortTable('Email')">Contacte <button class="btn-copy-all" onclick="copyDisplayedEmails('Paradetes i Artesania')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th class="sortable" data-sort="Descripcio" onclick="sortTable('Descripcio')" style="width: 35%">Descripció i Necessitats</th>
+                                <th class="sortable" data-sort="isDuplicate" onclick="sortTable('isDuplicate')" style="text-align: center;">Duplicat?</th>
+                                <th class="sortable" data-sort="Estat" onclick="sortTable('Estat')" style="width: 140px;">Estat</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-paradetes">
