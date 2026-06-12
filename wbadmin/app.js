@@ -44,7 +44,7 @@ function escapeHTML(str) {
 // 2. ESTAT LOCAL
 // ==========================================
 let appData = [];
-let currentCategoryFilter = 'Arts Generals';
+let currentCategoryFilter = 'Arts Plàstiques';
 let currentStatusFilter = 'Tots';
 let selectedIds = new Set();
 
@@ -58,13 +58,21 @@ function switchTab(tabName) {
     if(window.event && window.event.target) {
         window.event.target.classList.add('active');
     }
-    document.getElementById(`tab-${tabName}`).classList.add('active');
+    
+    let targetTab = tabName;
+    if (tabName === 'plastiques' || tabName === 'vives' || tabName === 'luminic') {
+        targetTab = 'arts';
+    }
+    document.getElementById(`tab-${targetTab}`).classList.add('active');
 
-    if (tabName === 'arts') currentCategoryFilter = 'Arts Generals';
+    if (tabName === 'plastiques') currentCategoryFilter = 'Arts Plàstiques';
+    if (tabName === 'vives') currentCategoryFilter = 'Arts Vives';
+    if (tabName === 'luminic') currentCategoryFilter = 'Art Lumínic';
     if (tabName === 'residencia') currentCategoryFilter = 'Residència Artística';
     if (tabName === 'paradetes') currentCategoryFilter = 'Paradetes i Artesania';
 
     updateKPIs();
+    renderAllTables();
 }
 
 // ==========================================
@@ -170,6 +178,18 @@ async function fetchDataFromGoogle() {
         // 3. Fusionar dades
         appData = googleData.map(row => {
             row.Estat = statusMap[row.id] || 'Nou'; // Si no n'hi ha, per defecte "Nou"
+            
+            // Separació local de la categoria "Arts Generals" per al dashboard
+            if (row.Categoria === 'Arts Generals') {
+                const mod = (row.Modalitat || '').toLowerCase();
+                if (mod.includes('vives')) {
+                    row.Categoria = 'Arts Vives';
+                } else if (mod.includes('lumínic') || mod.includes('luminic') || mod.includes('llum')) {
+                    row.Categoria = 'Art Lumínic';
+                } else {
+                    row.Categoria = 'Arts Plàstiques';
+                }
+            }
             return row;
         });
         
@@ -208,9 +228,14 @@ window.toggleSelect = function(id) {
 window.toggleSelectAll = function(category) {
     const isChecked = event.target.checked;
     
+    let targetCat = category;
+    if (category === 'Arts Generals') {
+        targetCat = currentCategoryFilter;
+    }
+    
     // Filtrem els que es veuen actualment
     const visibleRows = appData.filter(r => {
-        const matchCat = r.Categoria === category;
+        const matchCat = r.Categoria === targetCat;
         const matchStat = (currentStatusFilter === 'Tots') || (r.Estat === currentStatusFilter);
         return matchCat && matchStat;
     });
@@ -299,9 +324,14 @@ window.copyDisplayedEmails = async function(category) {
     const btn = event.currentTarget;
     const originalText = btn.innerText;
     
+    let targetCat = category;
+    if (category === 'Arts Generals') {
+        targetCat = currentCategoryFilter;
+    }
+    
     // Filtrem les dades que s'estan veient actualment
     const filtered = appData.filter(r => {
-        const matchCat = r.Categoria === category;
+        const matchCat = r.Categoria === targetCat;
         const matchStat = (currentStatusFilter === 'Tots') || (r.Estat === currentStatusFilter);
         return matchCat && matchStat;
     });
@@ -432,7 +462,12 @@ function renderAllTables() {
     // ARTS
     const tbodyArts = document.getElementById('table-body-arts');
     tbodyArts.innerHTML = '';
-    const artsData = getFilteredData('Arts Generals');
+    
+    let activeArtsCat = 'Arts Plàstiques';
+    if (['Arts Plàstiques', 'Arts Vives', 'Art Lumínic'].includes(currentCategoryFilter)) {
+        activeArtsCat = currentCategoryFilter;
+    }
+    const artsData = getFilteredData(activeArtsCat);
     artsData.forEach(r => {
         const isChecked = selectedIds.has(r.id) ? 'checked' : '';
         tbodyArts.innerHTML += `
@@ -501,7 +536,9 @@ function renderAllTables() {
 
 function updateKPIs() {
     const cats = {
-        'Arts Generals': 'arts',
+        'Arts Plàstiques': 'plastiques',
+        'Arts Vives': 'vives',
+        'Art Lumínic': 'luminic',
         'Residència Artística': 'res',
         'Paradetes i Artesania': 'para'
     };
@@ -516,11 +553,16 @@ function updateKPIs() {
         const process = data.filter(r => r.Estat === 'En Procés').length;
         const aprovades = data.filter(r => r.Estat === 'Aprovat').length;
 
-        document.getElementById(`stats-${prefix}-total`).innerText = total;
-        document.getElementById(`stats-${prefix}-noves`).innerText = noves;
-        document.getElementById(`stats-${prefix}-pendent`).innerText = pendent;
-        document.getElementById(`stats-${prefix}-proces`).innerText = process;
-        document.getElementById(`stats-${prefix}-aprovades`).innerText = aprovades;
+        const totalEl = document.getElementById(`stats-${prefix}-total`);
+        if (totalEl) totalEl.innerText = total;
+        const novesEl = document.getElementById(`stats-${prefix}-noves`);
+        if (novesEl) novesEl.innerText = noves;
+        const pendentEl = document.getElementById(`stats-${prefix}-pendent`);
+        if (pendentEl) pendentEl.innerText = pendent;
+        const procesEl = document.getElementById(`stats-${prefix}-proces`);
+        if (procesEl) procesEl.innerText = process;
+        const aprovadesEl = document.getElementById(`stats-${prefix}-aprovades`);
+        if (aprovadesEl) aprovadesEl.innerText = aprovades;
     });
 
     const titleEl = document.getElementById('kpi-title-h2');
