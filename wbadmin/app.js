@@ -169,15 +169,24 @@ async function fetchDataFromGoogle() {
             
         if (error) throw error;
 
-        // Crear mapa d'estats per cerca ràpida
+        // Crear mapa d'estats i correus incorrectes per cerca ràpida
         const statusMap = {};
+        const emailInvalidMap = {};
         dbStatuses.forEach(row => {
-            statusMap[row.id] = row.status;
+            const rawStatus = row.status || 'Nou';
+            if (rawStatus.includes(' | Correu Incorrecte')) {
+                statusMap[row.id] = rawStatus.split(' | ')[0];
+                emailInvalidMap[row.id] = true;
+            } else {
+                statusMap[row.id] = rawStatus;
+                emailInvalidMap[row.id] = false;
+            }
         });
 
         // 3. Fusionar dades
         appData = googleData.map(row => {
             row.Estat = statusMap[row.id] || 'Nou'; // Si no n'hi ha, per defecte "Nou"
+            row.EmailInvalid = emailInvalidMap[row.id] || false;
             
             // Separació local de la categoria "Arts Generals" per al dashboard
             if (row.Categoria === 'Arts Generals') {
@@ -311,11 +320,16 @@ document.getElementById('btn-apply-bulk').addEventListener('click', async () => 
     btn.disabled = true;
 
     try {
-        const upsertData = Array.from(selectedIds).map(id => ({
-            id: id,
-            status: newStatus,
-            updated_at: new Date().toISOString()
-        }));
+        const upsertData = Array.from(selectedIds).map(id => {
+            const row = appData.find(r => r.id === id);
+            const isEmailInvalid = row ? row.EmailInvalid : false;
+            const statusToSave = newStatus + (isEmailInvalid ? ' | Correu Incorrecte' : '');
+            return {
+                id: id,
+                status: statusToSave,
+                updated_at: new Date().toISOString()
+            };
+        });
 
         const { error } = await supabaseClient
             .from('registrations_management')
@@ -424,16 +438,19 @@ window.updateStatus = async function(rowId, newStatus) {
 
     // 2. Guardem a Supabase
     try {
+        const isEmailInvalid = row ? row.EmailInvalid : false;
+        const statusToSave = newStatus + (isEmailInvalid ? ' | Correu Incorrecte' : '');
+        
         const { error } = await supabaseClient
             .from('registrations_management')
             .upsert({ 
                 id: rowId, 
-                status: newStatus,
+                status: statusToSave,
                 updated_at: new Date().toISOString()
             });
             
         if (error) throw error;
-        console.log(`✅ Guardat a Supabase: ${rowId} = ${newStatus}`);
+        console.log(`✅ Guardat a Supabase: ${rowId} = ${statusToSave}`);
     } catch (err) {
         console.error("Error guardant estat:", err);
         alert("No s'ha pogut guardar el canvi a la base de dades.");
@@ -499,6 +516,9 @@ function renderAllTables() {
         const dupCell = r.isDuplicate 
             ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
             : `<span style="color: #64748b">-</span>`;
+        const emailInvalidChecked = r.EmailInvalid ? 'checked' : '';
+        const emailInvalidCell = `<input type="checkbox" ${emailInvalidChecked} onchange="toggleEmailInvalid('${r.id}', this.checked)">`;
+        
         tbodyArts.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -513,6 +533,7 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em;">${escapeHTML(r.Acessibilitat) || '-'}</div></td>
                 <td>${linkDrive(r.Dossier_File, 'Dossier')}</td>
                 <td style="text-align: center;">${dupCell}</td>
+                <td style="text-align: center;">${emailInvalidCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
@@ -533,6 +554,9 @@ function renderAllTables() {
         const dupCell = r.isDuplicate 
             ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
             : `<span style="color: #64748b">-</span>`;
+        const emailInvalidChecked = r.EmailInvalid ? 'checked' : '';
+        const emailInvalidCell = `<input type="checkbox" ${emailInvalidChecked} onchange="toggleEmailInvalid('${r.id}', this.checked)">`;
+        
         tbodyRes.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -543,6 +567,7 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em; max-height: 100px; overflow-y: auto; padding-right: 5px;">${r.Descripcio ? escapeHTML(r.Descripcio).replace(/\n/g, '<br>') : '-'}</div></td>
                 <td style="display:flex; flex-wrap:wrap; gap:5px;">${driveLinks || '-'}</td>
                 <td style="text-align: center;">${dupCell}</td>
+                <td style="text-align: center;">${emailInvalidCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
@@ -557,6 +582,9 @@ function renderAllTables() {
         const dupCell = r.isDuplicate 
             ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
             : `<span style="color: #64748b">-</span>`;
+        const emailInvalidChecked = r.EmailInvalid ? 'checked' : '';
+        const emailInvalidCell = `<input type="checkbox" ${emailInvalidChecked} onchange="toggleEmailInvalid('${r.id}', this.checked)">`;
+        
         tbodyPar.innerHTML += `
             <tr>
                 <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
@@ -566,6 +594,7 @@ function renderAllTables() {
                 <td><div style="font-size: 0.85em; margin-bottom: 5px;">${escapeHTML(r.Descripcio) || '-'}</div>
                     <small><strong>Llocs:</strong> ${escapeHTML(r.Parcel_les) || 1} | <strong>Llum:</strong> ${escapeHTML(r.Electricitat) || '-'} | <strong>Food:</strong> ${escapeHTML(r.Carnet_Alimentari) || '-'}</small></td>
                 <td style="text-align: center;">${dupCell}</td>
+                <td style="text-align: center;">${emailInvalidCell}</td>
                 <td>${renderStatusSelect(r.id, r.Estat)}</td>
             </tr>
         `;
@@ -674,3 +703,35 @@ function updateHeaderSortClasses() {
         th.classList.add(currentSortDirection);
     });
 }
+
+// ==========================================
+// 8. CORREUS INCORRECTES
+// ==========================================
+window.toggleEmailInvalid = async function(rowId, isChecked) {
+    // 1. Actualitza localment
+    const row = appData.find(r => r.id === rowId);
+    if(row) row.EmailInvalid = isChecked;
+    
+    // 2. Guardem a Supabase
+    try {
+        const currentEstat = row ? row.Estat : 'Nou';
+        const statusToSave = currentEstat + (isChecked ? ' | Correu Incorrecte' : '');
+        
+        const { error } = await supabaseClient
+            .from('registrations_management')
+            .upsert({ 
+                id: rowId, 
+                status: statusToSave,
+                updated_at: new Date().toISOString()
+            });
+            
+        if (error) throw error;
+        console.log(`✅ Guardat correu incorrecte a Supabase: ${rowId} = ${statusToSave}`);
+    } catch (err) {
+        console.error("Error guardant estat de correu:", err);
+        alert("No s'ha pogut guardar el canvi a la base de dades.");
+        // Revert local state on error
+        if(row) row.EmailInvalid = !isChecked;
+        renderAllTables();
+    }
+};
