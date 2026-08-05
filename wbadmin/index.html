@@ -111,6 +111,14 @@
                             <td id="stats-para-proces" style="color: #facc15;">-</td>
                             <td id="stats-para-aprovades" style="color: #4ade80;">-</td>
                         </tr>
+                        <tr>
+                            <td style="text-align: left;">Concurs de Barrets 🎩</td>
+                            <td id="stats-barrets-total">-</td>
+                            <td id="stats-barrets-noves" style="color: #60a5fa;">-</td>
+                            <td id="stats-barrets-pendent" style="color: #fb923c;">-</td>
+                            <td id="stats-barrets-proces" style="color: #facc15;">-</td>
+                            <td id="stats-barrets-aprovades" style="color: #4ade80;">-</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -141,6 +149,7 @@
                     <button class="tab-btn" onclick="switchTab('luminic')">Art Lumínic</button>
                     <button class="tab-btn" onclick="switchTab('residencia')">Residència</button>
                     <button class="tab-btn" onclick="switchTab('paradetes')">Paradetes</button>
+                    <button class="tab-btn" onclick="switchTab('barrets')">Concurs de Barrets 🎩</button>
                 </div>
                 <div class="table-controls">
                     <label for="filter-status" style="font-size: 0.85rem; color: #94a3b8; margin-right: 0.5rem;">Filtra per estat:</label>
@@ -226,6 +235,31 @@
                             </tr>
                         </thead>
                         <tbody id="table-body-paradetes">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Taula Concurs de Barrets -->
+            <div id="tab-barrets" class="data-tab">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="select-all-barrets" onclick="toggleSelectAll('Concurs Decoració de Barrets')"></th>
+                                <th class="sortable" data-sort="Timestamp" onclick="sortTable('Timestamp')">Data</th>
+                                <th class="sortable" data-sort="Codi_Registre" onclick="sortTable('Codi_Registre')">Nº Inscripció</th>
+                                <th class="sortable" data-sort="Nom" onclick="sortTable('Nom')">Nom i Cognoms</th>
+                                <th class="sortable" data-sort="Telefon" onclick="sortTable('Telefon')">Telèfon</th>
+                                <th class="sortable" data-sort="Email" onclick="sortTable('Email')">Correu electrònic <button class="btn-copy-all" onclick="copyDisplayedEmails('Concurs Decoració de Barrets')" title="Copia tots els mails d'aquesta llista">✉️ Còpia Mails</button></th>
+                                <th class="sortable" data-sort="Edat" onclick="sortTable('Edat')">Edat</th>
+                                <th class="sortable" data-sort="isDuplicate" onclick="sortTable('isDuplicate')" style="text-align: center;">Duplicat?</th>
+                                <th class="sortable" data-sort="EmailInvalid" onclick="sortTable('EmailInvalid')" style="text-align: center; width: 140px;">Correu Incorrecte</th>
+                                <th class="sortable" data-sort="Estat" onclick="sortTable('Estat')" style="width: 140px;">Estat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body-barrets">
                             <!-- Injected via JS -->
                         </tbody>
                     </table>

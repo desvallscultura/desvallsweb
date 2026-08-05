@@ -27,7 +27,7 @@ function doPost(e) {
     }
 
     // 2. SEGURETAT: LLISTA BLANCA DE CATEGORIES
-    var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Artística", "Paradetes i Artesania", "Associat"];
+    var ALLOWED_CATEGORIES = ["Arts Generals", "Residència Artística", "Paradetes i Artesania", "Associat", "Barrets", "Concurs Decoració de Barrets"];
     var categoryName = data.Categoria || "Inscripcions2026";
     
     if (ALLOWED_CATEGORIES.indexOf(categoryName) === -1 && categoryName !== "Inscripcions2026") {

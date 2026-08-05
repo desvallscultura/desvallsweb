@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripció Concurs de Decoració de Barrets | Fira Pluja d'Art 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #ddd6fe;
+            --secondary: #0284c7;
+            --accent: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6d28d9 0%, #0284c7 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 35px 30px;
+        }
+
+        .highlight-banner {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .highlight-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .highlight-text h4 {
+            color: #166534;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .highlight-text p {
+            color: #15803d;
+            font-size: 0.88rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        label span.required {
+            color: #ef4444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea,
+        select {
+            font-family: inherit;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: white;
+            color: #1e293b;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .checkbox-group a {
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(124, 58, 237, 0.5);
+        }
+
+        /* Modal Ticket Confirmation */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ticket-modal {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .ticket-header {
+            background: #f5f3ff;
+            border: 2px dashed #8b5cf6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ticket-code {
+            font-family: monospace;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #6d28d9;
+            letter-spacing: 2px;
+        }
+
+        .btn-close-modal {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .btn-submit { grid-column: span 1; }
+            .header h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="header-badge">Fira Pluja d'Art 2026</span>
+            <h1>Concurs de Decoració de Barrets</h1>
+            <p>Deixa volar la teva creativitat i guanya un menú per a dues persones!</p>
+        </div>
+
+        <div class="content">
+            <div class="highlight-banner">
+                <div class="highlight-icon">🎁</div>
+                <div class="highlight-text">
+                    <h4>Premi Principal</h4>
+                    <p>Un menú per a 2 persones al <strong>Restaurant Els 4 Vents</strong> de Sant Jordi Desvalls.</p>
+                </div>
+            </div>
+
+            <form id="barretsForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="nom">Nom i Cognoms <span class="required">*</span></label>
+                        <input type="text" id="nom" name="nom" placeholder="Ex: Maria Vila i Pons" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefon">Telèfon <span class="required">*</span></label>
+                        <input type="tel" id="telefon" name="telefon" placeholder="Ex: 600 123 456" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correu electrònic <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" placeholder="nom@exemple.cat" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edat">Edat <span class="required">*</span></label>
+                        <input type="number" id="edat" name="edat" min="1" max="120" placeholder="Ex: 34" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="bases" required>
+                            <label for="bases">
+                                Accepto les <a href="../bases_concurs_barrets.md" target="_blank">bases del concurs</a> i el tractament de dades personals (RGPD). <span class="required">*</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">🚀 Confirmar Inscripció Gratuïta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmació de rebut -->
+    <div class="modal-overlay" id="ticketModal">
+        <div class="ticket-modal">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
+            <h2 style="color: #6d28d9; font-family: 'Outfit'; margin-bottom: 6px;">Inscripció Confirmada!</h2>
+            <p style="color: #64748b; font-size: 0.95rem;">Gràcies per participar al Concurs de Decoració de Barrets.</p>
+
+            <div class="ticket-header">
+                <div style="font-size: 0.85rem; color: #6b21a8; font-weight: bold; text-transform: uppercase;">Nº Inscripció</div>
+                <div class="ticket-code" id="modalCode">BARRET-2026-X78</div>
+                <div style="font-size: 0.8rem; color: #475569; margin-top: 5px;" id="modalNom">Participant</div>
+            </div>
+
+            <div style="text-align: left; background: #f8fafc; padding: 14px; border-radius: 10px; font-size: 0.88rem; color: #334155; line-height: 1.5;">
+                <p>📍 <strong>Lliurament del Barret:</strong> Del 31 d'agost al 4 de setembre de 2026 a l'Ajuntament de Sant Jordi Desvalls.</p>
+                <p style="margin-top: 6px;">🏷️ En lliurar-lo, indica el teu nom i el teu Nº d'inscripció.</p>
+            </div>
+
+            <button class="btn-close-modal" onclick="closeModal()">Tancar finestra</button>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu7ka8LUg3hty2LhqiTDTDg_puJFPwGvA8FJFQaI55edJyDshRnGRq3DC397NcMQIX3g/exec';
+
+        let supabaseClient = null;
+        if (window.supabase) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        }
+
+        document.getElementById('barretsForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const nom = document.getElementById('nom').value;
+            const telefon = document.getElementById('telefon').value;
+            const email = document.getElementById('email').value;
+            const edat = document.getElementById('edat').value;
+            const randomCode = String(Math.floor(1 + Math.random() * 99)).padStart(2, '0');
+            
+            // 1. Supabase
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from('barret_inscripcions').insert([{
+                        nom: nom,
+                        telefon: telefon,
+                        email: email,
+                        edat: edat,
+                        codi_registre: randomCode,
+                        created_at: new Date().toISOString()
+                    }]);
+                } catch (err) {
+                    console.warn('Supabase insert:', err);
+                }
+            }
+
+            // 2. Google Script via iframe ocult (100% efectiu a tots els navegadors)
+            try {
+                let iframe = document.getElementById('gas_hidden_iframe');
+                if (!iframe) {
+                    iframe = document.createElement('iframe');
+                    iframe.id = 'gas_hidden_iframe';
+                    iframe.name = 'gas_hidden_iframe';
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+
+                let gasForm = document.getElementById('gas_hidden_form');
+                if (!gasForm) {
+                    gasForm = document.createElement('form');
+                    gasForm.id = 'gas_hidden_form';
+                    gasForm.method = 'POST';
+                    gasForm.action = GOOGLE_SCRIPT_URL;
+                    gasForm.target = 'gas_hidden_iframe';
+                    gasForm.style.display = 'none';
+                    document.body.appendChild(gasForm);
+                }
+
+                gasForm.innerHTML = `
+                    <input type="hidden" name="Codi_Registre" value="${randomCode}">
+                    <input type="hidden" name="Nom" value="${nom}">
+                    <input type="hidden" name="Telefon" value="${telefon}">
+                    <input type="hidden" name="Email" value="${email}">
+                    <input type="hidden" name="Edat" value="${edat}">
+                `;
+
+                gasForm.submit();
+            } catch (err) {
+                console.warn('Google Script submit error:', err);
+            }
+
+            document.getElementById('modalCode').textContent = randomCode;
+            document.getElementById('modalNom').textContent = nom;
+            document.getElementById('ticketModal').style.display = 'flex';
+        });
+
+        function closeModal() {
+            document.getElementById('ticketModal').style.display = 'none';
+            document.getElementById('barretsForm').reset();
+        }
+    </script>
+</body>
+</html>

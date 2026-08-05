@@ -24,7 +24,8 @@ if (window.location.protocol === 'file:') {
 }
 
 // ALERTA: Aquesta és la URL del Apps Script quan programis la funció doGet()
-const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgxLlIpnmTf6nHuZnDPUD2MxnQEuLYSc0URMUrujYr92YlfbCuH4NuFpNZeolcKZY9bA/exec';
+const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzHh9RupnngfeY9FoBc276LAPwGXRif2Bs1fs8Yp-OQORzyk-CYrdoFHgS2_M7mzleXlA/exec';
+const GOOGLE_BARRETS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu7ka8LUg3hty2LhqiTDTDg_puJFPwGvA8FJFQaI55edJyDshRnGRq3DC397NcMQIX3g/exec';
 const API_SECRET_TOKEN = 'v3rt1c4l-pluj4-4rt-2026'; // Token de seguretat admès pel script
 
 // Helper per evitar atacs XSS sanititzant els textos
@@ -70,6 +71,7 @@ function switchTab(tabName) {
     if (tabName === 'luminic') currentCategoryFilter = 'Art Lumínic';
     if (tabName === 'residencia') currentCategoryFilter = 'Residència Artística';
     if (tabName === 'paradetes') currentCategoryFilter = 'Paradetes i Artesania';
+    if (tabName === 'barrets') currentCategoryFilter = 'Concurs Decoració de Barrets';
 
     updateKPIs();
     renderAllTables();
@@ -162,6 +164,29 @@ async function fetchDataFromGoogle() {
         const response = await fetch(urlWithAuth);
         const googleData = await response.json();
         
+        // 1b. Obtenir dades del full dedicat de Barrets (Google Sheets)
+        try {
+            const barretsResponse = await fetch(GOOGLE_BARRETS_SCRIPT_URL);
+            const dedicatedBarretsData = await barretsResponse.json();
+            if (Array.isArray(dedicatedBarretsData)) {
+                dedicatedBarretsData.forEach((bRow, idx) => {
+                    googleData.push({
+                        id: 'BarretSheet_' + (idx + 1),
+                        Categoria: 'Concurs Decoració de Barrets',
+                        Modalitat: 'Concurs Decoració de Barrets',
+                        Nom: bRow['Nom i Cognoms'] || bRow.Nom || bRow.nom || '',
+                        Telefon: bRow['Telèfon'] || bRow.Telefon || bRow.telefon || '',
+                        Email: bRow['Correu electrònic'] || bRow.Email || bRow.email || '',
+                        Edat: bRow.Edat || bRow.edat || '',
+                        Codi_Registre: bRow['Nº Inscripció'] || bRow.Codi_Registre || String(idx + 1).padStart(2, '0'),
+                        Timestamp: bRow["Data d'Alta"] || bRow.Data || new Date().toISOString()
+                    });
+                });
+            }
+        } catch (bErr) {
+            console.warn("Full dedicat de barrets fetch:", bErr);
+        }
+        
         // 2. Obtenim els estats guardats a Supabase
         const { data: dbStatuses, error } = await supabaseClient
             .from('registrations_management')
@@ -188,12 +213,17 @@ async function fetchDataFromGoogle() {
             row.Estat = statusMap[row.id] || 'Nou'; // Si no n'hi ha, per defecte "Nou"
             row.EmailInvalid = emailInvalidMap[row.id] || false;
             
-            // Separació local de la categoria "Arts Generals" per al dashboard
-            if (row.Categoria === 'Arts Generals') {
-                const mod = (row.Modalitat || '').toLowerCase();
-                if (mod.includes('vives')) {
+            // Identificació i separació de categories per al dashboard
+            const modLower = (row.Modalitat || '').toLowerCase();
+            const catLower = (row.Categoria || '').toLowerCase();
+            const hasCodiReg = row.Codi_Registre !== undefined && row.Codi_Registre !== null && String(row.Codi_Registre).trim() !== '';
+
+            if (catLower.includes('barret') || catLower === 'barrets' || modLower.includes('barret') || modLower.includes('decoraci') || (row.Categoria === 'Arts Generals' && hasCodiReg && !row.Companyia)) {
+                row.Categoria = 'Concurs Decoració de Barrets';
+            } else if (row.Categoria === 'Arts Generals') {
+                if (modLower.includes('vives')) {
                     row.Categoria = 'Arts Vives';
-                } else if (mod.includes('lumínic') || mod.includes('luminic') || mod.includes('llum')) {
+                } else if (modLower.includes('lumínic') || modLower.includes('luminic') || modLower.includes('llum')) {
                     row.Categoria = 'Art Lumínic';
                 } else {
                     row.Categoria = 'Arts Plàstiques';
@@ -201,6 +231,38 @@ async function fetchDataFromGoogle() {
             }
             return row;
         });
+
+        // 3b. Obtenir i sincronitzar inscripcions de barrets des de Supabase
+        try {
+            const { data: supabaseBarrets } = await supabaseClient
+                .from('barret_inscripcions')
+                .select('*');
+
+            if (supabaseBarrets && supabaseBarrets.length > 0) {
+                const existingEmails = new Set(appData.map(r => (r.Email || r.email || '').toLowerCase().trim()));
+
+                supabaseBarrets.forEach(b => {
+                    const bEmail = (b.email || b.Email || '').toLowerCase().trim();
+                    if (!existingEmails.has(bEmail) && bEmail !== '') {
+                        appData.push({
+                            id: 'Supabase_' + b.id,
+                            Categoria: 'Concurs Decoració de Barrets',
+                            Modalitat: 'Concurs Decoració de Barrets',
+                            Nom: b.nom || b.Nom || '',
+                            Telefon: b.telefon || b.Telefon || '',
+                            Email: b.email || b.Email || '',
+                            Edat: b.edat || b.Edat || '',
+                            Codi_Registre: b.codi_registre || b.Codi_Registre || '01',
+                            Timestamp: b.created_at || new Date().toISOString(),
+                            Estat: statusMap['Supabase_' + b.id] || 'Nou',
+                            EmailInvalid: emailInvalidMap['Supabase_' + b.id] || false
+                        });
+                    }
+                });
+            }
+        } catch (sErr) {
+            console.warn('Sincronització directa des de Supabase (barret_inscripcions):', sErr);
+        }
         
         // 4. Identificació de possibles repetits (per correu o DNI)
         const emailCounts = {};
@@ -599,7 +661,37 @@ function renderAllTables() {
             </tr>
         `;
     });
-    
+
+    // CONCURS DE BARRETS
+    const tbodyBarrets = document.getElementById('table-body-barrets');
+    if (tbodyBarrets) {
+        tbodyBarrets.innerHTML = '';
+        const barretsData = getFilteredData('Concurs Decoració de Barrets');
+        barretsData.forEach(r => {
+            const isChecked = selectedIds.has(r.id) ? 'checked' : '';
+            const dupCell = r.isDuplicate 
+                ? `<span class="badge-duplicate" title="${escapeHTML(r.duplicateReason)}">⚠️ Sí</span>` 
+                : `<span style="color: #64748b">-</span>`;
+            const emailInvalidChecked = r.EmailInvalid ? 'checked' : '';
+            const emailInvalidCell = `<input type="checkbox" ${emailInvalidChecked} onchange="toggleEmailInvalid('${r.id}', this.checked)">`;
+            
+            tbodyBarrets.innerHTML += `
+                <tr>
+                    <td><input type="checkbox" ${isChecked} onchange="toggleSelect('${r.id}')"></td>
+                    <td>${formatDate(r.Timestamp)}</td>
+                    <td><strong style="color:#a78bfa">${escapeHTML(r.Codi_Registre) || '-'}</strong></td>
+                    <td><strong>${escapeHTML(r.Nom) || escapeHTML(r.Nom_Representant) || '-'}</strong></td>
+                    <td>${escapeHTML(r.Telefon) || '-'}</td>
+                    <td><a href="mailto:${escapeHTML(r.Email)}" style="color:#60a5fa">${escapeHTML(r.Email)}</a></td>
+                    <td>${escapeHTML(r.Edat) || '-'}</td>
+                    <td style="text-align: center;">${dupCell}</td>
+                    <td style="text-align: center;">${emailInvalidCell}</td>
+                    <td>${renderStatusSelect(r.id, r.Estat)}</td>
+                </tr>
+            `;
+        });
+    }
+
     updateHeaderSortClasses();
 }
 
@@ -609,7 +701,8 @@ function updateKPIs() {
         'Arts Vives': 'vives',
         'Art Lumínic': 'luminic',
         'Residència Artística': 'res',
-        'Paradetes i Artesania': 'para'
+        'Paradetes i Artesania': 'para',
+        'Concurs Decoració de Barrets': 'barrets'
     };
 
     Object.keys(cats).forEach(catName => {

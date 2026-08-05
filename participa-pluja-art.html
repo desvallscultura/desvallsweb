@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="css/style.css?v=2.2026.5">
     <script src="js/seo-schema.js"></script>
     <script src="js/main.js?v=2.2026.5"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .hero-participa {
             min-height: 60vh;
@@ -82,6 +84,18 @@
             <h2 class="section-title">Crides a l'Acció</h2>
             <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); text-align: left;">
                 
+                <!-- Concurs de Barrets (OBERT) -->
+                <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid #7c3aed; position: relative; background: #0f172a; border: 1px solid rgba(124, 58, 237, 0.4); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);">
+                    <span style="position: absolute; top: 1rem; right: 1rem; background: #7c3aed; color: #ffffff; padding: 0.35rem 0.85rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);">Obert</span>
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎩</div>
+                    <h3 style="margin-bottom: 0.75rem; font-size: 1.5rem; color: #ffffff; font-weight: 800; font-family: 'Outfit', sans-serif;">Concurs de Decoració de Barrets</h3>
+                    <p style="color: #e2e8f0; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">Deixa volar la teva creativitat decorant un barret de qualsevol estil o material. Obert a tothom i gratuït. Premi: <strong style="color: #fbbf24;">Un menú per a 2 persones al Restaurant Els 4 Vents</strong>. Termini: <strong style="color: #38bdf8;">12 d'agost de 2026</strong>.</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <a href="#form-inscripcio" onclick="showForm('formBarrets', document.getElementById('tabBtnBarrets'))" class="btn-primary w-100" style="background: #7c3aed; border-color: #7c3aed; color: #ffffff; font-weight: 700; padding: 0.85rem 1.25rem; font-size: 1rem; text-align: center; border-radius: 8px;">🚀 Inscriu-t'hi Online</a>
+                        <a href="docs/Bases_Concurs_Decoracio_Barrets_2026.pdf" target="_blank" class="btn-secondary w-100" style="border: 1px solid rgba(255,255,255,0.25); color: #ffffff; background: rgba(255,255,255,0.08); font-weight: 600; padding: 0.75rem 1.25rem; font-size: 0.95rem; text-align: center; border-radius: 8px;">📥 Descarregar Bases PDF</a>
+                    </div>
+                </div>
+
                 <!-- Projectes Generals -->
                 <div class="glass-card" style="padding: 2.5rem; border-top: 4px solid var(--dark-muted); position: relative;">
                     <span style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;">Tancat</span>
@@ -134,11 +148,12 @@
     <!-- Formulari Unificat Cridaner -->
     <section id="form-inscripcio" class="section dark-section">
         <div class="container text-center">
-            <h2 class="section-title text-light" style="margin-bottom: 1rem;">Estat de les Inscripcions</h2>
-            <p style="color: #cbd5e1; max-width: 750px; margin: 0 auto 2rem; line-height: 1.6;">Tots els terminis d'inscripció i participació per a la 5a Fira Pluja d'Art 2026 (incloent-hi Arts Generals, Mercat/Paradetes, Residència Artística, Concurs del Cartell i Foodtrucks) ja estan completament tancats. Moltes gràcies a tots els participants pel seu interès.</p>
+            <h2 class="section-title text-light" style="margin-bottom: 1rem;">Formulari d'Inscripció</h2>
+            <p style="color: #cbd5e1; max-width: 750px; margin: 0 auto 2rem; line-height: 1.6;">El <strong>Concurs de Decoració de Barrets</strong> té la inscripció oberta fins al 12 d'agost de 2026. La resta de convocatòries d'arts generals, paradetes i residència estan tancades.</p>
             
             <!-- Pestanyes -->
             <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button type="button" id="tabBtnBarrets" class="btn-primary form-tab-btn active-tab" onclick="showForm('formBarrets', this)" style="background: #7c3aed; border-color: #7c3aed; color: white;">🎩 Concurs de Barrets (OBERT)</button>
                 <button type="button" id="tabBtnGenerals" class="btn-primary form-tab-btn" onclick="showForm('formGenerals', this)" style="background: transparent; border-color: var(--primary); color: var(--primary);">Arts Generals (Tancat)</button>
                 <button type="button" id="tabBtnResidencia" class="btn-primary form-tab-btn" onclick="showForm('formResidencia', this)" style="background: transparent; border-color: #f43f5e; color: #f43f5e;">Residència Artística (Tancat)</button>
                 <button type="button" id="tabBtnParadetes" class="btn-primary form-tab-btn" onclick="showForm('formParadetes', this)" style="background: transparent; border-color: #10b981; color: #10b981;">Mercat/Paradetes (Tancat)</button>
@@ -147,6 +162,34 @@
             <div class="form-container">
                 <div class="glass-panel" style="background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.1);">
                     
+                    <!-- FORMULARI OBERT: CONCURS DE BARRETS -->
+                    <div id="formBarrets" class="plujaForm" style="display: block; text-align: left;">
+                        <form id="barretsWebForm">
+                            <input type="hidden" name="Categoria" value="Concurs Decoració de Barrets">
+                            <h3 style="color: #a78bfa; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🎩</span> Concurs de Decoració de Barrets 2026 (Inscripció Oberta)
+                            </h3>
+                            <p style="background: rgba(124, 58, 237, 0.15); border-left: 4px solid #a78bfa; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6; color: #e9d5ff;">
+                                📌 <strong>Inscripció gratuïta i oberta a tothom.</strong> Data límit: <strong>12 d'agost de 2026</strong>.<br>
+                                🎁 <strong>Premi:</strong> Un menú per a 2 persones al <strong>Restaurant Els 4 Vents</strong>.<br>
+                                📦 <strong>Lliurament del barret:</strong> Del 31 d'agost al 4 de setembre de 2026 a l'Ajuntament de Sant Jordi Desvalls.
+                            </p>
+
+                            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group"><label>Nom i Cognoms *</label><input type="text" id="barret_nom" name="Nom" required placeholder="Ex: Maria Vila i Pons"></div>
+                                <div class="form-group"><label>Telèfon *</label><input type="tel" id="barret_telefon" name="Telefon" required placeholder="Ex: 600 123 456"></div>
+                                <div class="form-group"><label>Correu electrònic *</label><input type="email" id="barret_email" name="Email" required placeholder="nom@exemple.cat"></div>
+                                <div class="form-group"><label>Edat *</label><input type="number" id="barret_edat" name="Edat" min="1" max="120" required placeholder="Ex: 34"></div>
+                            </div>
+
+                            <div class="checkbox-group" style="margin-top: 1rem;">
+                                <label><input type="checkbox" required> Accepto les <a href="docs/Bases_Concurs_Decoracio_Barrets_2026.pdf" target="_blank" style="color: #a78bfa; text-decoration: underline;">bases del concurs (PDF)</a> i el tractament de dades personals (RGPD).</label>
+                            </div>
+
+                            <button type="submit" id="btnSubmitBarrets" class="btn-primary w-100" style="margin-top: 1.5rem; padding: 1rem; background: #7c3aed; border-color: #7c3aed; font-size: 1.1rem; font-weight: bold;">🚀 Enviar Inscripció al Concurs</button>
+                        </form>
+                    </div>
+
                     <!-- AVIS DE TANCAMENT 1: GENERALS -->
                     <div id="formGenerals" class="plujaForm" style="display: none; text-align: left;">
                         <h3 style="color: var(--primary); margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -328,14 +371,110 @@
             btnElement.style.color = 'white';
         }
     }
-    // Obre la primera pestanya per defecte en carregar
+    // Obre la pestanya del Concurs de Barrets per defecte en carregar
     document.addEventListener("DOMContentLoaded", () => {
-        const resBtn = document.getElementById('tabBtnResidencia');
-        showForm('formResidencia', resBtn);
+        const barretBtn = document.getElementById('tabBtnBarrets');
+        showForm('formBarrets', barretBtn);
     });
 
-    // INSTRUCCIÓ PER L'ADMIN: Pega aquí la URL de la Web App del Google Apps Script
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgxLlIpnmTf6nHuZnDPUD2MxnQEuLYSc0URMUrujYr92YlfbCuH4NuFpNZeolcKZY9bA/exec';
+    // CONFIGURACIÓ SUPABASE I GOOGLE APPS SCRIPT
+    const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu7ka8LUg3hty2LhqiTDTDg_puJFPwGvA8FJFQaI55edJyDshRnGRq3DC397NcMQIX3g/exec';
+
+    let supabaseClient = null;
+    if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
+    // Integració Concurs de Barrets (Supabase + Google Script)
+    document.getElementById('barretsWebForm')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmitBarrets');
+        const feedback = document.getElementById('formFeedback');
+        
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Enviant inscripció...';
+        btn.disabled = true;
+
+        const nom = document.getElementById('barret_nom').value;
+        const telefon = document.getElementById('barret_telefon').value;
+        const email = document.getElementById('barret_email').value;
+        const edat = document.getElementById('barret_edat').value;
+        const codiRegistre = String(Math.floor(1 + Math.random() * 99)).padStart(2, '0');
+
+        // 1. Inserció a Supabase
+        if (supabaseClient) {
+            try {
+                await supabaseClient.from('barret_inscripcions').insert([{
+                    nom: nom,
+                    telefon: telefon,
+                    email: email,
+                    edat: edat,
+                    codi_registre: codiRegistre,
+                    created_at: new Date().toISOString()
+                }]);
+            } catch (err) {
+                console.warn('Supabase fallback:', err);
+            }
+        }
+
+        // 2. Enviament a Google Sheets via HTML Form i iframe ocult (garantit a tots els navegadors)
+        try {
+            let iframe = document.getElementById('gas_hidden_iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = 'gas_hidden_iframe';
+                iframe.name = 'gas_hidden_iframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+
+            let gasForm = document.getElementById('gas_hidden_form');
+            if (!gasForm) {
+                gasForm = document.createElement('form');
+                gasForm.id = 'gas_hidden_form';
+                gasForm.method = 'POST';
+                gasForm.action = GOOGLE_SCRIPT_URL;
+                gasForm.target = 'gas_hidden_iframe';
+                gasForm.style.display = 'none';
+                document.body.appendChild(gasForm);
+            }
+
+            gasForm.innerHTML = `
+                <input type="hidden" name="Codi_Registre" value="${codiRegistre}">
+                <input type="hidden" name="Nom" value="${nom}">
+                <input type="hidden" name="Telefon" value="${telefon}">
+                <input type="hidden" name="Email" value="${email}">
+                <input type="hidden" name="Edat" value="${edat}">
+            `;
+
+            gasForm.submit();
+        } catch (err) {
+            console.warn('Google Script submit error:', err);
+        }
+
+        feedback.className = 'form-message success';
+        feedback.style.background = 'rgba(124, 58, 237, 0.25)';
+        feedback.style.border = '2px dashed #a78bfa';
+        feedback.style.padding = '1.5rem';
+        feedback.style.borderRadius = '12px';
+        feedback.innerHTML = `
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+            <h3 style="color: #ffffff; margin-bottom: 0.5rem; font-size: 1.4rem;">Inscripció Confirmada!</h3>
+            <p style="color: #e9d5ff; font-size: 1.2rem; font-weight: bold; font-family: monospace;">Codi de Registre: <span style="color: #fbbf24; background: rgba(0,0,0,0.4); padding: 0.2rem 0.6rem; border-radius: 6px;">${codiRegistre}</span></p>
+            <p style="color: #cbd5e1; margin-top: 0.75rem;">Hola <strong>${nom}</strong>, hem registrat correctament la teva inscripció al Concurs de Decoració de Barrets.</p>
+            <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; font-size: 0.9rem; color: #e2e8f0; border-left: 4px solid #a78bfa;">
+                <p>📍 <strong>Lliurament del Barret:</strong> Del 31 d'agost al 4 de setembre de 2026 a l'Ajuntament de Sant Jordi Desvalls.</p>
+                <p style="margin-top: 0.4rem;">🏷️ Indica el teu nom i el teu codi <strong>${codiRegistre}</strong> en lliurar la peça.</p>
+            </div>
+        `;
+        feedback.style.display = 'block';
+        document.getElementById('barretsWebForm').reset();
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        window.scrollTo({ top: feedback.offsetTop - 100, behavior: 'smooth' });
+    });
 
     const handleSubmission = function(e) {
         e.preventDefault();
