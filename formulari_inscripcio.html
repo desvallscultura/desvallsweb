@@ -287,157 +287,40 @@
         <div class="header">
             <span class="header-badge">Fira Pluja d'Art 2026</span>
             <h1>Concurs de Decoració de Barrets</h1>
-            <p>Deixa volar la teva creativitat i guanya un menú per a dues persones!</p>
+            <p>Fase de Lliurament dels Barrets Participants</p>
         </div>
 
         <div class="content">
-            <div class="highlight-banner">
-                <div class="highlight-icon">🎁</div>
+            <div class="highlight-banner" style="background: #fdf2f8; border-color: #fbcfe8;">
+                <div class="highlight-icon">🔒</div>
                 <div class="highlight-text">
-                    <h4>Premi Principal</h4>
-                    <p>Un menú per a 2 persones al <strong>Restaurant Els 4 Vents</strong> de Sant Jordi Desvalls.</p>
+                    <h4 style="color: #9d174d;">Inscripcions Tancades</h4>
+                    <p style="color: #be185d;">El període d'inscripció va finalitzar el <strong>12 d'agost de 2026</strong>.</p>
                 </div>
             </div>
 
-            <form id="barretsForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="nom">Nom i Cognoms <span class="required">*</span></label>
-                        <input type="text" id="nom" name="nom" placeholder="Ex: Maria Vila i Pons" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="telefon">Telèfon <span class="required">*</span></label>
-                        <input type="tel" id="telefon" name="telefon" placeholder="Ex: 600 123 456" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Correu electrònic <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" placeholder="nom@exemple.cat" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="edat">Edat <span class="required">*</span></label>
-                        <input type="number" id="edat" name="edat" min="1" max="120" placeholder="Ex: 34" required>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="bases" required>
-                            <label for="bases">
-                                Accepto les <a href="../bases_concurs_barrets.md" target="_blank">bases del concurs</a> i el tractament de dades personals (RGPD). <span class="required">*</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-submit">🚀 Confirmar Inscripció Gratuïta</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal de confirmació de rebut -->
-    <div class="modal-overlay" id="ticketModal">
-        <div class="ticket-modal">
-            <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
-            <h2 style="color: #6d28d9; font-family: 'Outfit'; margin-bottom: 6px;">Inscripció Confirmada!</h2>
-            <p style="color: #64748b; font-size: 0.95rem;">Gràcies per participar al Concurs de Decoració de Barrets.</p>
-
-            <div class="ticket-header">
-                <div style="font-size: 0.85rem; color: #6b21a8; font-weight: bold; text-transform: uppercase;">Nº Inscripció</div>
-                <div class="ticket-code" id="modalCode">BARRET-2026-X78</div>
-                <div style="font-size: 0.8rem; color: #475569; margin-top: 5px;" id="modalNom">Participant</div>
+            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 25px; margin-bottom: 25px; color: #1e293b; line-height: 1.7;">
+                <h3 style="color: #6d28d9; font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span>📦</span> Informació per al Lliurament dels Barrets
+                </h3>
+                <ul style="list-style: none; padding-left: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+                    <li>📅 <strong>Període de lliurament:</strong> Del <strong style="color: #0284c7;">31 d'agost al 4 de setembre de 2026</strong>.</li>
+                    <li>📍 <strong>Lloc de lliurament:</strong> <strong>Ajuntament de Sant Jordi Desvalls</strong>, dins l'horari d'atenció al públic.</li>
+                    <li>🏷️ <strong>Identificació:</strong> En lliurar el barret, facilita el teu nom i telèfon (o número d'inscripció). S'assignarà un número identificatiu per mantenir l'anonimat davant del jurat i durant l'exposició.</li>
+                    <li>🎪 <strong>Exposició i votació:</strong> Els barrets decorats s'exposaran durant la Fira Pluja d'Art (<strong>18, 19 i 20 de setembre de 2026</strong>).</li>
+                    <li>🎁 <strong>Premi:</strong> Un menú per a 2 persones al <strong>Restaurant Els 4 Vents</strong> de Sant Jordi Desvalls.</li>
+                </ul>
             </div>
 
-            <div style="text-align: left; background: #f8fafc; padding: 14px; border-radius: 10px; font-size: 0.88rem; color: #334155; line-height: 1.5;">
-                <p>📍 <strong>Lliurament del Barret:</strong> Del 31 d'agost al 4 de setembre de 2026 a l'Ajuntament de Sant Jordi Desvalls.</p>
-                <p style="margin-top: 6px;">🏷️ En lliurar-lo, indica el teu nom i el teu Nº d'inscripció.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+                <a href="docs/Bases_Concurs_Decoracio_Barrets_2026.pdf" target="_blank" style="text-decoration: none; background: #6d28d9; color: white; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);">
+                    📥 Descarregar Bases Oficials (PDF)
+                </a>
+                <a href="index.html" style="text-decoration: none; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+                    🌐 Anar a la Web Principal
+                </a>
             </div>
-
-            <button class="btn-close-modal" onclick="closeModal()">Tancar finestra</button>
         </div>
     </div>
-
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu7ka8LUg3hty2LhqiTDTDg_puJFPwGvA8FJFQaI55edJyDshRnGRq3DC397NcMQIX3g/exec';
-
-        let supabaseClient = null;
-        if (window.supabase) {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-
-        document.getElementById('barretsForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const nom = document.getElementById('nom').value;
-            const telefon = document.getElementById('telefon').value;
-            const email = document.getElementById('email').value;
-            const edat = document.getElementById('edat').value;
-            const randomCode = String(Math.floor(1 + Math.random() * 99)).padStart(2, '0');
-            
-            // 1. Supabase
-            if (supabaseClient) {
-                try {
-                    await supabaseClient.from('barret_inscripcions').insert([{
-                        nom: nom,
-                        telefon: telefon,
-                        email: email,
-                        edat: edat,
-                        codi_registre: randomCode,
-                        created_at: new Date().toISOString()
-                    }]);
-                } catch (err) {
-                    console.warn('Supabase insert:', err);
-                }
-            }
-
-            // 2. Google Script via iframe ocult (100% efectiu a tots els navegadors)
-            try {
-                let iframe = document.getElementById('gas_hidden_iframe');
-                if (!iframe) {
-                    iframe = document.createElement('iframe');
-                    iframe.id = 'gas_hidden_iframe';
-                    iframe.name = 'gas_hidden_iframe';
-                    iframe.style.display = 'none';
-                    document.body.appendChild(iframe);
-                }
-
-                let gasForm = document.getElementById('gas_hidden_form');
-                if (!gasForm) {
-                    gasForm = document.createElement('form');
-                    gasForm.id = 'gas_hidden_form';
-                    gasForm.method = 'POST';
-                    gasForm.action = GOOGLE_SCRIPT_URL;
-                    gasForm.target = 'gas_hidden_iframe';
-                    gasForm.style.display = 'none';
-                    document.body.appendChild(gasForm);
-                }
-
-                gasForm.innerHTML = `
-                    <input type="hidden" name="Codi_Registre" value="${randomCode}">
-                    <input type="hidden" name="Nom" value="${nom}">
-                    <input type="hidden" name="Telefon" value="${telefon}">
-                    <input type="hidden" name="Email" value="${email}">
-                    <input type="hidden" name="Edat" value="${edat}">
-                `;
-
-                gasForm.submit();
-            } catch (err) {
-                console.warn('Google Script submit error:', err);
-            }
-
-            document.getElementById('modalCode').textContent = randomCode;
-            document.getElementById('modalNom').textContent = nom;
-            document.getElementById('ticketModal').style.display = 'flex';
-        });
-
-        function closeModal() {
-            document.getElementById('ticketModal').style.display = 'none';
-            document.getElementById('barretsForm').reset();
-        }
-    </script>
 </body>
 </html>
