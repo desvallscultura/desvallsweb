@@ -2,6 +2,9 @@
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Encarrega la samarreta oficial de Sant Jordi Desvalls 2026 i col·labora amb Desvalls Cultura. Talles S, M, L, XL, XXL en colors Blau i Vermell.">
     <meta name="keywords" content="Samarreta Desvalls Cultura, Sant Jordi Desvalls, Marxandatge, Pluja d'Art, Pluja de Lletres">
@@ -27,8 +30,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
     <!-- CSS Principal -->
-    <link rel="stylesheet" href="css/style.css?v=2.2026.5">
-    <script src="js/main.js?v=2.2026.5" defer></script>
+    <link rel="stylesheet" href="css/style.css?v=21a965ac">
+    <script src="js/main.js?v=ed957a32" defer></script>
 
     <style>
         :root {
@@ -651,12 +654,18 @@
                 </div>
 
                 <div class="info-destacada">
+                    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: 4px solid var(--primary); padding: 1.1rem 1.25rem; border-radius: 0.85rem; margin-bottom: 1.5rem; text-align: left;">
+                        <p style="margin: 0 0 0.5rem; font-weight: 700; color: #1e293b; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📢</span> Estat del període de comandes:
+                        </p>
+                        <p style="margin: 0; font-size: 0.95rem; color: #475569; line-height: 1.6;">
+                            El termini inicial ha finalitzat, però <strong>mantenim el formulari obert</strong> per recollir noves comandes. La teva sol·licitud quedarà registrada i <strong>es farà efectiva quan s'arribi a un número suficient de peticions</strong>. T'enviarem un avís per correu electrònic quan això succeeixi, i posteriorment un altre avís quan arribin les samarretes per a <strong>recollir i pagar</strong> a Sant Jordi Desvalls.
+                        </p>
+                    </div>
+
                     <p style="margin-bottom: 0.75rem;">🎨 <strong>Tria el color</strong> que t'agradi més (Blau o Vermell).</p>
                     <p style="margin-bottom: 0.75rem;">📏 <strong>Pren-te la mida</strong> i tria la talla perfecta per a tu.</p>
                     <p style="margin-bottom: 0.75rem;">📝 <strong>Omple el formulari</strong> i encomana'n tantes com vulguis.</p>
-                    <div>
-                        <span class="data-limit-badge">⏳ Fes la teva comanda abans de l'<strong>1 de setembre de 2026</strong>!</span>
-                    </div>
                 </div>
 
                 <!-- Guia de Talles Desplegable -->
@@ -773,13 +782,13 @@
             <div class="pagina" data-pagina="4" id="pagina-confirmacio">
                 <div class="confirmacio-wrapper">
                     <div class="icona-exit">✓</div>
-                    <h2 style="font-size: 2rem; color: #065f46; margin-bottom: 0.5rem; font-family: var(--font-serif);">Comanda enviada correctament!</h2>
-                    <p style="color: #475569; max-width: 520px; margin: 0 auto 1.5rem; font-size: 1.05rem;">
-                        Moltes gràcies pel teu suport a <strong>Desvalls Cultura</strong>. Hem registrat la teva comanda amb èxit.
+                    <h2 style="font-size: 2rem; color: #065f46; margin-bottom: 0.5rem; font-family: var(--font-serif);">Sol·licitud recollida correctament!</h2>
+                    <p style="color: #475569; max-width: 540px; margin: 0 auto 1.5rem; font-size: 1.05rem; line-height: 1.6;">
+                        Moltes gràcies pel teu suport a <strong>Desvalls Cultura</strong>. Hem registrat la teva sol·licitud amb èxit.
                     </p>
 
                     <div class="numero-comanda-box">
-                        <span>El teu número de comanda</span>
+                        <span>El teu número de sol·licitud</span>
                         <strong id="confirmacio-num-comanda">SAM-2026-0000</strong>
                     </div>
 
@@ -789,14 +798,17 @@
                             <strong id="confirmacio-unitats" style="font-size: 1.35rem; color: #1e293b;">0 unitats</strong>
                         </div>
                         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1rem 1.5rem; min-width: 150px;">
-                            <span style="display: block; font-size: 0.85rem; color: #64748b;">Import total</span>
+                            <span style="display: block; font-size: 0.85rem; color: #64748b;">Import estimat</span>
                             <strong id="confirmacio-import" style="font-size: 1.35rem; color: var(--primary);">0,00 €</strong>
                         </div>
                     </div>
 
-                    <p style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 0.85rem 1.25rem; border-radius: 0.75rem; font-size: 0.95rem; margin: 1.5rem 0;">
-                        📧 Rebràs un correu electrònic amb la confirmació i t'avisarem quan puguis passar a recollir i pagar les samarretes a Sant Jordi Desvalls.
-                    </p>
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 1.1rem 1.35rem; border-radius: 0.85rem; font-size: 0.95rem; margin: 1.5rem auto; max-width: 580px; text-align: left; line-height: 1.65;">
+                        <p style="margin: 0 0 0.5rem; font-weight: 700; font-size: 1rem; color: #1e3a8a;">ℹ️ Estat i seguiment de la comanda:</p>
+                        <p style="margin: 0 0 0.4rem;">• Com que el termini inicial ha finalitzat, la teva comanda ha estat <strong>recollida</strong> i <strong>es farà efectiva quan s'arribi a un número suficient de sol·licituds</strong>.</p>
+                        <p style="margin: 0 0 0.4rem;">• <strong>T'enviarem un avís per correu electrònic</strong> en el moment que s'activi la producció.</p>
+                        <p style="margin: 0;">• Posteriorment, rebràs una segona notificació quan les samarretes arribin per poder passar a <strong>recollir i pagar</strong> a Sant Jordi Desvalls.</p>
+                    </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap;">
                         <button type="button" class="nav-btn" style="flex: 1;" onclick="window.location.href='index.html'">
