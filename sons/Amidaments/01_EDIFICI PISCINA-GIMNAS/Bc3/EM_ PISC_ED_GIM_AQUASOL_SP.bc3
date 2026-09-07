@@ -1,0 +1,417 @@
+~V|SOFT S.A.|FIEBDC-3/2002|Presto 8.8||ANSI|
+~K|\2\2\3\2\2\2\2\EUR\|0|
+~C|%0290|%|Medios auxiliares|0|221105|0|
+~C|00383-1369|u|TRANSFORMADOR 100W|0|220425|0|
+~C|17506##||Reforma y ampliación Hotel-apartamentos Aquasol|0|221105|0|
+~D|17506##|PISCINA\1\1\|
+~C|AA 05 172|u|VALVULA DE RETENCIÓN DE 3/4"|0|220425|0|
+~C|AA 05 173|u|VALVULA DE RETENCIÓN DE 1"|0|220425|0|
+~C|AC01024|u|PURGADOR AUTOMATICO DE 1/2"|0|220425|0|
+~C|AFM1|kg|MEDIO FILTRANTE DE MATERIAL ACTIVADO (0,5-1mm)|0|220425|0|
+~C|AFM2|kg|MEDIO FILTRANTE DE MATERIAL ACTIVADO (1-2mm)|0|220425|0|
+~C|AFM3|kg|MEDIO FILTRANTE DE MATERIAL ACTIVADO (2-6mm)|0|220425|0|
+~C|ALGUIC|u|SUMINISTRO DE ALGUICIDA 25 litros|0|220425|0|
+~C|AMINPH|u|SUMINISTRO DE AMINORADOR DE PH AL 40% 25 litros|0|220425|0|
+~C|ARQ 2BA+SG|Ud.|ARQUETA RECOGIDA AGUAS RESIDUALES|0|220425|0|
+~C|AST00285|u|SUMIDERO REJILLA 330x330mm|0|220425|0|
+~C|AST00317|u|BOQUILLA ASPIRACION con tapa roscada aspiración limpieza|0|220425|0|
+~C|AST05581|u|PIEZA REJA PERIMETRAL 195mm x 500 mm|0|220425|0|
+~C|AST12062|u|ARMARIO PORTASONDAS 3 NIVELES|0|220425|0|
+~C|AST20430|u|CONTADOR DE AGUA 2"|0|220425|0|
+~C|AST22353|u|BOQUILLA DE DE FONDO OSCILANTE Ø50 PN-10|0|220425|0|
+~C|AST30825|u|CAJA CONEXIONES|0|220425|0|
+~C|AST32431|u|FILTRO LAMINADO DE POLIESTER Ø600 CON VALVULA MULTIPORT|0|220425|0|
+~C|AST52142|u|MODULADOR DMX|0|220425|0|
+~C|AST57748|u|NEOLYSYS DE BAJA SAL 50g Cl2/h+UV 75W+pH/ppm|0|220425|0|
+~C|AST59976|u|PROYECTOR MINI LED RGB 4VA|0|220425|0|
+~C|B0005.0010|h|Oficial 1ª electricista|0|060917|1|
+~C|B0005.0020|h|Ayudante electricista|0|300817|1|
+~C|C3G1.5|ml|CIRCUITO DE ALIMENTACIÓN 3G1,5mm2|0|220425|0|
+~C|C3G2.5|ml|CIRCUITO DE ALIMENTACIÓN 3G2,5mm2|0|220425|0|
+~C|C4X2.5|ml|CIRCUITO DE ALIMENTACIÓN 3x2,5+2,5TTmm2|0|220425|0|
+~C|CABLE2X4|m|CABLEADO PROYECTORES|0|220425|0|
+~C|CCCG0200|m|CONDUCTO DE CHAPA GALVANIZADA D200x0,6mm|0|220425|0|
+~C|CERTINS|u|CERTIFICADO DE INSTALACION|0|220425|0|
+~C|COL75X2A|u|COLECTOR DE PVC Ø110 ASPIRACION|0|220425|0|
+~C|CONT025|u|CONTADOR DE AGUA 1"|0|220425|0|
+~C|ELPRSOBTR3|u|PROTECCION CONTRA SOBRETENSIONES TRANSITORIAS CLASE III|0|220425|0|
+~C|ENC162PES|u|BASE DE ENCHUFE 2P+TT 16A ESTANCA|0|220425|0|
+~C|EVALV001|u|ELECTROVALVULA 1" 230V NC|0|220425|0|
+~C|IM01111|u|TERMOMETRO D63mm 0-120ºC c/ vaina 1/2"|0|220425|0|
+~C|IM33003|u|MANOMETRO GLICERINA D60mm 0-4Bar|0|220425|0|
+~C|INT01ES|ud|INTERRUPTOR UNIPOLAR ESTANCO|0|220425|0|
+~C|INTERUFP6375|u|INTERCAMBIADOR DE PLACAS DE TITANIO P=36,5KW|0|220425|0|
+~C|INTFDN50|u|INTERRUPTOR DE FLUJO PVC DN50 PN10|0|220425|0|
+~C|MALLINSD200|u|MALLA ANTIINSECTOS PARA CONDUCTO D200mm|0|220425|0|
+~C|MHYA1100000E|u|LUZ DE EMERGENCIA 160lumens IP66 DE SUPERFÍCIE|0|220425|0|
+~C|NB32250206|u|BOMBA FILTRACION|0|220425|0|
+~C|NEOLINEO150|u|EXTRACTOR EN LINEA|0|220425|0|
+~C|OPTIMAM|u|BOMBA DOSIFICADORA OPTIMA MANUAL REGULABLE|0|220425|0|
+~C|OPTIMAP|u|BOMBA DOSIFICADORA OPTIMA PROPORCIONAL|0|220425|0|
+~C|PFLED29W|u|PANTALLA ESTANCA LED 29W 3400 lumens L=1500 mm|0|220425|0|
+~C|PISCDESIN#||DESINFECCIÓN|0|220425|0|
+~D|PISCDESIN#|AST57748\1\1\OPTIMAP\1\1\OPTIMAM\1\1\AMINPH\1\2\ALGUIC\1\1\|
+~C|PISCELEC#||ELECTRICIDAD|0|221105|0|
+~D|PISCELEC#|CERTINS\1\1\QEL17\1\1\ELPRSOBTR3\1\1\AST59976\1\3\AST52142\1\1\00383-1369\1\1\CABLE2X4\1\45\PTPP025\1\45\PTR020\1\15\AST30825\1\3\C3G1.5\1\33\C3G2.5\1\61\C4X2.5\1\15\INT01ES\1\1\ENC162PES\1\5\PL01S\1\2\PLE01S\1\1\PFLED29W\1\2\MHYA1100000E\1\1\REDTIERRJAC\1\1\|
+~C|PISCEQ#||EQUIPAMIENTO|0|220425|0|
+~D|PISCEQ#|NB32250206\1\1\COL75X2A\1\1\AST32431\1\2\AFM1\1\248\AFM2\1\0\AFM3\1\0\AST22353\1\2\AST00317\1\1\AST00285\1\2\AST05581\1\38\EVALV001\1\1\AST12062\1\1\CONT025\1\1\AST20430\1\1\VISD75\1\1\INTERUFP6375\1\1\|
+~C|PISCEXT#||EXTRACCION|0|220425|0|
+~D|PISCEXT#|NEOLINEO150\1\1\CCCG0200\1\20\MALLINSD200\1\1\|
+~C|PISCINA#||PISCINA CLIMATIZADA|0|221105|0|
+~D|PISCINA#|PISCEQ\1\1\PISCTUB\1\1\PISCVAL\1\1\PISCDESIN\1\1\PISCVAR\1\1\PISCEXT\1\1\PISCELEC\1\1\|
+~C|PISCTUB#||TUBERIAS|0|220425|0|
+~D|PISCTUB#|TPVCD200\1\4.4\TPVCD160\1\0\TPVCD125\1\0\TPVCD110\1\6\TPVCD90\1\0\TPVCD75\1\10\TPVCD63\1\54\TPVCD50\1\39\TPVCD40\1\0\TPVCD32\1\8\TPVCD25\1\32\TPVCD20\1\0\|
+~C|PISCVAL#||VALVULERIA|0|050918|0|
+~D|PISCVAL#|VALMADN150\1\0\VALMADN125\1\0\VALMADN100\1\0\VALMADN80\1\0\VALBODN65\1\4\VALBODN50\1\4\VALBODN40\1\1\VALBODN32\1\1\VALBODN25\1\1\VALBODN20\1\6\VALANDN125\1\0\VALANDN100\1\0\VALANDN80\1\0\VALANDN65\1\0\VALANDN550\1\1\VALANDN32\1\0\VALANDN25\1\0\AA 05 173\1\1\AA 05 172\1\0\VISDN80\1\0\VISDN50\1\1\INTFDN50\1\2\IM33003\1\2\IM01111\1\2\AC01024\1\2\SOND080420MA\1\2\|
+~C|PISCVAR#||VARIOS|0|220425|0|
+~D|PISCVAR#|VA001\1\1\VA002\1\1\VA003\1\1\VA004\1\1\VA005\1\2\VA009\1\1\ARQ 2BA+SG\1\1\VERSATG\1\2\|
+~C|PL01S|u|PUNTO DE LUZ SIMPLE|0|220425|0|
+~C|PLE01S|u|PUNTO DE LUZ ALUMBRADO DE EMERGENCIA|0|220425|0|
+~C|PTPP025|ml|TUBO CORRUGADO POLIPROPILENO Ø25mm|0|221105|0|
+~D|PTPP025|B0005.0010\1\0\B0005.0020\1\0\TPP025\1\1\%0290\1\0\|
+~C|PTR020|ml|TUBO RÍGIDO LIBRE DE HALOGENOS Ø20mm|0|221105|0|
+~D|PTR020|B0005.0010\1\0\B0005.0020\1\0\TR020\1\1\%0290\1\0\|
+~C|QEL17|u|SUBCUADRO ELECTRICO PISCINA|0|220425|0|
+~C|REDTIERRJAC|u|RED EQUIPOTENCIAL DE TIERRA|0|220425|0|
+~C|SOND080420MA|u|SONDA DE TEMPERATURA 0-80ºC CON VAINA|0|220425|0|
+~C|TPP025|ml|TUBO CORRUGADO POLIPROPILENO Ø25mm|0|290817|3|
+~C|TPVCD110|u|TUBERIA DE PVC Ø110 PN10|0|220425|0|
+~C|TPVCD125|u|TUBERIA DE PVC Ø125 PN10|0|220425|0|
+~C|TPVCD160|u|TUBERIA DE PVC Ø160 PN10|0|220425|0|
+~C|TPVCD20|u|TUBERIA DE PVC Ø20 PN16|0|220425|0|
+~C|TPVCD200|u|TUBERIA DE PVC Ø200 PN10|0|220425|0|
+~C|TPVCD25|u|TUBERIA DE PVC Ø25 PN16|0|220425|0|
+~C|TPVCD32|u|TUBERIA DE PVC Ø32 PN16|0|220425|0|
+~C|TPVCD40|u|TUBERIA DE PVC Ø40 PN10|0|220425|0|
+~C|TPVCD50|u|TUBERIA DE PVC Ø50 PN10|0|220425|0|
+~C|TPVCD63|u|TUBERIA DE PVC Ø63 PN10|0|220425|0|
+~C|TPVCD75|u|TUBERIA DE PVC Ø75 PN10|0|220425|0|
+~C|TPVCD90|u|TUBERIA DE PVC Ø90 PN10|0|220425|0|
+~C|TR020|ml|TUBO RÍGIDO LIBRE DE HALOGENOS Ø20mm|0|190817|3|
+~C|VA001|u|ELEVADOR HIDRAULICO|0|220425|0|
+~C|VA002|u|LIMPIAFONDOS|0|220425|0|
+~C|VA003|u|CEPILLO DE LIMPIEZA|0|220425|0|
+~C|VA004|u|RECOGE HOJAS|0|220425|0|
+~C|VA005|u|SALVAVIDAS|0|220425|0|
+~C|VA009|u|DEPOSITO DE COMPENSACION 4 m3|0|220425|0|
+~C|VALANDN100|u|VALVULA ANTIRETORNO PVC DN100|0|050918|0|
+~C|VALANDN125|u|VALVULA ANTIRETORNO PVC DN125|0|220425|0|
+~C|VALANDN25|u|VALVULA ANTIRETORNO PVC DN25|0|041218|0|
+~C|VALANDN32|u|VALVULA ANTIRETORNO PVC DN32|0|220425|0|
+~C|VALANDN550|u|VALVULA ANTIRETORNO PVC DN50|0|220425|0|
+~C|VALANDN65|u|VALVULA ANTIRETORNO PVC DN65|0|220425|0|
+~C|VALANDN80|u|VALVULA ANTIRETORNO PVC DN80|0|220425|0|
+~C|VALBODN20|u|VALVULA DE ESFERA PVC DN20 PN10|0|220425|0|
+~C|VALBODN25|u|VALVULA DE ESFERA PVC DN25 PN10|0|220425|0|
+~C|VALBODN32|u|VALVULA DE ESFERA PVC DN32 PN10|0|220425|0|
+~C|VALBODN40|u|VALVULA DE ESFERA PVC DN40 PN10|0|220425|0|
+~C|VALBODN50|u|VALVULA DE ESFERA PVC DN50 PN10|0|220425|0|
+~C|VALBODN65|u|VALVULA DE ESFERA PVC DN65 PN10|0|220425|0|
+~C|VALMADN100|u|VALVULA DE MARIPOSA PVC DN100 PN10|0|220425|0|
+~C|VALMADN125|u|VALVULA DE MARIPOSA PVC DN125 PN10|0|220425|0|
+~C|VALMADN150|u|VALVULA DE MARIPOSA PVC DN150 PN10|0|220425|0|
+~C|VALMADN80|u|VALVULA DE MARIPOSA PVC DN80 PN10|0|220425|0|
+~C|VERSATG|Ud.|BOMBA ACHIQUE 0'95kW-230Vca|0|220425|0|
+~C|VISD75|u|VISOR DE NIVEL D75mm|0|220425|0|
+~C|VISDN50|u|VISOR DE LIQUIDOS DN50 PN10|0|220425|0|
+~C|VISDN80|u|VISOR DE LIQUIDOS DN80 PN10|0|220425|0|
+~T|00383-1369|Suministro e instalación transformador 230V-12V de 100 W IP20, marca Astral codigo 00383-1369, instalado en cuadro eléctrico. Incluso pp de accesorios y material necesario para su montaje y conexión.
+ 
+
+|
+~T|AA 05 172|Suministro e instalación de válvula de retención de 3/4", con cuerpo, eje y disco de latón, muelle de acero inoxidable AISI-304 y junta de cierre de NBR, Tª maxima de servicio=90ºC. Incluso pp de accesorios y elementos necesarios para su montaje.|
+~T|AA 05 173|Suministro e instalación de válvula de retención de 1", con cuerpo, eje y disco de latón, muelle de acero inoxidable AISI-304 y junta de cierre de NBR, Tª maxima de servicio=90ºC. Incluso pp de accesorios y elementos necesarios para su montaje.|
+~T|AC01024|Suministro e instalación de Purgador automático de aire SEI de SALVADOR ESCODA ref. AC01024 o similar equivalente. Temperatura 0º C +110 Cº, presión máx. 10 bar, dimensiones 1/2". Incluso pp de accesorios, valvulería y elementos necesarios para su montaje y conexión.
+|
+~T|AFM1|Suministro e instalación de medio filtrante a base de material activado granulometría 0,5-1 mm instalado en filtro de arena marca DrydenAqua modelo AFM grado 1.
+|
+~T|AFM2|Suministro e instalación de medio filtrante a base de material activado granulometría 1-2 mm instalado en filtro de arena marca DrydenAqua modelo AFM grado 2.
+|
+~T|AFM3|Suministro e instalación de medio filtrante a base de material activado granulometría 1-2 mm instalado en filtro de arena marca DrydenAqua modelo AFM grado 2.
+|
+~T|ALGUIC|Suministro de envase y alguicida en garrafa de 25 litros. Incluso pp de montaje, conexionado y puesta en marcha.|
+~T|AMINPH|Suministro de envase y aminorador de PH al 40% en garrafa de 25 litros. Incluso pp de montaje, conexionado y puesta en marcha.|
+~T|ARQ 2BA+SG|Suministro e instalación de arqueta de recogida y elevación de aguas residuales  de medidas interiores de 1.00x1.0x1.0m (ancho x largo x fondo), realizada con fábrica de ladrillo macizo colocado de 1/2 pie de espesor, recibido con mortero de cemento y arena lavada 1/6, enfoscada con mortero de cemento y arena lavada 1/6 y bruñida con mortero de cemento y arena lavada 1/2 en su interior, sobre solera de hormigón HM-20/P/40. Incluso cerco, tapa de fundición, accesorios y material auxiliar necesario para montaje, soporte y sujeción.|
+~T|AST00285|Suministro, instalación y conexionado de sumidero fabricado en resina de polyester + F.V. acabado de gel-coat, con rejilla inoxidable y tornilleria en acero inox AISI 304, de 330x330mm., Caudal nominal 18 m3/h para 0,5 m/s, marca ASTRALPOOL ref. 20282. Incluso pasamuros y accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.|
+~T|AST00317|Suministro, instalación y conexionado de toma de aspiración limpieza mediante Boquilla de aspiración. Para encolar a tubo Ø 50 PN 10. Fabricada en ABS color blanco con tapón rosca 1½”. Conexión terminal 07958 y racord 01393. Cumple con las normas EN 16582-1 y EN 16713-2". Marca ASTRAL codigo 24415 o similar. Incluso reducción de tuberia a diametro nominal de conexiones de bomba, puente manometrico, parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección.
+
+|
+~T|AST05581|Suministro, instalación y conexionado de piezas de reja longitudinal para recogida de rebosadero piscina de 22mm alto x 195mm anchox500mm largo (2 uds = 1m), fabricado en polipropileno estabilizado a la acción de rayos UV, color blanco, union mediante enganches macho-hembra de la misma placa, marca ASTRALPOOL ref. 28664. Incluso mermas por perímetro de piscina, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.|
+~T|AST12062|Suministro e instalación de armario portasondas a 3 niveles, (Nivel mínimo de seguridad, Nivel de llenado y Nivel de arranque forzado de la bomba), incluye sondas PTC con 2 metros de cable, IP56, retraso en actuación ajustable de 1 a 60 segundos, marca Astral codigo 12062. Incluye tuberia visor metracrilato D1100mm, conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.
+|
+~T|AST20430|Suministro e instalación de contador de agua fria Woltman con emisor de impulsos  tipo CYBLE de bridas DN50 2". Qn= 25 m3/h.  Marca Astral Codigo 20430.  Incluso conexiones hidráulicas, filtro, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.
+|
+~T|AST22353|Suministro e instalación de Boquilla impulsion/aspiración de fondo oscilante Ø50 PN-10. Fabricada en material plástico ABS y tornillería de acero inoxidable AISI-316. Caudal máximo 10 m3/h. Marca Astral modelo 22353, incluso Tubo passamuros codigo 21248.  Totalmente instalado y funcionando, incluso pasamuros PVC.|
+~T|AST30825|Suministro e instalación de caja de conexiones de seguridad fabricadas en ABS, compuesta de 3 entradas o salidas a 3/4''. Acoplamiento rosca 3/4'' y M-25. Marca Astral Codigo 30825. Incluso pp de accesorios y elementos necesarios para sujeción.|
+~T|AST32431|Suministro, instalación y conexionado de filtro laminado con resina de poliéster + FV, velocidad de filtración 25 m3/h/m2 y una presión max. de trabajo de 2.5 kg/cm2, salida 1 1/2", además de bancada en material plastico resistente, con válvula multiport incorporada, marca ASTRAL modelo VESUBIO Ø600 codigo 15786
+. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.
+|
+~T|AST52142|Suministro e instalación de modulador LUMIPLUS, marca Astral Codigo 27818 en subcuadro eléctrico. Incluso pp de accesorios y elementos de sujeción.
+|
+~T|AST57748|Suministro, instalación y conexionado de sistema de Neolysis LS, Neolysis baja sal+ control PH  Astralpool AP Neo/S 50 g Cl2/h + UV 75 W + pH/PPM (EXT-2) código 66148. 
+Neolysis S (5-6 g/L) + UV para piscina pública.
+Neolysis, el tratamiento más avanzado de AstralPool: + Sostenibilidad + Desinfección + Innovación + Salud.
+Ventajas:
+• Máxima calidad de agua.
+• Doble desinfección: UV + Electrólisis.
+Características:
+• Baja salinidad 2-3 g/L (Neo LS)
+• Máxima capacidad reducción de cloraminas (UV LP + Electrólisis).
+• Electrodos autolimpiantes 12.000 - 15.000 horas (Neo LS y Neo S).
+• Lámpara UV LP HO (13.000 horas).
+• Proceso Patentado.
+• Para controlar más de una unidad para la misma piscina, se requiere control externo AP PR-200 o Smart
+Control y el control multiple Kit TRI (codigo 70338) incluido.
+
+Incluso portasondas, panel de sujeción, programación, puesta en marcha, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.|
+~T|AST59976|Suministro e instalación de 1 Ud. Proyector LUMIPLUS MINI V3 RGB con embellecedor efecto inox y un flujo luminoso de186 lm. Potencia Consumo RGB: 7 VA. Marca Astralpool codigo 59972.
+1 Ud. Nicho para hormigón codigo 53956.
+1 Ud. Kit empalme sumergible. Conexión subacuática para sellar una conexión eléctrica mediante resinas con la máxima seguridad.
+1 Ud. Manguera pasacables flexible. Para unión de proyector a caja conexiones. Mangueras de longitud de 1 m. Totalmente instalado y funcionando.|
+~T|B0005.0010|Oficial 1ª electricista|
+~T|B0005.0020|Ayudante electricista|
+~T|C3G1.5|Suministro e instalación de linea de alimentación, realizado con cable tipo RZ1-k AS 0,6/1kV hasta cajas de derivación y/o ES07Z1-k AS 450/750V hasta receptores, de 3G1,5mm2 en cobre, (UNE 211002, 21123, 21145, 21147.1, 21432.1, 21174, 21172 o IEC 1034, IEEE 383.74) en montaje a definir por DF, en sistema monofásico. Incluida p.p. de cajas derivación, bornes, sujeciones tubos, y canalización mediante tubo rígido en instalación vista.|
+~T|C3G2.5|Suministro e instalación de linea de alimentación, realizado con cable tipo RZ1-k AS 0,6/1kV hasta cajas de derivación y/o ES07Z1-k AS 450/750V hasta receptores, de 3G2,5mm2 en cobre, (UNE 211002, 21123, 21145, 21147.1, 21432.1, 21174, 21172 o IEC 1034, IEEE 383.74) en montaje a definir por DF, en sistema monofásico. Incluida p.p. de cajas derivación, bornes, sujeciones tubos, y canalización mediante tubo rígido en instalación vista.|
+~T|C4X2.5|Suministro e instalación de linea de alimentación, realizado con cable tipo RZ1-k AS 0,6/1kV, de 3x2,5+2,5TTmm2 en cobre, (UNE 211002, 21123, 21145, 21147.1, 21432.1, 21174, 21172 o IEC 1034, IEEE 383.74) en montaje a definir por DF, en sistema trifásico. Incluida p.p. de cajas derivación, bornes, sujeciones tubos, y tubo rígido para instalación vista.|
+~T|CABLE2X4|Suministro e instalación de línea de alumbrado para focos LED RGB formada cable 2x4mm2  RZ1-K(AS) 0,6/1KV , enterrada bajo tubo, incluso pp de accesorios y conexión a transformador y focos.
+|
+~T|CCCG0200|Suministro e instalación de Coducto recto circular en chapa de acero galvanizado de clasificación A1 engatillado en hélice según norma EN 1506, de diámetro 200 mm y 0,6 mm de espesor, fábricado con nervio para aumentar su rigidez, fijados con tornillos autotaladrantes. Incluso pp de accesorios y material necesario para su montaje y soportación.
+|
+~T|CERTINS|Elaboración de certificado de instalacion electrica en baja tensión según REBT2002 por instalador autorizado, de los cuadros eléctricos y la instalación interior derivada. |
+~T|COL75X2A|Suministro e instalación de colector de PVC Ø110 con 2 entradas 2xØ75, 1 entrada Ø50 y 1 salida Ø63. Incluye accesorios de conexiones hidráulicas y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.
+|
+~T|CONT025|Suministro e instalación de contador de agua fria de chorro múltiple DN25 1" Roscas 1 1/4". Qn= 3 m3/h.  Incluye conexiones hidráulicas, filtro, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.|
+~T|ELPRSOBTR3|Suministro e instalacion en cuadro eléctrico de dispositivo de protección contra sobretensiones clase III 8/20us (Up<1.1kV - Imax<8kA) 3p+N, debidamente conectado a red de tierras (instalación TT). Incluso protección mediante interruptor magnetotermico 20A/4p curva C Icu=10kA, pp de accesorios y material necesario para su montaje.
+
+
+|
+~T|ENC162PES|Suministro e instalación de base enchufe estanca de superfície con toma de tierra lateral, tipo Shucko, marca Bticino, serie Light,  color blanco o similar. Incluye parte proporcional de cable 3x2,5 mm2 libre de halógenos y tubo rígido en canalización vista.|
+~T|EVALV001|Suministro e instalación de electroválvula de 1" con acción indirecta, construida con cuerpo de latón y núcleo de acero inoxidable, juntas NBR,  normalmente cerrada, Vac=230V, kv= 190 l/min, marca Genebre modelo 4020 06 220 o similar equivalente.  Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción.
+|
+~T|IM01111|Suministro e instalación de termómetro bimetálico con vaina. Rosca 1/2" macho, Ø esfera 63 mm, longitud 50 mm, escala 0°C a 120°C, precisión: ±3%, Ø interior 9,5 mm, Ø exterior 10,5 mm. Caja de acero cromado, aro de acero inoxidable, esfera y aguja de aluminio, vaina de latón, sujeción por tornillo. Incluso pp de accesorios, valvulería y elementos necesarios para su montaje y conexión.
+|
+~T|IM33003|Suministro e instalación de manómetro Ø 60 mm, rosca 1/4" macho BSP, temperatura ambiente -20°C a 90°C, fluido máx. 90°C, precisión ± 1,6 %, escala 0-4 bar, caja de acero inoxidable AISI 304, esfera ABS y aguja de aluminio, mecanismo y perno de conexión de aleación cobre. Incluso pp de accesorios, valvulería y elementos necesarios para su montaje y conexión.|
+~T|INT01ES|Suministro e instalación de interruptor unipolar estanco de superficie 10A/1p, marca Bticino, serie Light,  color blanco o similar. Incluye parte proporcional de cable 2x1,5 mm2 libre de halógenos y tubo rígido en canalización vista, y conexionado.|
+~T|INTERUFP6375|Suministro e instalación de intercambiador de placas desmontables Marca Sedical Modelo UFP-32 / 31 H - C - PN10, bastidor ST 52.3 / calidad 8.8, 31 placas de TITANIO de 0,5 mm de espesor, juntas Nitrilo HT, temperatura máxima 100ºC, conexiones 1 1/4", Largo, alto, ancho y peso del bastidor: 390 mm/ 480 mm/ 194 mm/ 39 kg
+
+Superfície intercambio efectiva =1,21 m2
+Agrupamiento = 1x15/1x15
+Coef. global de transmisión (servicio / limpio) =2398.6 / 6793.3 W/m²×ºK
+Sobredimensionamiento: 180%
+Potencia de intercambio =33,6kWt
+Lado calor
+Tª entrada =45ºC
+Tª salida = 40ºC
+Lado frío
+Tª entrada=28ºC
+Tª salida = 32ºC
+
+Incluso pp de accesorios y elementos para conexión y soportación.
+
+
+|
+~T|INTFDN50|Suministro, instalación y conexionado de interruptor de flujo DN50, de Ø63 en cuerpo de PVC, contacto NC y contacto NO. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+
+|
+~T|MALLINSD200|Suministro e instalación de malla antiinsectos de acero galvanizado para conexión a conducto circular D200 mm. Incluso pp de accesorios y material necesario para su montaje y soportación.
+|
+~T|MHYA1100000E|Suministro e instalación de luz de emergencia LED de superfície de 160 lúmens IP66 no permanente, con carcasa y difusor fabricados en policarbonato, con batería para una autonomía de 1 hora, aislamiento eléctrico Clase II. Marca Daisalux Modelo HYDRA LD N3 referencia HYA1100000 y caja estanca Marca Daisalux Modelo KES HYDRA referencia HYA1000000. Incluso pp de accesorios y elementos necesarios de montaje, sujeción y conexionado.
+
+
+|
+~T|NB32250206|Suministro y colocación de Bomba autoaspirante Astralpool Victoria Plus Silent 1CV-400V. El cuerpo de la bomba se caracteriza por prefiltro integrado. Los motores suministrados han sido protegidos con IP-55 y acondicionados para soportar ambientes calurosos y niveles de humedad elevados., caudal de 15 m3/h presión de 11 mca. Incluso reducción de tuberia a diametro nominal de conexiones de bomba, puente manometrico, parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección.
+
+|
+~T|NEOLINEO150|Suministro e instalación de Extractor en lÍnea para conductos marca S&P modelo: TD-350/125 SILENT (230-240V 50/60) RE. Clase ETIM 9.0: EC011013- Version 6.. Codigo Producto: 5211360400
+Ventilador helicocentrífugo in-line de bajo perfil, extremadamente silencioso, certificados por la Noise Abatement Society (Asociación para la reducción del ruido), fabricados en material plástico, con elementos acústicos (estructura interna perforada que direcciona las ondas sonoras, y aislamiento interior fonoabsorbente que amortigua el ruido radiado), cuerpo-motor desmontable sin necesidad de tocar los conductos, juntas de goma en impulsión y descarga para absorber las vibraciones, caja de bornes externa orientable 360º, IP44, motor 230V-50Hz, de 2 velocidades, regulables por variación de tensión, Clase B, rodamientos a bolas de engrase permanente, condensador y protector térmico. 
+Incluso pp de accesorios y material necesario para su montaje, conexión y soportación.|
+~T|OPTIMAM|Suministro e instalación de bomba dosificadora analógica de caudal constante manual regulable Marca Astral Modelo Optima. Incluso conexion eléctrico, hidráulica, pp de accesorios y elementos necesarios paras su montaje, sujeción e instalación.
+Incluye:
+- 1 tubo de aspiración de PVC tipo cristal transparente, flexible de 2 m.
+- 1 tubo de impulsión de polietileno de 2 m semirígido blanco.
+- 1 válvula de inyeccion de 3/8” BSP m.
+- 1 filtro de fondo.
+- 1 set de instrucciones|
+~T|OPTIMAP|Suministro e instalación de bomba dosificadora digital proporcional y volumétrica Marca Astral Modelo Optima. Incluso conexion eléctrico, hidráulica, pp de accesorios y elementos necesarios paras su montaje, sujeción e instalación.
+Incluye:
+- 1 tubo de aspiración de PVC tipo cristal transparente, flexible de 2 m.
+- 1 tubo de impulsión de polietileno de 2 m semirígido blanco.
+- 1 válvula de inyeccion de 3/8” BSP m.
+- 1 filtro de fondo.
+- 1 set de instrucciones|
+~T|PFLED29W|Suministro e instalación de pantalla estanca LED de 29W 3400 lúmens 1500mm color de luz blanco neutro 840, IP65 IK08, marca Philips modelo WT120C LED34S/840 PSU L1500, lampara incluida. Incluso pp de accesorios y elementos necesarios de montaje, sujeción y conexionado.
+
+
+
+|
+~T|PL01S|Instalación de punto de luz realizado en tubo PVC rígido M 20 y conductor de cobre unipolar, aislados para una tensión nominal de 750 V. y sección 3x1,5 mm2., (activo, neutro y protección). Incluye 5 metros de cable y tubo, montaje en techo, falso techo o pared de luminaria en canalización superficial.|
+~T|PLE01S|Instalación de punto de luz realizado en tubo PVC rígido M 20 y conductor de cobre unipolar, aislados para una tensión nominal de 750 V. y sección 3x1,5 mm2., (activo, neutro y protección). Incluye 6 metros de cable y tubo, montaje en techo, falso techo o pared de luminaria en canalización superficial.
+|
+~T|PTPP025|Suministro e instalación de canalización enterrada mediante tubo de PP de Øexterior 25 mm según UNE-EN 50.086 -2-4. Resistencia a la compresión 450N, Resistencia al impacto Normal. Incluso cable guía, pp de accesorios y elementos necesarios para su conexionado.
+|
+~T|PTR020|Suministro e instalación de tubo rígido códigos 432112422010 de Øexterior 20 mm según UNE-EN 50086-2-2, libre de halogenos y no propagador de la llama, en montaje superficial en interiores. Se incluye parte proporcional sujeciones tubo, accesorios y pequeño material. Conexionado y montaje.
+
+|
+~T|QEL17|Suministro e instalación de cuadro eléctrico en envolvente de plastico IP54 IK10, con aparamenta según esquemas eléctricos de proyecto, formado por:
+- 1 ud interrruptor magentotérmico 20A/4p/10kA/C
+- 1 ud interruptor diferencial 25A/4p/AC
+- 3 uds interruptor diferencial 40A/2p/AC
+- 4 uds interrruptor magentotérmico 10A/2p/6kA/C
+- 4 uds interrruptor magentotérmico 16A/2p/6kA/C
+- 1 ud guadramotor 1,6-2,5A/3p
+- 1 ud contactor 20A/4p
+- 2 ud contactor 20A/2p
+- 1 ud reloj universal con 3 salidas
+- 1 ud proteccion contra sobretensiones (partida separada)
+
+Aparamenta i cuadro eléctrico marca ABB, Siemens o Schneider Electric.
+
+Incluso pp de accesorios para su montaje, conexionado y soportación.
+|
+~T|REDTIERRJAC|Suministro e instalación de red equipotencial de tierra mediante cable de cobre desnudo 35mm2 (50 mtros), incluso pp de conexionado de todos los elementos metálicos de la piscina y juegos de agua, piquetas para una resistencia de tierra <12 Ohmios..|
+~T|SOND080420MA|Suministro e instalación de Sonda de temperatura PT100, 0-80ºC, incluso transmisor de señal 4-20mA en cabezal de aluminio, y vaina roscada de tubo de acero inoxidable AISI316 para medición de temperatura marca Wika modelo TR10-F + TW40 + BS + T19 o similar. Incluso pp de accesorios y elementos necesarios para montaje, conexionado y sujeción.|
+~T|TPP025|Tubo de PP de Øexterior 25 mm según UNE-EN 50.086 -2-4. Resistencia a la compresión 450N, Resistencia al impacto Normal, Incluso cable guía, pp de accesorios y elementos necesarios para su conexionado.|
+~T|TPVCD110|Suministro e instalación de tubería de PVC PN10 de diámetro 110x4,2 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD125|Suministro e instalación de tubería de PVC PN10 de diámetro 125x4,8 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+|
+~T|TPVCD160|Suministro e instalación de tubería de PVC PN10 de diámetro 160x6,2 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+|
+~T|TPVCD20|Suministro e instalación de tubería de PVC PN16 de diámetro 20x1,9 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+|
+~T|TPVCD200|Suministro e instalación de tubería de PVC PN10 de diámetro 200x7,7 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD25|Suministro e instalación de tubería de PVC PN16 de diámetro 25x1,9 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD32|Suministro e instalación de tubería de PVC PN16 de diámetro 32x2,4 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD40|Suministro e instalación de tubería de PVC PN10 de diámetro 40x1,9 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD50|Suministro e instalación de tubería de PVC PN10 de diámetro 50x2,4 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD63|Suministro e instalación de tubería de PVC PN10 de diámetro 63x3 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD75|Suministro e instalación de tubería de PVC PN10 de diámetro 75x3,6 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TPVCD90|Suministro e instalación de tubería de PVC PN10 de diámetro 90x4,3 mm según norma UNE-EN 1452. Marca Terrain o similar. Incluso pruebas a presión constante y parte proporcional de accesorios del mismo material o metálicos en transición, elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección. 
+
+|
+~T|TR020|Tubo rígido códigos 432112422010 de Øexterior 20 mm según UNE-EN 50086-2-2, libre de halogenos y no propagador de la llama, en montaje superficial en interiores. Se incluye parte proporcional sujeciones tubo, accesorios y pequeño material. |
+~T|VA001|Suministro e instalación de elevador hidráulico en acero inoxidable AISI-316 Ø43 mm. con mecanismo hidráulico para una presión mínima de 3.5 kg/cm2, con pasamanos de longitud 1 m. ( para piscina con rebosadero). Marca ASTRALPOOL modelo 28620 (elevador), 28621 (cilindro) y 28622 (complementos) o similar. Incluso conexión a tuberia AFS D20mm, parte proporcional de accesorios, de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujección.
+|
+~T|VA002|Suministro de limpiafondos de aluminio con horquilla, conexión al mango mediante palomillas de 450 mm de longitud. Marca ASTRAL codigo 01358. Incluso mango telescopico de aluiminio de 2,4 a 4,8 m Marca ASTRAL codigo 38423. Manguera autoflotante de polietileno color azul de D38mm-1 1/2" de 15 metros de longitud Marca Astral codigo 01375 incluye terminales. Enrollador de manguera Marca Astral codigo 66042.|
+~T|VA003|Suministro de cepillo para esquinas con aspiracion Shark. Marca ASTRAL codigo 36617. Cepillo curvo Shark Marca Astral codigo 36616. Incluso mango telescopico de aluiminio de 2,4 a 4,8 m Marca ASTRAL codigo 38423.|
+~T|VA004|Suministro de recogehojas de fondo Shark. Marca ASTRAL codigo 366174. Recogehojas de superficie Shark Marca Astral codigo 36613. Incluso mango telescopico de aluiminio de 2,4 a 4,8 m Marca ASTRAL codigo 38423.|
+~T|VA005|Suministro e instalación de salvavidas de D700mm fabricado en Styropor forrado en lona. Marca Astral cogigo 01369. Incluso soporte de acero inosidable AISI 304 codigo 01370, pie para soporte codigo 01371 y 16 metros de cuerda, accesorios y material para fijación y soportación incluidos.|
+~T|VA009|Construcción de deposito de compensación de 4 m3 utiles de obra. (Partida a valorar de obra). Con pasamuros para tubo PVC D75mm (succión bomba filtración) en fondo, D200 en pared (recogida rebosadero), D110 en pared (rebosadero), 2xD32 en pared (entrada agua de red y visor nivel).
+|
+~T|VALANDN100|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN100 de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALANDN125|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN125 de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALANDN25|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN25, en cuerpo de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALANDN32|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN32, en cuerpo de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VALANDN550|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN50, en cuerpo de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VALANDN65|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN65 de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALANDN80|Suministro, instalación y conexionado de válvula de retención cierre con muelle  DN80 de PVC, de encolar marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VALBODN20|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN20, de Ø25 en cuerpo de PVC, Kv100=380 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALBODN25|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN25,en cuerpo de PVC, Kv100=690 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALBODN32|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN32, de Ø40 en cuerpo de PVC, Kv100=9800 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VALBODN40|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN40, de Ø50 en cuerpo de PVC, Kv100=1600 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALBODN50|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN50, de Ø63 en cuerpo de PVC, Kv100=3000 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+
+|
+~T|VALBODN65|Suministro, instalación y conexionado de válvula de corte de esfera de encolar DN65, de Ø75 en cuerpo de PVC, Kv100=5500 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALMADN100|Suministro, instalación y conexionado de válvula de corte de mariposa DN100, de Ø110 en cuerpo de PVC, Kv100=8280 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VALMADN125|Suministro, instalación y conexionado de válvula de corte de mariposa DN125, de Ø125 en cuerpo de PVC, Kv100=28000 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALMADN150|Suministro, instalación y conexionado de válvula de corte de mariposa DN150, de Ø160 en cuerpo de PVC, Kv100=16200 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. |
+~T|VALMADN80|Suministro, instalación y conexionado de válvula de corte de mariposa DN80, de Ø90 en cuerpo de PVC, Kv100=4020 l/min,1 bar. Marca CEPEX o similar. Incluye conexiones hidráulicas, accesorios y parte proporcional de elementos mecánicos y material auxiliar necesarios para montaje, conexionado, soporte y sujeción. 
+|
+~T|VERSATG|Suministro e instalación de bomba de impulsión EBARA VERSATILE SG 0,95kW 230Vca, caudal de 9 m3/h a una presión de 6 m.c.a., con interruptor de nivel incluido. Se incluye llaves de paso y válvulas de retención. Incluso accesorios y material auxiliar necesario para montaje, soporte y sujeción.|
+~T|VISD75|Suministro e instalación de visor de nivel de metracrilato D75 mm de 1,5 m de longitud. Incluso pp de accesorios y material necesario para su montaje y sujeción.|
+~T|VISDN50|Suministro e instalación de visor de líquidos DN50 Ø63 PN10  de metracrilato de encolar marca Cepex codigo 02388 referencia 05 54 063. Incluso pp de accesorios y elementos necesarios para soportación.|
+~T|VISDN80|Suministro e instalación de visor de líquidos DN80 Ø90 PN10 de metracrilato de encolar marca Cepex codigo 02390 referencia 05 54 090. Incluso pp de accesorios y elementos necesarios para soportación.|
+~M|PISCEQ#\NB32250206|1\1\1\|1|\\1\\\\|
+~M|PISCEQ#\COL75X2A|1\1\2\|1|\\1\\\\|
+~M|PISCEQ#\AST32431|1\1\3\|2|\\2\\\\|
+~M|PISCEQ#\AFM1|1\1\4\|248|\filtros\2\124\\\|
+~M|PISCEQ#\AST22353|1\1\7\|2|\impulsion fondo\2\\\\|
+~M|PISCEQ#\AST00317|1\1\8\|1|\\1\\\\|
+~M|PISCEQ#\AST00285|1\1\9\|2|\\2\\\\|
+~M|PISCEQ#\AST05581|1\1\10\|38|\Rebose perimetral\\\\\\(19 m x2 uds/m)=\2\19\\\|
+~M|PISCEQ#\EVALV001|1\1\11\|1|\llenado\1\\\\|
+~M|PISCEQ#\AST12062|1\1\12\|1|\Deposito compensacion\1\\\\|
+~M|PISCEQ#\CONT025|1\1\13\|1|\Suministro Agua\1\\\\|
+~M|PISCEQ#\AST20430|1\1\14\|1|\filtracion\1\\\\|
+~M|PISCEQ#\VISD75|1\1\15\|1|\\1\\\\|
+~M|PISCEQ#\INTERUFP6375|1\1\16\|1|\CALENTAMIENTO PISCINA\1\\\\|
+~M|PISCTUB#\TPVCD200|1\2\1\|4.4|\Recogida canal rebosadero\1.1\4\\\|
+~M|PISCTUB#\TPVCD110|1\2\4\|6|\Rebose vaso compensacion\6\\\\|
+~M|PISCTUB#\TPVCD75|1\2\6\|10|\Aspiración\10\\\\|
+~M|PISCTUB#\TPVCD63|1\2\7\|54|\Impulsion\18\\\\\Desague\12\\\\\intercambiador calor\2\12\\\|
+~M|PISCTUB#\TPVCD50|1\2\8\|39|\Boquillas impulsion\5\\\\\Toma limpieza\20\\\\\Pozo bombeo\6\\\\\Filtros\2\4\\\|
+~M|PISCTUB#\TPVCD32|1\2\10\|8|\Llenado aljibe\8\\\\|
+~M|PISCTUB#\TPVCD25|1\2\11\|32|\Desinfeccion\1\12\\\\Elevador hidraulico\1\20\\\|
+~M|PISCVAL#\VALMADN100|1\3\3\|0|\\\\\\|
+~M|PISCVAL#\VALMADN80|1\3\4\|0|\\\\\\|
+~M|PISCVAL#\VALBODN65|1\3\5\|4|\\4\\\\|
+~M|PISCVAL#\VALBODN50|1\3\6\|4|\\4\\\\|
+~M|PISCVAL#\VALBODN40|1\3\7\|1|\\1\\\\|
+~M|PISCVAL#\VALBODN32|1\3\8\|1|\\1\\\\|
+~M|PISCVAL#\VALBODN25|1\3\9\|1|\\1\\\\|
+~M|PISCVAL#\VALBODN20|1\3\10\|6|\\6\\\\|
+~M|PISCVAL#\VALANDN550|1\3\15\|1|\bomba\1\\\\|
+~M|PISCVAL#\AA 05 173|1\3\18\|1|\afs\1\\\\|
+~M|PISCVAL#\VISDN50|1\3\21\|1|\DESAGUE FILTROS\1\\\\|
+~M|PISCVAL#\INTFDN50|1\3\22\|2|\\2\\\\|
+~M|PISCVAL#\IM33003|1\3\23\|2|\intercambiador\2\\\\|
+~M|PISCVAL#\IM01111|1\3\24\|2|\intercambiador\2\\\\|
+~M|PISCVAL#\AC01024|1\3\25\|2|\\2\\\\|
+~M|PISCVAL#\SOND080420MA|1\3\26\|2|\\2\\\\|
+~M|PISCDESIN#\AST57748|1\4\1\|1|\\1\\\\|
+~M|PISCDESIN#\OPTIMAP|1\4\2\|1|\PH-\1\\\\|
+~M|PISCDESIN#\OPTIMAM|1\4\3\|1|\Alguicida\1\\\\|
+~M|PISCDESIN#\AMINPH|1\4\4\|2|\\2\\\\|
+~M|PISCDESIN#\ALGUIC|1\4\5\|1|\\1\\\\|
+~M|PISCVAR#\VA001|1\5\1\|1|\\1\\\\|
+~M|PISCVAR#\VA002|1\5\2\|1|\\1\\\\|
+~M|PISCVAR#\VA003|1\5\3\|1|\\1\\\\|
+~M|PISCVAR#\VA004|1\5\4\|1|\\1\\\\|
+~M|PISCVAR#\VA005|1\5\5\|2|\\2\\\\|
+~M|PISCVAR#\VA009|1\5\6\|1|\\1\\\\|
+~M|PISCVAR#\ARQ 2BA+SG|1\5\7\|1|\sala instalaciones\1\\\\|
+~M|PISCVAR#\VERSATG|1\5\8\|2|\pozo\2\\\\|
+~M|PISCEXT#\NEOLINEO150|1\6\1\|1|\\1\\\\|
+~M|PISCEXT#\CCCG0200|1\6\2\|20|\\20\\\\|
+~M|PISCEXT#\MALLINSD200|1\6\3\|1|\\1\\\\|
+~M|PISCELEC#\CERTINS|1\7\1\|1|\\1\\\\|
+~M|PISCELEC#\QEL17|1\7\2\|1|\\1\\\\|
+~M|PISCELEC#\ELPRSOBTR3|1\7\3\|1|\\1\\\\|
+~M|PISCELEC#\AST59976|1\7\4\|3|\\3\\\\|
+~M|PISCELEC#\AST52142|1\7\5\|1|\\1\\\\|
+~M|PISCELEC#\00383-1369|1\7\6\|1|\\1\\\\|
+~M|PISCELEC#\CABLE2X4|1\7\7\|45|\\3\15\\\|
+~M|PISCELEC#\PTPP025|1\7\8\|45|\Proyectores\3\15\\\|
+~M|PISCELEC#\PTR020|1\7\9\|15|\Proyectores\3\5\\\|
+~M|PISCELEC#\AST30825|1\7\10\|3|\\3\\\\|
+~M|PISCELEC#\C3G1.5|1\7\11\|33|\Maniobra\5\\\\\Alumbrado\28\\\\|
+~M|PISCELEC#\C3G2.5|1\7\12\|61|\Tomas auxiliares\1\15\\\\Extractor\1\10\\\\Tomas dosificacion\1\12\\\\Bombas pozo\2\12\\\|
+~M|PISCELEC#\C4X2.5|1\7\13\|15|\Bombas filtracion\1\15\\\|
+~M|PISCELEC#\INT01ES|1\7\14\|1|\\1\\\\|
+~M|PISCELEC#\ENC162PES|1\7\15\|5|\TOMAS AUXILIARES\2\\\\\TOMAS DOSIFICACION\3\\\\|
+~M|PISCELEC#\PL01S|1\7\16\|2|\\2\\\\|
+~M|PISCELEC#\PLE01S|1\7\17\|1|\\1\\\\|
+~M|PISCELEC#\PFLED29W|1\7\18\|2|\\2\\\\|
+~M|PISCELEC#\MHYA1100000E|1\7\19\|1|\\1\\\\|
+~M|PISCELEC#\REDTIERRJAC|1\7\20\|1|\\1\\\\|

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encarrega la samarreta oficial de Sant Jordi Desvalls 2026 i col·labora amb Desvalls Cultura. Talles S, M, L, XL, XXL en colors Blau i Vermell.">
+    <meta name="keywords" content="Samarreta Desvalls Cultura, Sant Jordi Desvalls, Marxandatge, Pluja d'Art, Pluja de Lletres">
+    
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://desvallscultura.cat/marxandatge.html">
+    <meta property="og:title" content="Samarreta Oficial Sant Jordi Desvalls 2026 | Desvalls Cultura">
+    <meta property="og:description" content="Reserva la teva samarreta per col·laborar amb Desvalls Cultura. Tria talla i color oficial!">
+    <meta property="og:image" content="https://drive.google.com/thumbnail?id=1neim2uaZSiiiT_faIl_ymBpVf41IvoVf&sz=w1000">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Samarreta Oficial Sant Jordi Desvalls 2026">
+    <meta name="twitter:description" content="Encarrega la teva samarreta oficial i col·labora amb Desvalls Cultura.">
+    <meta name="twitter:image" content="https://drive.google.com/thumbnail?id=1neim2uaZSiiiT_faIl_ymBpVf41IvoVf&sz=w1000">
+
+    <title>Marxandatge i Samarretes | Desvalls Cultura</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="css/style.css?v=21a965ac">
+    <script src="js/main.js?v=ed957a32" defer></script>
+
+    <style>
+        :root {
+            --brand-blue: #1d4ed8;
+            --brand-blue-bg: #eff6ff;
+            --brand-red: #e11d48;
+            --brand-red-bg: #fff1f2;
+            --wizard-bg: #ffffff;
+        }
+
+        .marxandatge-hero {
+            padding: 8rem 0 3rem;
+            background: linear-gradient(135deg, #09090b 0%, #134e4a 60%, #0f172a 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .marxandatge-hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(18,162,152,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .wizard-container {
+            max-width: 820px;
+            margin: -2.5rem auto 4rem;
+            background: var(--wizard-bg);
+            border-radius: 1.5rem;
+            padding: 2.25rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Progrés / Stepper */
+        .progres-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .punt {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .punt.actiu {
+            background: var(--primary);
+            transform: scale(1.35);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .punt.fet {
+            background: #0f766e;
+        }
+
+        /* Pàgines */
+        .pagina {
+            display: none;
+        }
+
+        .pagina.actiu {
+            display: block;
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pas-cap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .pas-num {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pas-titol {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        /* Imatge de Producte */
+        .imatge-producte-card {
+            text-align: center;
+            margin-bottom: 1.75rem;
+            background: #f8fafc;
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .imatge-producte-card img {
+            max-width: 100%;
+            height: auto;
+            max-height: 420px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            object-fit: contain;
+        }
+
+        .info-destacada {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-limit-badge {
+            display: inline-block;
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Guia de Talles */
+        details.guia-talles {
+            margin: 1.5rem 0;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: white;
+        }
+
+        details.guia-talles summary {
+            padding: 1rem 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: #f8fafc;
+            font-size: 1rem;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #1e293b;
+        }
+
+        details.guia-talles summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.guia-talles summary::after {
+            content: "▾";
+            font-size: 1.2rem;
+            color: #64748b;
+            transition: transform 0.2s;
+        }
+
+        details.guia-talles[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .taula-talles-wrap {
+            overflow-x: auto;
+            padding: 0.5rem;
+        }
+
+        .taula-talles {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .taula-talles th, .taula-talles td {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .taula-talles th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+        }
+
+        .taula-talles td:first-child {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Targeta Preu */
+        .preu-destacat-card {
+            margin-top: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border: 2px solid var(--primary);
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #0f766e;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .preu-destacat-card .preu-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #047857;
+        }
+
+        /* Taula de Comanda i Selectors */
+        .taula-comanda-wrap {
+            overflow-x: auto;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            margin-top: 1rem;
+        }
+
+        .taula-comanda {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .taula-comanda th {
+            padding: 1rem 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-align: center;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .taula-comanda th.cap-blau {
+            background: var(--brand-blue-bg);
+            color: var(--brand-blue);
+            border-bottom: 2px solid #bfdbfe;
+        }
+
+        .taula-comanda th.cap-vermell {
+            background: var(--brand-red-bg);
+            color: var(--brand-red);
+            border-bottom: 2px solid #fecdd3;
+        }
+
+        .taula-comanda td {
+            padding: 0.85rem 0.5rem;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .taula-comanda td:first-child {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1e293b;
+            background: #f8fafc;
+            width: 80px;
+        }
+
+        .controls-qty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-qty {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s, opacity 0.2s;
+            touch-action: manipulation;
+        }
+
+        .btn-qty:active {
+            transform: scale(0.92);
+        }
+
+        .btn-qty.minus {
+            background: #ef4444;
+        }
+
+        .btn-qty.plus {
+            background: #10b981;
+        }
+
+        .qty-val {
+            width: 34px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e293b;
+            padding: 0;
+        }
+
+        /* Caixa Total */
+        .total-box-card {
+            margin-top: 1.5rem;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            padding: 1.25rem 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .total-box-card .import-destacat {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        /* Formulari Dades */
+        .grid-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* Resum */
+        .resum-card {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            background: #ffffff;
+        }
+
+        .resum-linia {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.98rem;
+        }
+
+        .resum-linia:last-child {
+            border-bottom: none;
+        }
+
+        .resum-linia.total-final {
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--primary);
+            border-top: 2px solid #e2e8f0;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+
+        /* Confirmació */
+        .confirmacio-wrapper {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .icona-exit {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .numero-comanda-box {
+            background: #f0fdfa;
+            border: 2px dashed var(--primary);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .numero-comanda-box span {
+            display: block;
+            font-size: 0.9rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .numero-comanda-box strong {
+            font-size: 2rem;
+            color: #0f766e;
+            font-family: monospace;
+            letter-spacing: 0.05em;
+        }
+
+        /* Botons de navegació del Wizard */
+        .nav-wizard {
+            display: flex;
+            gap: 12px;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 0.85rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: 1.5px solid #cbd5e1;
+            background: white;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .nav-btn.primari {
+            background: linear-gradient(135deg, var(--primary) 0%, #0f766e 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .nav-btn.primari:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--primary-glow);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Alerta missatge */
+        .alerta-box {
+            display: none;
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
+            margin-top: 1.25rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .alerta-box.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            display: block;
+        }
+
+        .alerta-box.ok {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .wizard-container {
+                margin: -1.5rem 1rem 3rem;
+                padding: 1.25rem;
+            }
+            .grid-form {
+                grid-template-columns: 1fr;
+            }
+            .preu-destacat-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            .total-box-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="container">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 40px; border-radius: 6px; mix-blend-mode: multiply;">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links">
+                <li><a href="pluja-art-2026.html" style="color: var(--secondary); font-weight: 800;">Pluja d'Art 2026</a></li>
+                <li><a href="pluja-lletres-2026.html" style="color: var(--primary); font-weight: bold;">Pluja de Lletres 2026</a></li>
+                <li><a href="index.html#festivals">Festivals</a></li>
+                <li><a href="marxandatge.html" class="active" style="color: var(--primary); font-weight: 800; border-bottom: 2px solid var(--primary);">👕 Samarretes</a></li>
+                <li><a href="index.html#associa-t">Fes-te Soci</a></li>
+                <li><a href="participa-pluja-art.html" class="btn-primary" style="background: var(--dark); border-color: var(--dark); color: white;">Participa</a></li>
+            </ul>
+            <div class="mobile-menu-icon" id="mobileMenuIcon">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Header -->
+    <section class="marxandatge-hero">
+        <div class="container">
+            <span style="display: inline-block; background: rgba(255,255,255,0.1); padding: 0.4rem 1rem; border-radius: 2rem; margin-bottom: 1.25rem; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.2);">Marxandatge Oficial · Edició 2026</span>
+            <h1 style="font-size: 2.75rem; font-family: var(--font-serif); font-weight: 800; margin-bottom: 0.75rem;">Samarreta Sant Jordi Desvalls</h1>
+            <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto 1rem; font-size: 1.1rem;">Vesteix l'esperit cultural del nostre poble i col·labora directament amb els projectes de Desvalls Cultura.</p>
+        </div>
+    </section>
+
+    <!-- Wizard Form Section -->
+    <main class="container">
+        <div class="wizard-container">
+
+            <!-- Punts de progrés -->
+            <div class="progres-container" id="progres">
+                <div class="punt actiu"></div>
+                <div class="punt"></div>
+                <div class="punt"></div>
+                <div class="punt"></div>
+                <div class="punt"></div>
+            </div>
+
+            <!-- ================= PAS 0: INTRODUCCIÓ ================= -->
+            <div class="pagina actiu" data-pagina="0">
+                <div class="imatge-producte-card">
+                    <img src="https://drive.google.com/thumbnail?id=1neim2uaZSiiiT_faIl_ymBpVf41IvoVf&sz=w1000" alt="Samarreta Oficial Sant Jordi Desvalls" loading="lazy">
+                    <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; font-size: 0.95rem; color: #475569;">
+                        ✨ Disseny cedit per <strong>Bussoga</strong>
+                        <div style="margin-top: 0.4rem; display: flex; justify-content: center; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
+                            <a href="https://www.bussoga.com/" target="_blank" rel="noopener" style="color: var(--primary); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                🌐 bussoga.com
+                            </a>
+                            <span style="color: #cbd5e1;">·</span>
+                            <a href="https://www.instagram.com/bussoga/" target="_blank" rel="noopener" style="color: #e11d48; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                📸 @bussoga (Instagram)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-destacada">
+                    <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-left: 4px solid var(--primary); padding: 1.1rem 1.25rem; border-radius: 0.85rem; margin-bottom: 1.5rem; text-align: left;">
+                        <p style="margin: 0 0 0.5rem; font-weight: 700; color: #1e293b; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📢</span> Estat del període de comandes:
+                        </p>
+                        <p style="margin: 0; font-size: 0.95rem; color: #475569; line-height: 1.6;">
+                            El termini inicial ha finalitzat, però <strong>mantenim el formulari obert</strong> per recollir noves comandes. La teva sol·licitud quedarà registrada i <strong>es farà efectiva quan s'arribi a un número suficient de peticions</strong>. T'enviarem un avís per correu electrònic quan això succeeixi, i posteriorment un altre avís quan arribin les samarretes per a <strong>recollir i pagar</strong> a Sant Jordi Desvalls.
+                        </p>
+                    </div>
+
+                    <p style="margin-bottom: 0.75rem;">🎨 <strong>Tria el color</strong> que t'agradi més (Blau o Vermell).</p>
+                    <p style="margin-bottom: 0.75rem;">📏 <strong>Pren-te la mida</strong> i tria la talla perfecta per a tu.</p>
+                    <p style="margin-bottom: 0.75rem;">📝 <strong>Omple el formulari</strong> i encomana'n tantes com vulguis.</p>
+                </div>
+
+                <!-- Guia de Talles Desplegable -->
+                <details class="guia-talles">
+                    <summary>📐 Veure taula de mides (talles S a XXL)</summary>
+                    <div class="taula-talles-wrap">
+                        <table class="taula-talles">
+                            <thead>
+                                <tr>
+                                    <th>Talla</th>
+                                    <th>Amplada (A)</th>
+                                    <th>Llargada (B)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>S</td><td>49 cm</td><td>69 cm</td></tr>
+                                <tr><td>M</td><td>52 cm</td><td>71 cm</td></tr>
+                                <tr><td>L</td><td>55 cm</td><td>73 cm</td></tr>
+                                <tr><td>XL</td><td>58 cm</td><td>75 cm</td></tr>
+                                <tr><td>XXL</td><td>61 cm</td><td>77 cm</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+
+                <!-- Preu -->
+                <div class="preu-destacat-card">
+                    <span>Preu per unitat:</span>
+                    <div><span class="preu-num">20,00 €</span> <small style="font-size: 0.85rem; color: #047857;">(IVA inclòs)</small></div>
+                </div>
+            </div>
+
+            <!-- ================= PAS 1: TRIA TALLES I COLORS ================= -->
+            <div class="pagina" data-pagina="1">
+                <div class="pas-cap">
+                    <div class="pas-num">1</div>
+                    <h2 class="pas-titol">Tria talla i color</h2>
+                </div>
+                <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.25rem;">Afegeix les unitats que desitgis de cada combinació de talla i color.</p>
+
+                <div class="taula-comanda-wrap">
+                    <table class="taula-comanda" id="taula-comanda">
+                        <thead>
+                            <tr>
+                                <th>Talla</th>
+                                <th class="cap-blau">🔵 Blau</th>
+                                <th class="cap-vermell">🔴 Vermell</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Inserit dinàmicament per JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="total-box-card">
+                    <div>Total samarretes: <strong id="unitats-text" style="font-size: 1.25rem; color: #0f766e;">0</strong></div>
+                    <div>Import total: <span class="import-destacat" id="import-text">0,00 €</span></div>
+                </div>
+            </div>
+
+            <!-- ================= PAS 2: LES TEVES DADES ================= -->
+            <div class="pagina" data-pagina="2">
+                <div class="pas-cap">
+                    <div class="pas-num">2</div>
+                    <h2 class="pas-titol">Les teves dades</h2>
+                </div>
+                <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.25rem;">Introdueix les teves dades per identificar la comanda i avisar-te quan la tinguis a punt.</p>
+
+                <!-- Honeypot anti-spam -->
+                <input type="text" id="website_hp" name="website_hp" style="display:none !important;" tabindex="-1" autocomplete="off">
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label for="nom">Nom i cognoms *</label>
+                        <input type="text" id="nom" class="form-input" placeholder="Ex: Maria Puig i Font" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telf">Telèfon de contacte *</label>
+                        <input type="tel" id="telf" class="form-input" placeholder="Ex: 612 345 678" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="mail">Correu electrònic *</label>
+                        <input type="email" id="mail" class="form-input" placeholder="Ex: mariapuig@exemple.cat" required>
+                        <small style="color: #64748b; font-size: 0.8rem;">T'enviarem el resguard de la comanda a aquest correu.</small>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="obs">Observacions (opcional)</label>
+                        <textarea id="obs" class="form-input" placeholder="Alguna indicació especial sobre la recollida o la comanda?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PAS 3: REVISA I ENVIA ================= -->
+            <div class="pagina" data-pagina="3">
+                <div class="pas-cap">
+                    <div class="pas-num">3</div>
+                    <h2 class="pas-titol">Revisa i confirma la comanda</h2>
+                </div>
+
+                <div class="resum-card" id="resum-detall">
+                    <!-- Es genera dinàmicament -->
+                </div>
+
+                <button type="button" class="nav-btn primari" id="btn-enviar-comanda" style="width: 100%; padding: 1.15rem; font-size: 1.15rem;" onclick="enviarComandaFinal()">
+                    ✨ Confirmar i Enviar Comanda
+                </button>
+            </div>
+
+            <!-- ================= PAS 4: CONFIRMACIÓ ================= -->
+            <div class="pagina" data-pagina="4" id="pagina-confirmacio">
+                <div class="confirmacio-wrapper">
+                    <div class="icona-exit">✓</div>
+                    <h2 style="font-size: 2rem; color: #065f46; margin-bottom: 0.5rem; font-family: var(--font-serif);">Sol·licitud recollida correctament!</h2>
+                    <p style="color: #475569; max-width: 540px; margin: 0 auto 1.5rem; font-size: 1.05rem; line-height: 1.6;">
+                        Moltes gràcies pel teu suport a <strong>Desvalls Cultura</strong>. Hem registrat la teva sol·licitud amb èxit.
+                    </p>
+
+                    <div class="numero-comanda-box">
+                        <span>El teu número de sol·licitud</span>
+                        <strong id="confirmacio-num-comanda">SAM-2026-0000</strong>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin: 1.5rem 0; justify-content: center; flex-wrap: wrap;">
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1rem 1.5rem; min-width: 150px;">
+                            <span style="display: block; font-size: 0.85rem; color: #64748b;">Samarretes</span>
+                            <strong id="confirmacio-unitats" style="font-size: 1.35rem; color: #1e293b;">0 unitats</strong>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1rem 1.5rem; min-width: 150px;">
+                            <span style="display: block; font-size: 0.85rem; color: #64748b;">Import estimat</span>
+                            <strong id="confirmacio-import" style="font-size: 1.35rem; color: var(--primary);">0,00 €</strong>
+                        </div>
+                    </div>
+
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 1.1rem 1.35rem; border-radius: 0.85rem; font-size: 0.95rem; margin: 1.5rem auto; max-width: 580px; text-align: left; line-height: 1.65;">
+                        <p style="margin: 0 0 0.5rem; font-weight: 700; font-size: 1rem; color: #1e3a8a;">ℹ️ Estat i seguiment de la comanda:</p>
+                        <p style="margin: 0 0 0.4rem;">• Com que el termini inicial ha finalitzat, la teva comanda ha estat <strong>recollida</strong> i <strong>es farà efectiva quan s'arribi a un número suficient de sol·licituds</strong>.</p>
+                        <p style="margin: 0 0 0.4rem;">• <strong>T'enviarem un avís per correu electrònic</strong> en el moment que s'activi la producció.</p>
+                        <p style="margin: 0;">• Posteriorment, rebràs una segona notificació quan les samarretes arribin per poder passar a <strong>recollir i pagar</strong> a Sant Jordi Desvalls.</p>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap;">
+                        <button type="button" class="nav-btn" style="flex: 1;" onclick="window.location.href='index.html'">
+                            Tornar a l'Inici
+                        </button>
+                        <button type="button" class="nav-btn primari" style="flex: 1;" onclick="reiniciarComanda()">
+                            Fer una altra comanda
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Caixa d'alertes / errors -->
+            <div id="alerta-box" class="alerta-box"></div>
+
+            <!-- Botons de Navegació Inferiors -->
+            <div class="nav-wizard" id="nav-wizard">
+                <button type="button" class="nav-btn" id="btnEnrere" onclick="canviaPagina(-1)">Enrere</button>
+                <button type="button" class="nav-btn primari" id="btnSeguent" onclick="canviaPagina(1)">Comença la comanda ➜</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; align-items: center;">
+            <div>
+                <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: white;">
+                    <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 35px; border-radius: 4px; mix-blend-mode: multiply;">
+                    <span style="font-weight: 800; font-size: 1.2rem;">Desvalls Cultura</span>
+                </a>
+                <p style="color: var(--dark-muted); font-size: 0.9rem; margin-top: 0.5rem;">Sant Jordi Desvalls · El batec cultural de Girona</p>
+            </div>
+            <div style="display: flex; gap: 1.5rem;">
+                <a href="index.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Inici</a>
+                <a href="pluja-art-2026.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Pluja d'Art</a>
+                <a href="marxandatge.html" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 700;">Samarretes</a>
+                <a href="legal.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Avís Legal</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÒGICA JAVASCRIPT DEL WIZARD I CONNEXIÓ SUPABASE + GOOGLE SHEETS -->
+    <script>
+        // CONFIGURACIÓ
+        const PREU_UNITARI = 20;
+        const TALLES = ["S", "M", "L", "XL", "XXL"];
+        const COLORS = ["Blau", "Vermell"];
+        const TOTAL_PAGINES = 5;
+        let paginaActual = 0;
+
+        // Endpoint Google Apps Script (Google Sheets & Notificacions per correu)
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_HVR10QSn4JNwcWy1Q4WHD4PPUBQFuNdr2a5fVazLd6cXJUE7LgrdTB8JyBe3zk10Jw/exec';
+
+        // 1. Inicialització de la taula de talles i colors
+        function initTaulaComanda() {
+            const tbody = document.querySelector("#taula-comanda tbody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            TALLES.forEach(talla => {
+                const tr = document.createElement("tr");
+                let rowHtml = `<td>${talla}</td>`;
+
+                COLORS.forEach(color => {
+                    const inputId = `qty_${talla}_${color}`;
+                    rowHtml += `
+                        <td>
+                            <div class="controls-qty">
+                                <button type="button" class="btn-qty minus" onclick="modificarQuantitat('${talla}', '${color}', -1)" aria-label="Restar">−</button>
+                                <input type="text" id="${inputId}" class="qty-val" value="0" readonly>
+                                <button type="button" class="btn-qty plus" onclick="modificarQuantitat('${talla}', '${color}', 1)" aria-label="Sumar">+</button>
+                            </div>
+                        </td>
+                    `;
+                });
+
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 2. Modificació de quantitat
+        function modificarQuantitat(talla, color, delta) {
+            ocultaAlerta();
+            const input = document.getElementById(`qty_${talla}_${color}`);
+            if (!input) return;
+            let val = parseInt(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val;
+            actualitzarTotals();
+        }
+
+        // 3. Càlcul de totals
+        function obtenirItemsSeleccionats() {
+            const items = [];
+            TALLES.forEach(talla => {
+                COLORS.forEach(color => {
+                    const input = document.getElementById(`qty_${talla}_${color}`);
+                    const q = input ? (parseInt(input.value) || 0) : 0;
+                    if (q > 0) {
+                        items.push({ talla: talla, color: color, unitats: q });
+                    }
+                });
+            });
+            return items;
+        }
+
+        function obtenirTotalUnitats() {
+            const items = obtenirItemsSeleccionats();
+            return items.reduce((acc, it) => acc + it.unitats, 0);
+        }
+
+        function actualitzarTotals() {
+            const totalUt = obtenirTotalUnitats();
+            const importTotal = totalUt * PREU_UNITARI;
+
+            const utText = document.getElementById("unitats-text");
+            const impText = document.getElementById("import-text");
+
+            if (utText) utText.innerText = totalUt;
+            if (impText) impText.innerText = importTotal.toFixed(2).replace(".", ",") + " €";
+        }
+
+        // 4. Gestió de passos del Wizard
+        function actualitzaPuntsProgres() {
+            const punts = document.querySelectorAll(".progres-container .punt");
+            punts.forEach((p, idx) => {
+                p.classList.toggle("actiu", idx === paginaActual);
+                p.classList.toggle("fet", idx < paginaActual);
+            });
+        }
+
+        function mostraPagina(n) {
+            ocultaAlerta();
+            const pagines = document.querySelectorAll(".pagina");
+            pagines.forEach(p => {
+                p.classList.toggle("actiu", parseInt(p.dataset.pagina) === n);
+            });
+
+            paginaActual = n;
+            actualitzaPuntsProgres();
+
+            const btnEnrere = document.getElementById("btnEnrere");
+            const btnSeguent = document.getElementById("btnSeguent");
+            const navWizard = document.getElementById("nav-wizard");
+            const progresContainer = document.getElementById("progres");
+
+            if (btnEnrere) btnEnrere.disabled = (n === 0);
+
+            if (n === 0) {
+                if (btnSeguent) {
+                    btnSeguent.style.display = "block";
+                    btnSeguent.textContent = "Comença la comanda ➜";
+                }
+            } else if (n === 1 || n === 2) {
+                if (btnSeguent) {
+                    btnSeguent.style.display = "block";
+                    btnSeguent.textContent = "Següent ➜";
+                }
+            } else if (n === 3) {
+                // Pas de revisió: amaguem el botó 'Següent' estàndard perquè hi ha el botó gran d'enviar
+                if (btnSeguent) btnSeguent.style.display = "none";
+                generarResumPas3();
+            } else if (n === 4) {
+                // Pantalla d'èxit: amaguem navegació inferior i punts
+                if (navWizard) navWizard.style.display = "none";
+                if (progresContainer) progresContainer.style.display = "none";
+            }
+
+            window.scrollTo({ top: 180, behavior: "smooth" });
+        }
+
+        function canviaPagina(delta) {
+            const desti = paginaActual + delta;
+            if (desti < 0 || desti >= TOTAL_PAGINES) return;
+
+            // Validació Pas 1: Almenys una samarreta
+            if (delta === 1 && paginaActual === 1) {
+                if (obtenirTotalUnitats() === 0) {
+                    mostraAlerta("Has de seleccionar almenys una samarreta per continuar.", "error");
+                    return;
+                }
+            }
+
+            // Validació Pas 2: Dades obligatòries
+            if (delta === 1 && paginaActual === 2) {
+                const nom = document.getElementById("nom").value.trim();
+                const telf = document.getElementById("telf").value.trim();
+                const mail = document.getElementById("mail").value.trim();
+
+                if (!nom || !telf || !mail) {
+                    mostraAlerta("Sisplau, omple el teu nom, telèfon i correu electrònic.", "error");
+                    return;
+                }
+
+                if (!mail.includes("@") || !mail.includes(".")) {
+                    mostraAlerta("Sisplau, introdueix una adreça de correu electrònic vàlida.", "error");
+                    return;
+                }
+            }
+
+            mostraPagina(desti);
+        }
+
+        // 5. Generar Resum al Pas 3
+        function generarResumPas3() {
+            const container = document.getElementById("resum-detall");
+            if (!container) return;
+
+            const nom = document.getElementById("nom").value.trim();
+            const telf = document.getElementById("telf").value.trim();
+            const mail = document.getElementById("mail").value.trim();
+            const obs = document.getElementById("obs").value.trim();
+            const items = obtenirItemsSeleccionats();
+            const totalUt = obtenirTotalUnitats();
+            const importTotal = totalUt * PREU_UNITARI;
+
+            let html = `
+                <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: #1e293b;">Detall de la comanda:</h3>
+            `;
+
+            items.forEach(it => {
+                html += `
+                    <div class="resum-linia">
+                        <span>👕 Samarreta <strong>${it.talla}</strong> · Color ${it.color}</span>
+                        <span><strong>${it.unitats} ut.</strong> (${(it.unitats * PREU_UNITARI).toFixed(2).replace(".", ",")} €)</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="resum-linia total-final">
+                    <span>Total (${totalUt} unitats)</span>
+                    <span>${importTotal.toFixed(2).replace(".", ",")} €</span>
+                </div>
+                <h4 style="font-size: 1rem; margin: 1.25rem 0 0.5rem; color: #475569;">Dades del sol·licitant:</h4>
+                <div class="resum-linia"><span>Nom:</span><span><strong>${nom}</strong></span></div>
+                <div class="resum-linia"><span>Telèfon:</span><span>${telf}</span></div>
+                <div class="resum-linia"><span>Email:</span><span>${mail}</span></div>
+                ${obs ? `<div class="resum-linia"><span>Observacions:</span><span><em>${obs}</em></span></div>` : ""}
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // 6. Generador de Número de Comanda
+        function generarCodiComanda() {
+            const aleatori = Math.floor(1000 + Math.random() * 9000);
+            return `SAM-2026-${aleatori}`;
+        }
+
+        // 7. Enviament Final a Supabase i Google Sheets
+        async function enviarComandaFinal() {
+            ocultaAlerta();
+            
+            // Comprovació Honeypot
+            const hp = document.getElementById("website_hp").value;
+            if (hp && hp.length > 0) {
+                console.warn("Spam detectat.");
+                return;
+            }
+
+            const nom = document.getElementById("nom").value.trim();
+            const telf = document.getElementById("telf").value.trim();
+            const mail = document.getElementById("mail").value.trim();
+            const obs = document.getElementById("obs").value.trim();
+            const items = obtenirItemsSeleccionats();
+            const totalUt = obtenirTotalUnitats();
+            const importTotal = totalUt * PREU_UNITARI;
+
+            if (!nom || !telf || !mail || items.length === 0) {
+                mostraAlerta("Falten dades per completar la comanda. Torna enrere i revisa-les.", "error");
+                return;
+            }
+
+            const btnEnviar = document.getElementById("btn-enviar-comanda");
+            if (btnEnviar) {
+                btnEnviar.disabled = true;
+                btnEnviar.innerText = "⏳ Tramitant comanda...";
+            }
+
+            const nComanda = generarCodiComanda();
+
+            const comandaPayload = {
+                num_comanda: nComanda,
+                nom: nom,
+                telefon: telf,
+                telf: telf,
+                email: mail,
+                mail: mail,
+                observacions: obs,
+                obs: obs,
+                items: items,
+                total_unitats: totalUt,
+                import_total: importTotal,
+                created_at: new Date().toISOString()
+            };
+
+            // Enviar a Google Apps Script (Google Sheets a Drive & Notificacions per Correu)
+            try {
+                if (GOOGLE_SCRIPT_URL) {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(comandaPayload)
+                    });
+                }
+            } catch (eSheets) {
+                console.warn("Error enviant a Google Sheets:", eSheets);
+            }
+
+            // Mostrar pantalla de confirmació
+            document.getElementById("confirmacio-num-comanda").innerText = nComanda;
+            document.getElementById("confirmacio-unitats").innerText = `${totalUt} ${totalUt === 1 ? 'unitat' : 'unitats'}`;
+            document.getElementById("confirmacio-import").innerText = `${importTotal.toFixed(2).replace(".", ",")} €`;
+
+            mostraPagina(4);
+        }
+
+        // 8. Reiniciar comanda
+        function reiniciarComanda() {
+            TALLES.forEach(talla => {
+                COLORS.forEach(color => {
+                    const input = document.getElementById(`qty_${talla}_${color}`);
+                    if (input) input.value = "0";
+                });
+            });
+
+            document.getElementById("nom").value = "";
+            document.getElementById("telf").value = "";
+            document.getElementById("mail").value = "";
+            document.getElementById("obs").value = "";
+
+            actualitzarTotals();
+
+            const btnEnviar = document.getElementById("btn-enviar-comanda");
+            if (btnEnviar) {
+                btnEnviar.disabled = false;
+                btnEnviar.innerText = "✨ Confirmar i Enviar Comanda";
+            }
+
+            const navWizard = document.getElementById("nav-wizard");
+            const progresContainer = document.getElementById("progres");
+            if (navWizard) navWizard.style.display = "flex";
+            if (progresContainer) progresContainer.style.display = "flex";
+
+            mostraPagina(0);
+        }
+
+        // 9. Alertes
+        function mostraAlerta(text, tipus) {
+            const box = document.getElementById("alerta-box");
+            if (!box) return;
+            box.innerText = text;
+            box.className = `alerta-box ${tipus}`;
+            box.style.display = "block";
+        }
+
+        function ocultaAlerta() {
+            const box = document.getElementById("alerta-box");
+            if (box) box.style.display = "none";
+        }
+
+        // Inicialització en carregar la pàgina
+        document.addEventListener("DOMContentLoaded", () => {
+            initTaulaComanda();
+            actualitzarTotals();
+            mostraPagina(0);
+        });
+    </script>
+</body>
+</html>

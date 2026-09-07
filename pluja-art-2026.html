@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://ojqhexrqbfwcubyactuj.supabase.co;">
+    <meta name="description" content="5a Fira Pluja d'Art de Sant Jordi Desvalls (18, 19 i 20 de setembre de 2026). Consulta el programa oficial d'espectacles, l'itinerari d'exposicions d'art, espais patrimonials i com arribar-hi.">
+    
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://desvallscultura.cat/pluja-art-2026.html">
+    <meta property="og:title" content="Pluja d'Art 2026 | 5a Fira d'Art i Espectacles a Sant Jordi Desvalls">
+    <meta property="og:description" content="18, 19 i 20 de setembre de 2026. Espectacles de teatre, dansa, música en directe, 21 espais d'exposició d'arts plàstiques i gastronomia.">
+    <meta property="og:image" content="https://desvallscultura.cat/img/logo.jpg">
+
+    <title>Pluja d'Art 2026 | Programa Oficial i Exposicions · Desvalls Cultura</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="css/style.css?v=21a965ac">
+
+    <style>
+        :root {
+            --art-accent: #f43f5e;
+            --art-purple: #8b5cf6;
+        :root {
+            --art-accent: #f43f5e;
+            --art-purple: #8b5cf6;
+            --art-amber: #f59e0b;
+        }
+
+        .logo img, .logo-img {
+            height: 40px;
+            max-height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Hero Pluja d'Art: Fons fosc net, sense focus blanc molest i amb màxima llegibilitat */
+        .hero-art {
+            min-height: 55vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+            padding: 7.5rem 0 3.5rem;
+            background: #090d16;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(244, 63, 94, 0.15);
+            color: #fda4af;
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-art-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-art-dates {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #fb7185;
+            margin-bottom: 1.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Botons de navegació ràpida de seccions */
+        .hub-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 2.5rem 0 1rem;
+        }
+
+        .hub-nav-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #f1f5f9;
+            padding: 0.75rem 1.4rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hub-nav-btn:hover, .hub-nav-btn.active {
+            background: #f43f5e;
+            border-color: #f43f5e;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(244, 63, 94, 0.5);
+        }
+
+        /* Filtres de Dies */
+        .day-filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 0.65rem 1.25rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-btn:hover {
+            color: #ffffff;
+            border-color: #64748b;
+        }
+
+        .day-btn.active {
+            background: #f43f5e;
+            border-color: #f43f5e;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35);
+        }
+
+        /* Targetes d'Espectacles */
+        .show-card {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .show-card:hover {
+            border-color: rgba(244, 63, 94, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        .show-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .show-time-badge {
+            background: rgba(244, 63, 94, 0.15);
+            color: #fda4af;
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-family: var(--font-sans);
+        }
+
+        .show-duration-badge {
+            background: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .show-genre-badge {
+            background: rgba(255, 255, 255, 0.06);
+            color: #cbd5e1;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .show-title {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0.25rem 0;
+            font-family: var(--font-sans);
+        }
+
+        .show-company {
+            color: #38bdf8;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .show-synopsis {
+            color: #cbd5e1;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .show-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .show-loc {
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .show-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .show-tag-link {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .show-tag-link:hover {
+            color: #ffffff;
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Targetes d'Exposicions */
+        .expo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            text-align: left;
+        }
+
+        .expo-card {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .expo-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .expo-space-badge {
+            background: rgba(56, 189, 248, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.35rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .expo-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .expo-artist {
+            color: #fda4af;
+            font-weight: 700;
+            font-size: 0.98rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .expo-desc {
+            color: #cbd5e1;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .expo-meta {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .expo-meta strong {
+            color: #e2e8f0;
+        }
+
+        /* Banner d'enllaç creuat Participa */
+        .participa-bridge-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #311042 50%, #0f172a 100%);
+            border: 2px solid #7c3aed;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Guia d'espais */
+        .spaces-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .space-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .space-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .space-name {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .space-sub {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navegació -->
+    <header class="glass-header">
+        <nav class="nav container" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="img/logo.jpg" alt="Logo Desvalls Cultura" style="height: 40px; width: auto; max-height: 40px; border-radius: 6px; mix-blend-mode: multiply;">
+                <span class="logo-text">Desvalls</span> Cultura
+            </a>
+            <ul class="nav-links">
+                <li><a href="pluja-art-2026.html" style="color: var(--art-accent); font-weight: 800;">Pluja d'Art 2026</a></li>
+                <li><a href="art-luminic-2026.html" style="color: #38bdf8; font-weight: 800; text-shadow: 0 0 10px rgba(56,189,248,0.4);">✨ Art Lumínic</a></li>
+                <li><a href="participa-pluja-art.html" style="color: #a78bfa; font-weight: 600;">Participa & Bases</a></li>
+                <li><a href="marxandatge.html" style="color: var(--primary); font-weight: 700;">👕 Samarretes</a></li>
+                <li><a href="pluja-lletres-2026.html">Pluja de Lletres</a></li>
+                <li><a href="index.html#festivals">Festivals</a></li>
+                <li><a href="index.html#agenda">Agenda</a></li>
+                <li><a href="index.html#associa-t" class="btn-primary" style="background: var(--dark); border-color: var(--dark); color: white;">Fes-te Soci</a></li>
+            </ul>
+            <div class="mobile-menu-icon" id="mobileMenuIcon">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-art dark-section">
+        <div class="container hero-content" style="position: relative; z-index: 2;">
+            <div class="hero-badge-pill">
+                <span>🎨</span> 5a Fira d'Art i Espectacles al Carrer
+            </div>
+            <h1 class="hero-art-title">PLUJA D'ART 2026</h1>
+            <div class="hero-art-dates">
+                <span>📅</span> 18, 19 i 20 de setembre de 2026 · Sant Jordi Desvalls
+            </div>
+            <p style="color: #e2e8f0; max-width: 720px; margin: 0 auto 2rem; font-size: 1.15rem; line-height: 1.7;">
+                Durant tres dies, els carrers, places, patis i cases històriques de Sant Jordi Desvalls es transformen en un gran escenari viu d'art contemporani, espectacles de teatre, dansa, concerts i creació popular.
+            </p>
+
+            <!-- Menú de salt ràpid a seccions -->
+            <div class="hub-nav">
+                <a href="#espectacles" class="hub-nav-btn active">🎭 Espectacles i Música</a>
+                <a href="#residencia" class="hub-nav-btn" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #e9d5ff;">🧵 1ª Residència · Flassada Col·lectiva</a>
+                <a href="art-luminic-2026.html" class="hub-nav-btn" style="background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); border-color: #38bdf8; color: #ffffff; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);">✨ Festival Art Lumínic</a>
+                <a href="#exposicions" class="hub-nav-btn">🖼️ Exposicions d'Art</a>
+                <a href="#gastronomia" class="hub-nav-btn">🍔 Foodtrucks & Festa</a>
+                <a href="#com-arribar" class="hub-nav-btn">📍 Com Arribar-hi & Plànol</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 1: PROGRAMACIÓ D'ESPECTACLES -->
+    <section id="espectacles" class="section dark-section" style="background: #020617; padding-top: 4rem;">
+        <div class="container text-center">
+            <h2 class="section-title text-light" style="margin-bottom: 0.5rem;">Programació d'Espectacles</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem; max-width: 650px; margin: 0 auto 2.5rem;">
+                Teatre de carrer, recitals poètics, dansa contemporània, concerts clàssics, màgia còmica i sessions de nit.
+            </p>
+
+            <!-- Filtres de Dies -->
+            <div class="day-filters">
+                <button type="button" class="day-btn active" onclick="filterDay('all', this)">Tot el Festival</button>
+                <button type="button" class="day-btn" onclick="filterDay('divendres', this)">Divendres 18 Setembre</button>
+                <button type="button" class="day-btn" onclick="filterDay('dissabte', this)">Dissabte 19 Setembre</button>
+                <button type="button" class="day-btn" onclick="filterDay('diumenge', this)">Diumenge 20 Setembre</button>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto; text-align: left;">
+
+                <!-- ==================== DIVENDRES 18 ==================== -->
+                <div class="day-group day-divendres">
+                    <h3 style="color: var(--art-accent); font-family: var(--font-serif); font-size: 1.8rem; margin: 2rem 0 1.5rem; border-bottom: 2px solid rgba(244,63,94,0.3); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🟣</span> Divendres 18 de setembre · Vespre i Nit d'Obertura
+                    </h3>
+
+                    <!-- Show 0: Acte d'Inauguració · Marc Agustí -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">19:30 h</span>
+                                <span class="show-duration-badge">⏱️ ~30 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎉 Acte d'Inauguració & 1ª Residència</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Acte d'Inauguració - Una flassada col·lectiva</h4>
+                            <div class="show-company">Marc Agustí</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Presentació de l'obra col·lectiva de la 1ª Residència Pluja d'Art i acte d'inauguració oficial de la fira a la Sala Nova amb la benvinguda institucional i l'obertura del cap de setmana cultural.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🏛️ Sala Nova</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Inauguració Oficial</span>
+                                <span class="show-tag-link">1ª Residència Pluja d'Art</span>
+                                <a href="#residencia" class="show-tag-link" style="color: #c084fc; border-color: rgba(168,85,247,0.4); font-weight: 700;">🧵 Veure obra i procés</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 1: Els Braves -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <span class="show-time-badge">20:00 h</span>
+                            <span class="show-genre-badge">🎭 Espectacle Teatral</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">No Som Tan Diferents</h4>
+                            <div class="show-company">Cia. Els Braves (Aleix Gàzquez)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Una comèdia àgil i divertida ambientada en un peculiar plató de debat de televisió presentat per un carismàtic personatge. Un cara a cara hilarant sobre tradicions, cultura, gastronomia i situacions quotidianes.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🏛️ Sala Nova</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Comèdia Teatral</span>
+                                <span class="show-tag-link">Obertura</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 2: Rumbesia -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">21:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~60 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎵 Poesia, Música i Llum</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Flama i Silenci</h4>
+                            <div class="show-company">Rumbesia (Jose Manuel Panzano)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Maridatge poètic i musical de la poesia de Màrius Torres amb composicions d'Enric Granados. Un recital vibrant i commovedor interpretat per Rumbesia amb força, sensibilitat i passió escènica.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <a href="https://www.instagram.com/rumbesia/" target="_blank" class="show-tag-link">🌐 @rumbesia</a>
+                                <span class="show-tag-link">Música & Poesia</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 3: Teràpia de Riure -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">22:30 h</span>
+                                <span class="show-duration-badge">⏱️ ~55 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎭 Teràpia de Riure · Monòleg Teatral</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">El Taxista Frustrat</h4>
+                            <div class="show-company">Teràpia de Riure (Oriol Serra Pagès)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Un monòleg còmic i teatre de proximitat on un taxista comparteix amb el públic les anècdotes més surrealistes, personatges extravagants i situacions hilarants viscudes al volant del seu taxi durant els torns de nit.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Comèdia</span>
+                                <span class="show-tag-link">Monòleg d'autor</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 4: Helena i Albert -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <span class="show-time-badge">23:30 h</span>
+                            <span class="show-genre-badge">🎶 Concert Duo Acústic</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Duo Acústic</h4>
+                            <div class="show-company">Helena i Albert</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Duo acústic en directe amb veu i guitarra per tancar la nit de divendres a la fresca amb cançons d'autor, temes íntims i versions d'alta complicitat musical.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Música en directe</span>
+                                <span class="show-tag-link">Acústic</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- ==================== DISSABTE 19 ==================== -->
+                <div class="day-group day-dissabte">
+                    <h3 style="color: #fbbf24; font-family: var(--font-serif); font-size: 1.8rem; margin: 3rem 0 1.5rem; border-bottom: 2px solid rgba(251,191,36,0.3); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🟡</span> Dissabte 19 de setembre · Jornada Central
+                    </h3>
+
+                    <!-- Matí -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 1rem;">
+                        ☀️ Matí
+                    </div>
+
+                    <!-- Show 5: CabraCadabra -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">10:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~40 min</span>
+                            </div>
+                            <span class="show-genre-badge">🐸 Espectacle Infantil i Familiar</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Les Granotes</h4>
+                            <div class="show-company">Cia. CabraCadabra (Hélène Hüsler)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Les granotes convida a experimentar dos mons: la terra i l'aigua. A la terra veiem volar cuques de llum, i a l'aigua peixos que neden per aigües càlides. Una experiència sensorial i màgica amb titelles, moviment i música per a tota la família.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🏫 Les Escoles</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Familiar / Infants</span>
+                                <span class="show-tag-link">Titelles & Moviment</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show Urban Sketchers -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">10:00 h - 12:15 h</span>
+                                <span class="show-duration-badge">⏱️ ~120 min</span>
+                            </div>
+                            <span class="show-genre-badge">✏️🎨 Dibuix Urbà in situ & Exposició</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Exposició de dibuixos fets durant el matí</h4>
+                            <div class="show-company">Urban Sketchers & Dibuixants d'Arreu</div>
+                        </div>
+                        <p class="show-synopsis">
+                            El moviment internacional Urban Sketchers arriba a la Pluja d'Art. Durant el matí (de 10:00 h a 12:15 h), dibuixants i il·lustradors capturen "in situ", amb llibretes, tintes i aquarel·les, l'encant dels carrers, façanes i racons del poble. A les 12:15 h, trobada oberta a la Plaça Clos Garriga amb l'exposició de dibuixos fets durant el matí per fer la posada en comú, compartir les llibretes i celebrar l'art del dibuix al carrer.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🌿 Plaça Clos Garriga & Carrers</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Urban Sketching</span>
+                                <span class="show-tag-link">Exposició al Carrer</span>
+                                <span class="show-tag-link">Trobada Oberta</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 6: Duo Belarc -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">11:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~50 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎻 Concert de Música Clàssica</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Interseccions</h4>
+                            <div class="show-company">Duo Belarc (Laura Almiñana)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Concert instrumental d'alta sensibilitat acústica que explora el diàleg entre corda i vent a través de repertori clàssic i contemporani sota el concepte d'escolta profunda (Deep Listening).
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Música Clàssica</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 7: Djammal -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">12:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~45 min</span>
+                            </div>
+                            <span class="show-genre-badge">🤡 Circ Multidisciplinar & Clown</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Clown on Popping</h4>
+                            <div class="show-company">Djammal (Jose Miguel Martins Semedo)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Espectacle de circ multidisciplinar i clown gestual que combina dansa urbana, teatre físic i popping. Una peça interactiva i absorbent plena de sorpreses i energia.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">📍 Plaça U d’Octubre</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Circ Multidisciplinar</span>
+                                <span class="show-tag-link">Clown Urbà</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 8: Barretús Garden -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">13:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~60 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎸 Cançó d'Autor & Vermut Musical</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Abans que el dia acabi</h4>
+                            <div class="show-company">Barretús Garden (Santi Cos Giner)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Repertori de cançons pròpies amb melodies lluminoses, lletres poètiques i ritmes acústics vibrants per gaudir del vermut musical de dissabte a la Plaça Major.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Vermut Musical</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Tarda -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; margin: 2rem 0 1rem;">
+                        ⛅ Tarda
+                    </div>
+
+                    <!-- Show 9: Lia Alonso i Margarida Codina -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">16:30 h</span>
+                                <span class="show-duration-badge">⏱️ ~90 min</span>
+                            </div>
+                            <span class="show-genre-badge">🏺 Taller Espectacle · Paraula, Emoció i Fang</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Paraula, Emoció, Fang</h4>
+                            <div class="show-company">Lia Alonso i Margarida Codina</div>
+                        </div>
+                        <p class="show-synopsis" style="line-height: 1.65;">
+                            Diuen que modelar el fang és l'única poesia que pot ser tocada, on les mans escriuen versos amb forma de corbes, textures i imperfeccions...<br><br>
+                            Així com el poeta usa paraules per evocar emocions, el ceramista usa el fang, els esmalts i el foc per modelar emocions tangibles. Una creació ceràmica narra una història silenciosa, tan profunda com una poesia.<br><br>
+                            En aquest taller experimentem com a partir de paraules arribem a emocions que les nostres mans transmeten al fang, creant-se un procés creatiu terapèutic.<br><br>
+                            Vine a transformar la paraula en fang. Fes que l'emoció agafi forma i sorgeixi un poema de les teves mans.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🏡 Ca la Lluïsa</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Taller Espectacle</span>
+                                <span class="show-tag-link">Ceràmica & Paraula</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 10: La Pulposa -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">18:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~40 min</span>
+                            </div>
+                            <span class="show-genre-badge">🩰 Dansa Contemporània & Moviment</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Kairós - En temps d'equilibri</h4>
+                            <div class="show-company">Cia. La Pulposa (Gaia Magrané)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Una peça de dansa contemporània i teatre físic que investiga la fragilitat de l'equilibri, la recerca del moment oportú (*Kairós*) i la connexió corporal a l'espai públic urbà.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <a href="https://lapulposa.es/" target="_blank" class="show-tag-link">🌐 lapulposa.es</a>
+                                <span class="show-tag-link">Dansa Contemporània</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 11: Pamboliteatre -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">19:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~60 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎭 Comèdia Teatral</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Martínez i Martínez Varietés</h4>
+                            <div class="show-company">Pamboli Teatre (Quim Castellà Turon)</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Una companyia de varietés en decadència viatja de poble en poble amb el seu nou espectacle i la gran Vedette Cuqui «la Maravillas». Quan la vedette es posa malalta, el presentador ha d'improvisar situacions delirants.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🏛️ Sala Nova</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Comèdia Teatral</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Nit -->
+                    <div style="background: rgba(255,255,255,0.02); padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; margin: 2rem 0 1rem;">
+                        🌙 Nit & Festa Gastronòmica
+                    </div>
+
+                    <!-- Show Art Lumínic Inaugural -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <span class="show-time-badge">21:30 h</span>
+                            <span class="show-genre-badge">✨ Art Lumínic & Inauguració</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Espectacle inaugural del Festival Art Lumínic</h4>
+                            <div class="show-company">Festival Art Lumínic & Pluja d'Art</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Acte i espectacle inaugural del Festival Art Lumínic a la Plaça U d'Octubre, donant el tret de sortida a les instal·lacions lumíniques, visuals i immersives de la nit de dissabte.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">📍 Plaça U d’Octubre</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Art Lumínic</span>
+                                <span class="show-tag-link">Inauguració</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show Ommatidia: mathr & netz -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">21:45 h</span>
+                                <span class="show-duration-badge">⏱️ 30 min</span>
+                            </div>
+                            <span class="show-genre-badge">🌌 Audiovisual en Viu & Live AV</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Ommatidia</h4>
+                            <div class="show-company">mathr & netz</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Espectacle audiovisual en viu (Live AV) que combina projeccions visuals generatives, art digital i experimentació sonora en directe, creant una experiència immersiva i hipnòtica a la plaça.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">📍 Plaça U d’Octubre</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Audiovisual en viu</span>
+                                <span class="show-tag-link">Live AV</span>
+                                <span class="show-tag-link">Art Digital</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- DESTACAT: MAR MEDITERRÀNIA - FESTIVAL D'ART LUMÍNIC -->
+                    <div style="background: linear-gradient(135deg, #021226 0%, #082f49 50%, #031226 100%); border: 2px solid #06b6d4; border-radius: 20px; padding: 2.25rem 2rem; margin: 2rem 0; box-shadow: 0 15px 35px rgba(6, 182, 212, 0.25); text-align: left; position: relative; overflow: hidden;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                            <span style="background: rgba(6, 182, 212, 0.2); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.5); padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+                                ✨ Festival d'Art Lumínic 2026
+                            </span>
+                            <span style="color: #fbbf24; font-weight: 700; font-size: 0.95rem;">🕯️ Recorregut amb Camí d'Espelmes</span>
+                        </div>
+                        <h3 style="color: #ffffff; font-family: var(--font-serif); font-size: 1.9rem; margin-bottom: 0.75rem; font-weight: 800;">
+                            Mar Mediterrània · L'Oceà de Llum i Art Immersiu
+                        </h3>
+                        <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                            Descobreix la guia completa de les <strong>9 instal·lacions lumíniques</strong>: inflables gegants, meduses bioluminescents, projeccions làser, fumaroles marines i la Reina del Mar presidint des del dipòsit de l'aigua. Segueix el camí màgic d'espelmes que connecta tots els espais del nucli històric.
+                        </p>
+                        <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
+                            <a href="art-luminic-2026.html" class="btn-primary" style="background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); border-color: #38bdf8; color: white; font-weight: 800; padding: 0.8rem 1.6rem; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4); display: inline-flex; align-items: center; gap: 0.45rem;">
+                                🌊 Veure Pàgina i Guia d'Art Lumínic
+                            </a>
+                            <a href="mapa3.html" class="btn-secondary" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.25); color: #e2e8f0; font-weight: 700; padding: 0.8rem 1.5rem; border-radius: 30px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.45rem;">
+                                🗺️ Plànol del Circuit (mapa3.html)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Show 12: DJ Pipa -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <span class="show-time-badge">00:00 h (Mitjanit)</span>
+                            <span class="show-genre-badge">🎧 Sessió Musical per a Tothom</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Música per a Tothom</h4>
+                            <div class="show-company">DJ Pipa</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Gran sessió musical festiva per ballar i gaudir de la nit de dissabte a la zona de Foodtrucks, amb ritmes transversals i ambient per a totes les edats.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🍔 Zona Foodtrucks</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Festa & Ball</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- ==================== DIUMENGE 20 ==================== -->
+                <div class="day-group day-diumenge">
+                    <h3 style="color: #10b981; font-family: var(--font-serif); font-size: 1.8rem; margin: 3rem 0 1.5rem; border-bottom: 2px solid rgba(16,185,129,0.3); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🟢</span> Diumenge 20 de setembre · Matí i Cloenda
+                    </h3>
+
+                    <!-- Show 13: Gegants -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">10:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~60 min</span>
+                            </div>
+                            <span class="show-genre-badge">🥁 Tradició Popular & Cercavila</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Cercavila de Gegants (inici plaça 1 d'Octubre)</h4>
+                            <div class="show-company">Colles Geganteres de Sant Jordi Desvalls, Celrà i Flaçà</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Plantada i recorregut festiu dels gegants i capgrossos amb inici a la Plaça 1 d'Octubre i pels carrers i places del poble, omplint de música tradicional i alegria la jornada de diumenge. Enguany amb la participació de les colles geganteres de Celrà i Flaçà.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🥁 Carrers de la Vila</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Cultura Popular</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 14: Llegim teatre -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">11:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~60-90 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎭 Performance</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Poesia, Colors i Consciència</h4>
+                            <div class="show-company">Llegim teatre</div>
+                        </div>
+                        <p class="show-synopsis">
+                            A partir d'una performance que comença a la plaça Major, deixa't portar fins la plaça Clos Garriga i entra en un espai de reflexió on la paraula, la poesia i els colors donen forma a pensaments. Els versos i colors et poden connectar amb l'emoció, l'emoció amb l'art, tot lligat amb l'objectiu de la lluita per una transició energètica justa.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">🌿 Plaça Clos Garriga</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Performance</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 15: Pau Zabala -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                                <span class="show-time-badge">12:00 h</span>
+                                <span class="show-duration-badge">⏱️ ~50 min</span>
+                            </div>
+                            <span class="show-genre-badge">🎹 Recital de Piano en Viu</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Concert de Piano</h4>
+                            <div class="show-company">Pau Zabala Padró</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Un concert de piano en viu amb un repertori apassionant d'obres clàssiques i peces contemporànies interpretades a l'aire lliure a la Plaça Major.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Piano en Viu</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Show 16: Acte de Clausura -->
+                    <article class="show-card">
+                        <div class="show-card-header">
+                            <span class="show-time-badge">13:00 h</span>
+                            <span class="show-genre-badge">🥂 Acte Oficial de Clausura</span>
+                        </div>
+                        <div>
+                            <h4 class="show-title">Acte de clausura</h4>
+                            <div class="show-company">Ajuntament de Sant Jordi Desvalls & Comissió Organitzadora</div>
+                        </div>
+                        <p class="show-synopsis">
+                            Acte de cloenda i clausura oficial de la 5ª edició de la Fira Pluja d'Art 2026 a la Plaça Major, agraïment als artistes, col·laboradors i comiat fins a la propera edició.
+                        </p>
+                        <div class="show-footer">
+                            <span class="show-loc">⛲ Plaça Major</span>
+                            <div class="show-links">
+                                <span class="show-tag-link">Clausura Oficial</span>
+                                <span class="show-tag-link">Cloenda</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ: 1ª RESIDÈNCIA ARTÍSTICA PLUJA D'ART -->
+    <section id="residencia" class="section dark-section" style="background: radial-gradient(circle at 50% 10%, rgba(147, 51, 234, 0.12) 0%, #060913 70%); border-top: 1px solid rgba(168, 85, 247, 0.25); padding: 5rem 0 4rem;">
+        <div class="container">
+            <div class="text-center" style="max-width: 840px; margin: 0 auto 3rem;">
+                <span class="hero-badge-pill" style="background: rgba(168, 85, 247, 0.15); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.35); margin-bottom: 1rem;">
+                    🧵 1ª Residència Artística Pluja d'Art 2026
+                </span>
+                <h2 class="section-title text-light" style="margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: clamp(2rem, 4vw, 2.7rem);">
+                    Una flassada col·lectiva
+                </h2>
+                <div style="color: #c084fc; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.5rem;">
+                    Marc Agustí i veïns del poble
+                </div>
+                <div style="color: #94a3b8; font-size: 0.95rem; font-style: italic; margin-bottom: 1.25rem;">
+                    «Una flassada per a un llit tan gran com un poble»
+                </div>
+                <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.7;">
+                    Obra d'art comunitària fruit de la <strong>1ª Residència d'Art de Sant Jordi Desvalls</strong>. Una creació col·lectiva que transforma testimonis materials de dolor i malaltia en un gran amulet compartit d'aixopluc, guarició i protecció ciutadana.
+                </p>
+            </div>
+
+            <!-- Targeta Gran Destacada del Projecte -->
+            <div style="background: linear-gradient(145deg, rgba(26, 16, 48, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid rgba(168, 85, 247, 0.35); border-radius: 20px; padding: 2.5rem 2rem; box-shadow: 0 20px 45px -15px rgba(147, 51, 234, 0.3); max-width: 1040px; margin: 0 auto;">
+                
+                <!-- Bloc de Dades Pràctiques Destacades -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1.1rem 1.25rem;">
+                        <div style="color: #c084fc; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">📍 Ubicació de l'obra</div>
+                        <div style="color: #f8fafc; font-size: 1.1rem; font-weight: 800;">Façana de l'Ajuntament</div>
+                        <div style="color: #38bdf8; font-size: 0.88rem; font-weight: 600; margin-top: 0.2rem;">Plaça U d’Octubre</div>
+                    </div>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1.1rem 1.25rem;">
+                        <div style="color: #facc15; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">📅 Penjada de la peça</div>
+                        <div style="color: #facc15; font-size: 1.1rem; font-weight: 800;">Dissabte 19 de setembre</div>
+                        <div style="color: #cbd5e1; font-size: 0.88rem; margin-top: 0.2rem;">Es penja al matí a la façana</div>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1.1rem 1.25rem;">
+                        <div style="color: #34d399; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">🎨 Tècnica & Procés</div>
+                        <div style="color: #f8fafc; font-size: 1.1rem; font-weight: 800;">Cianotípia sobre tela</div>
+                        <div style="color: #cbd5e1; font-size: 0.88rem; margin-top: 0.2rem;">Radiografies & costura col·lectiva</div>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1.1rem 1.25rem;">
+                        <div style="color: #fb7185; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem;">🎙️ Presentació Inaugural</div>
+                        <div style="color: #f8fafc; font-size: 1.1rem; font-weight: 800;">Divendres 18 · 19:30 h</div>
+                        <div style="color: #cbd5e1; font-size: 0.88rem; margin-top: 0.2rem;">A la Sala Nova (obertura oficial)</div>
+                    </div>
+                </div>
+
+                <!-- Detalls del Procés Creatiu i Metodologia segons el Dossier -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; text-align: left;">
+                    
+                    <!-- Pas 1 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #38bdf8; border-radius: 12px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.6rem;">🩻</span>
+                            <h4 style="color: #ffffff; font-size: 1.15rem; font-weight: 800; margin: 0;">1. Les radiografies i la cianotípia</h4>
+                        </div>
+                        <p style="color: #cbd5e1; font-size: 0.92rem; line-height: 1.65; margin: 0;">
+                            Els veïns i veïnes van portar radiografies vinculades a malalties viscudes. Amb cotó fluix i acetona, la imatge impresa s'esborra fins a obtenir un acetat transparent, on s'hi pinta la part del cos afectada —ara curada i guarida— per traslladar-la com a fotolit mitjançant la tècnica fotogràfica de la <strong>cianotípia</strong> sobre retalls de tela blanca.
+                        </p>
+                    </div>
+
+                    <!-- Pas 2 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #c084fc; border-radius: 12px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.6rem;">🪡</span>
+                            <h4 style="color: #ffffff; font-size: 1.15rem; font-weight: 800; margin: 0;">2. Tallers i costura participativa</h4>
+                        </div>
+                        <p style="color: #cbd5e1; font-size: 0.92rem; line-height: 1.65; margin: 0;">
+                            En espais de confiança i trobada al poble, cada peça de cianotípia es cus amb les dels altres participants. La tela resultant esdevé un sudari per acomiadar el dolor viscut i, al mateix temps, una gran flassada destinada a acotxar la ciutadania en un llit simbòlic de cura i suport comunitari.
+                        </p>
+                    </div>
+
+                    <!-- Pas 3 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 3px solid #facc15; border-radius: 12px; padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.6rem;">🏛️</span>
+                            <h4 style="color: #ffffff; font-size: 1.15rem; font-weight: 800; margin: 0;">3. Penjada a la façana de l'Ajuntament</h4>
+                        </div>
+                        <p style="color: #cbd5e1; font-size: 0.92rem; line-height: 1.65; margin: 0;">
+                            <strong>Dissabte 19 al matí</strong>, la gran flassada col·lectiva és penjada a la façana de l'Ajuntament, a la Plaça U d'Octubre. La peça romandrà instal·lada al cor del poble com a símbol viu de la vulnerabilitat comuna i de la capacitat de la comunitat per sostenir-la davant la incertesa del món.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Cita del Dossier de l'Artista -->
+                <blockquote style="margin: 0; padding: 1.5rem 1.75rem; background: rgba(168, 85, 247, 0.08); border-left: 4px solid #c084fc; border-radius: 0 14px 14px 0; color: #e2e8f0; font-style: italic; font-size: 1rem; line-height: 1.7; text-align: left;">
+                    «Una gran tela composta per retalls d'imatges de dolors pretèrits que, transformats col·lectivament, es converteixen en un amulet de protecció compartit. Un objecte que apel·la a la vulnerabilitat comuna i a la capacitat de la comunitat per sostenir-la, davant la incertesa i l'hostilitat del món que habitem.»
+                    <footer style="margin-top: 0.75rem; font-style: normal; font-size: 0.88rem; color: #d8b4fe; font-weight: 700;">
+                        — Marc Agustí Vila · Projecte guanyador de la 1ª Residència Artística Pluja d'Art 2026
+                    </footer>
+                </blockquote>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 2: ITINERARI D'EXPOSICIONS D'ARTS PLÀSTIQUES -->
+    <section id="exposicions" class="section dark-section" style="background: #090d16; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container text-center">
+            <span class="hero-badge-pill" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
+                🏛️ Itinerari Artístic Patrimonial
+            </span>
+            <h2 class="section-title text-light">Exposicions d'Arts Plàstiques</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem; max-width: 750px; margin: 0 auto 3rem;">
+                Passeja per Sant Jordi Desvalls i descobreix les obres de pintura, escultura, ceràmica, gravat japonès i instal·lacions tèxtils ubicades a les cases i racons singulars del poble.
+            </p>
+
+            <div class="expo-grid">
+
+                <!-- 1. Ajuntament (Sala de Regants) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏛️ Espai 1 · Ajuntament (Sala de Regants)</span>
+                        <h3 class="expo-title">«Exposició Col·lectiva d'Alumnes»</h3>
+                        <div class="expo-artist">Escola de Dibuix i Pintura de Celrà</div>
+                        <p class="expo-desc">
+                            Mostra col·lectiva amb 18 obres realitzades pels alumnes del taller, explorant tècniques d'oli, acrílic, aquarel·la i composició figurativa.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura Col·lectiva (18 obres)</div>
+                    </div>
+                </div>
+
+                <!-- 2. Ajuntament (2on Pis) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏛️ Espai 2 · Ajuntament (2on Pis)</span>
+                        <h3 class="expo-title">«Memòria i Silenci»</h3>
+                        <div class="expo-artist">Cristina Perez (Les Fonts, Terrassa)</div>
+                        <p class="expo-desc">
+                            4 pintures contemporànies d'atmosfera intimista que reflexionen sobre el pas del temps, el record i la calma dels espais buits.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura Contemporània (4 peces)</div>
+                    </div>
+                </div>
+
+                <!-- 3. Ajuntament (2on pis - Sala de Plens) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏛️ Espai 3 · Ajuntament (2on pis - Sala de Plens)</span>
+                        <h3 class="expo-title">«RASTRES. UNA MIRADA DIFERENT AL PAISATGE»</h3>
+                        <div class="expo-artist">Rosa Aguilò (Palafrugell)</div>
+                        <p class="expo-desc">
+                            Sèrie de 5-6 pintures de gran format (105 cm cadascuna) amb una visió suggerent, texturada i cromàtica del paisatge empordanès.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura de Gran Format (5-6 obres)</div>
+                    </div>
+                </div>
+
+                <!-- 4. Can Ministral (Porta Darrere - Caixetes) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🪵 Espai 4 · Can Ministral (Porta Darrere)</span>
+                        <h3 class="expo-title">«Caixetes de Fusta d'Autor»</h3>
+                        <div class="expo-artist">Daniel Ministral (Sant Jordi Desvalls)</div>
+                        <p class="expo-desc">
+                            Col·lecció de caixes d'artesania en fusta ensamblades a mà, combinant diferents vetes, mecanismes i acabats naturals amb una gran precisió.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Ebenisteria & Artesania en Fusta</div>
+                    </div>
+                </div>
+
+                <!-- 4. Can Ministral (Porta Darrere - Pintura) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🖼️ Espai 4 · Can Ministral (Porta Darrere)</span>
+                        <h3 class="expo-title">«Ensoñaciones»</h3>
+                        <div class="expo-artist">Paz Muntades & Majo Menendez (Salt)</div>
+                        <p class="expo-desc">
+                            Gran muntatge conjunt de 10 peces i teles de 2x2 metres. Abstraccions poètiques de la natura i retrats expressius que capturen l'invisible en els gestos.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura de Gran Format & Retrat</div>
+                    </div>
+                </div>
+
+                <!-- 5. Can Felip -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🌿 Espai 5 · Can Felip</span>
+                        <h3 class="expo-title">«Muntanyes»</h3>
+                        <div class="expo-artist">Àngel Martinez (Subirats)</div>
+                        <p class="expo-desc">
+                            Col·lecció de pintures de petit format muntades sobre cavallets, explorant l'orografia, les línies de l'horitzó i la serenor del paisatge muntanyós.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura de Paisatge</div>
+                    </div>
+                </div>
+
+                <!-- 6. Cal Coix -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏡 Espai 6 · Cal Coix</span>
+                        <h3 class="expo-title">«Alabastre, Ceràmica i Pedres»</h3>
+                        <div class="expo-artist">Teresa Ferro (Sant Just Desvern)</div>
+                        <p class="expo-desc">
+                            Escultures esculpides en alabastre translúcid, ceràmica i pedres naturals que juguen amb la llum, les textures i la puresa mineral.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Escultura en Alabastre & Ceràmica</div>
+                    </div>
+                </div>
+
+                <!-- 7. Can Ministral (Porta Principal) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🚪 Espai 7 · Can Ministral (Porta Principal)</span>
+                        <h3 class="expo-title">«Quadres i Dibuixos de Tota una Vida»</h3>
+                        <div class="expo-artist">Angela Batlle (Sant Jordi Desvalls)</div>
+                        <p class="expo-desc">
+                            Emotiva retrospectiva de quadres i dibuixos realitzats per artista local de 88 anys, testimoni de sensibilitat artística i memòria viva del poble.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Dibuix & Pintura</div>
+                    </div>
+                </div>
+
+                <!-- 8. El Castell -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏰 Espai 8 · El Castell (Balcó)</span>
+                        <h3 class="expo-title">«Obra col·lectiva»</h3>
+                        <div class="expo-artist">Montse Planas (Girona)</div>
+                        <p class="expo-desc">
+                            Espectacular instal·lació tèxtil de grans dimensions (2,75 x 1,84 m) integrada a l'arquitectura històrica del balcó del Castell de Sant Jordi.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Instal·lació Tèxtil Monumental</div>
+                    </div>
+                </div>
+
+                <!-- 9. Can Batlle -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏛️ Espai 9 · Can Batlle (Entrada)</span>
+                        <h3 class="expo-title">«MIRADAS»</h3>
+                        <div class="expo-artist">Dolores Duran (Girona)</div>
+                        <p class="expo-desc">
+                            4 pintures de rostres femenins de gran intensitat expressiva sobre fons fosc, explorant la necessitat de ser observada, els desitjos i les emocions humanes.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura (Retrat expressiu)</div>
+                    </div>
+                </div>
+
+                <!-- 10. Can Roca -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🧶 Espai 10 · Can Roca</span>
+                        <h3 class="expo-title">«Figures de ganxet»</h3>
+                        <div class="expo-artist">Cristina Bueno (Sant Jordi Desvalls)</div>
+                        <p class="expo-desc">
+                            Mostra d'artesania i figures fetes a mà amb la tècnica del ganxet.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Artesania Tèxtil & Ganxet</div>
+                    </div>
+                </div>
+
+                <!-- 11. Ca la Catarineta -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">👗 Espai 11 · Ca la Catarineta</span>
+                        <h3 class="expo-title">«Disseny Tèxtil d'Autor»</h3>
+                        <div class="expo-artist">Laia Vallès (Sant Jordi Desvalls)</div>
+                        <p class="expo-desc">
+                            Mostra d'artesania de moda, patronatge i confecció exclusiva de biquinis i peces d'estiu amb materials sostenibles i estampats únics.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Disseny de Moda & Confecció</div>
+                    </div>
+                </div>
+
+                <!-- 12. Ca la Montserrat -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🌸 Espai 12 · Ca la Montserrat</span>
+                        <h3 class="expo-title">«JO TACO»</h3>
+                        <div class="expo-artist">Elisenda Serradell (Badalona)</div>
+                        <p class="expo-desc">
+                            Obres de pintura i tècniques tradicionals de gravat japonès (Moku Hanga) exposades a l'aire lliure al costat bell de Ca la Montserrat.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura & Gravat Japonès</div>
+                    </div>
+                </div>
+
+                <!-- 13. Can Casademont (Conrad Owen Lyon) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏡 Espai 13 · Can Casademont</span>
+                        <h3 class="expo-title">«Pintura i Fusta d'Arrel»</h3>
+                        <div class="expo-artist">Conrad Owen Lyon (Sant Jordi Desvalls)</div>
+                        <p class="expo-desc">
+                            Treball artístic en fusta noble i pintura que reflecteix la vinculació amb el bosc, la tradició rural i la matèria viva de l'entorn de Sant Jordi.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Escultura en Fusta & Pintura</div>
+                    </div>
+                </div>
+
+                <!-- 13. Can Casademont (Emili Biarnès) -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏡 Espai 13 · Can Casademont</span>
+                        <h3 class="expo-title">«Formes de Fang i Foc»</h3>
+                        <div class="expo-artist">Emili Biarnès (Cervià de Ter)</div>
+                        <p class="expo-desc">
+                            Peces de ceràmica artística cuita a alta temperatura, amb esmalts subtils i volums geomètrics que comparteixen espai amb les obres d'en Conrad.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Ceràmica Contemporània</div>
+                    </div>
+                </div>
+
+                <!-- 14. Can Burcet Planta Baixa -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏡 Espai 14 · Can Burcet (Planta Baixa)</span>
+                        <h3 class="expo-title">«Diàleg de Fang i Matèria»</h3>
+                        <div class="expo-artist">Lourdes Doñate & Cesc Oliveras (El Bruc)</div>
+                        <p class="expo-desc">
+                            Exposició conjunta que uneix escultures ceràmiques d'autor i quadres matèrics en diferents textures i pigments minerals.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Ceràmica i Pintura Matèrica</div>
+                    </div>
+                </div>
+
+                <!-- 15. Les Escoles -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🏫 Espai 15 · Les Escoles</span>
+                        <h3 class="expo-title">«L’aigua que pensa en colors»</h3>
+                        <div class="expo-artist">Antonio Majuelos (Girona)</div>
+                        <p class="expo-desc">
+                            Aquarel·les lluminoses i performance de pintura en directe sota carpa, on l'aigua i el pigment flueixen de manera orgànica i espontània a l'espai de les Escoles.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Aquarel·la & Pintura en Viu</div>
+                    </div>
+                </div>
+
+                <!-- 16. Airearte -->
+                <div class="expo-card">
+                    <div>
+                        <span class="expo-space-badge">🎨 Espai 16 · Airearte</span>
+                        <h3 class="expo-title">«Mostra col·lectiva d'autors locals»</h3>
+                        <div class="expo-artist">Bussoga, Marta Sastre, Pere Amilibia, Alba Dhaya, Lia Alonso, Viki Barragán, Eva Is, Lluis Mohedano, Francesc Carreras</div>
+                        <p class="expo-desc">
+                            Mostra col·lectiva d'arts plàstiques amb obres creades pel talent i la creativitat del municipi: ceràmica, pintura, escultura i disseny.
+                        </p>
+                    </div>
+                    <div class="expo-meta">
+                        <div><strong>Disciplina:</strong> Pintura, Ceràmica, Escultura & Disseny</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 3: ZONA GASTRONÒMICA I FOODTRUCKS -->
+    <section id="gastronomia" class="section dark-section" style="background: #020617; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container text-center">
+            <span class="hero-badge-pill" style="background: rgba(245, 158, 11, 0.12); color: #fbbf24; border-color: rgba(245, 158, 11, 0.3);">
+                🍔 Gastronomia & Maridatge
+            </span>
+            <h2 class="section-title text-light">Espai Foodtrucks & Música</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem; max-width: 650px; margin: 0 auto 2.5rem;">
+                Un espai a la fresca per descansar, dinar, sopar i compartir una copa amb servei de foodtrucks i concerts en directe.
+            </p>
+
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); text-align: left;">
+                <div class="glass-card" style="padding: 2rem; border-top: 4px solid #f59e0b;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌮</div>
+                    <h3 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.5rem;">Foodtrucks d'Autor</h3>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Varietat de propostes gastronòmiques dolces i salades: crepes, hamburgueses gourmet, opcions vegetarianes, tapes i begudes artesanes.<br>
+                        <strong>Horaris:</strong> Divendres i dissabte de 19:00 h a 21:00 h.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="padding: 2rem; border-top: 4px solid #ec4899;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎶</div>
+                    <h3 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.5rem;">Música en Viu a la Zona Gastro</h3>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Dissabte nit amb gran sessió de ball amb <strong>DJ Pipa</strong> (01:00 h).
+                    </p>
+                </div>
+
+                <div class="glass-card" style="padding: 2rem; border-top: 4px solid #10b981;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🍷</div>
+                    <h3 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.5rem;">Bar Social & Restauració Local</h3>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Gaudeix de la gastronomia dels establiments del poble com el Bar Social i el <strong>Restaurant Els 4 Vents</strong> de Sant Jordi Desvalls.
+                    </p>
+                </div>
+                <div class="glass-card" style="padding: 2rem; border-top: 4px solid #a78bfa;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#127912;</div>
+                    <h3 style="color: #ffffff; font-size: 1.3rem; margin-bottom: 0.5rem;">Airearte &middot; Bar &amp; Galeria d&apos;Art</h3>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Seu de l&apos;<strong>Associaci&oacute; Cultural local Airearte</strong>, galeria d&apos;art del poble amb servei de bar. Un espai &uacute;nic on l&apos;art i la cultura es fonen amb l&apos;ambient festiu de la Pluja d&apos;Art.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓ 4: COM ARRIBAR-HI & ESPAIS -->
+    <section id="com-arribar" class="section dark-section" style="background: #090d16; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div class="container text-center">
+            <span class="hero-badge-pill" style="background: rgba(16, 185, 129, 0.12); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
+                📍 Informació Pràctica
+            </span>
+            <h2 class="section-title text-light">Com Arribar-hi & Espais</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem; max-width: 700px; margin: 0 auto 2.5rem;">
+                Sant Jordi Desvalls es troba situat al nord del Gironès, a 15 minuts de Girona i a tocar de l'Empordà.
+            </p>
+
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); text-align: left; margin-bottom: 3rem;">
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🚗</div>
+                    <h4 style="color: #ffffff; font-size: 1.2rem; margin-bottom: 0.5rem;">En Cotxe</h4>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Accés fàcil per la carretera <strong>AP-7</strong> i <strong>NII</strong>, des de Girona o Figueres, desviament per la <strong>GI-633</strong> directament cap a Sant Jordi Desvalls.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🅿️ / ♿</div>
+                    <h4 style="color: #ffffff; font-size: 1.2rem; margin-bottom: 0.5rem;">Aparcament & PMR</h4>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Zones d'aparcament gratuït a les entrades del poble i <strong>aparcament accessible reservat per a vehicles amb mobilitat reduïda (PMR)</strong> indicat al mapa oficial.
+                    </p>
+                </div>
+
+                <div class="glass-card" style="padding: 2rem;">
+                    <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🚆</div>
+                    <h4 style="color: #ffffff; font-size: 1.2rem; margin-bottom: 0.5rem;">En Tren (Rodalies / R11)</h4>
+                    <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                        Estació de tren de <strong>Sant Jordi Desvalls (Línia R11 Barcelona - Girona - Portbou)</strong> o estació de Flaçà a només 5 km.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Guia d'espais del poble -->
+            <h3 style="color: #ffffff; font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem;">Els Espais del Festival</h3>
+            <div class="spaces-list">
+                <div class="space-item">
+                    <span class="space-icon">⛲</span>
+                    <div>
+                        <div class="space-name">Plaça Major</div>
+                        <div class="space-sub">Escenari central d'espectacles i música</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🏛️</span>
+                    <div>
+                        <div class="space-name">Sala Nova</div>
+                        <div class="space-sub">Espai teatral i espectacles de sala</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">📍</span>
+                    <div>
+                        <div class="space-name">Plaça U d’Octubre</div>
+                        <div class="space-sub">Clown i espectacle figuratiu</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🏫</span>
+                    <div>
+                        <div class="space-name">Les Escoles</div>
+                        <div class="space-sub">Espectacle infantil CabraCadabra & Exposició 15</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🌿</span>
+                    <div>
+                        <div class="space-name">Plaça Clos Garriga</div>
+                        <div class="space-sub">Performance «Poesia, Colors i Consciència» & Exposició Urban Sketchers</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🍔</span>
+                    <div>
+                        <div class="space-name">Zona Foodtrucks</div>
+                        <div class="space-sub">Restauració i festa nocturna</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🏰</span>
+                    <div>
+                        <div class="space-name">El Castell & Can Sais</div>
+                        <div class="space-sub">Instal·lacions tèxtils monumentals</div>
+                    </div>
+                </div>
+                <div class="space-item">
+                    <span class="space-icon">🏡</span>
+                    <div>
+                        <div class="space-name">Cases i Patis Oberts</div>
+                        <div class="space-sub">Can Batlle, Can Felip, Can Casademont, Can Ministral...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOC DESTACAT: PLÀNOL + TRÍPTIC -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 3rem auto 0; max-width: 900px;">
+
+                <!-- Plànol Interactiu -->
+                <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border: 2px solid var(--primary); border-radius: 16px; padding: 2.5rem 1.75rem; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.5);">
+                    <span style="background: rgba(18, 162, 152, 0.2); color: #2dd4bf; border: 1px solid rgba(18, 162, 152, 0.4); padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-bottom: 0.75rem;">
+                        🗺️ Plànol Digital Oficial
+                    </span>
+                    <h3 style="color: white; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">
+                        Plànol Interactiu de Sant Jordi Desvalls
+                    </h3>
+                    <p style="color: #cbd5e1; margin: 0 auto 1.75rem; font-size: 0.95rem; line-height: 1.6;">
+                        Descobreix la ubicació dels 16 espais d'exposició d'art, escenaris d'espectacles, zona de parades d'artesania, foodtrucks i aparcaments.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="mapa.html" class="btn-primary" style="background: var(--primary); border-color: var(--primary); color: white; font-weight: 700; padding: 0.8rem 1.8rem; font-size: 1rem; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            🗺️ Obrir Plànol Oficial
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Descàrrega Tríptic PDF -->
+                <div style="background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%); border: 2px solid #a78bfa; border-radius: 16px; padding: 2.5rem 1.75rem; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.5);">
+                    <span style="background: rgba(167, 139, 250, 0.2); color: #c4b5fd; border: 1px solid rgba(167, 139, 250, 0.4); padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-bottom: 0.75rem;">
+                        📄 Programa Oficial
+                    </span>
+                    <h3 style="color: white; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">
+                        Descarrega el Tríptic del Programa
+                    </h3>
+                    <p style="color: #cbd5e1; margin: 0 auto 1.75rem; font-size: 0.95rem; line-height: 1.6;">
+                        Tota la programació de la 5a Fira Pluja d'Art 2026 en un document PDF per imprimir o consultar des del teu dispositiu.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="docs/TRIPTIC PROGRAMA PLUJA D'ART 2026.pdf" target="_blank" download style="background: #7c3aed; color: white; font-weight: 700; padding: 0.8rem 1.8rem; font-size: 1rem; text-decoration: none; border-radius: 30px; display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 15px rgba(124,58,237,0.4);">
+                            📥 Descarregar Tríptic (PDF)
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BÀNER D'ENLLAÇ AMB PARTICIPA -->
+            <div class="participa-bridge-banner">
+                <span style="background: #64748b; color: white; padding: 0.35rem 0.9rem; border-radius: 2rem; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-bottom: 1rem;">
+                    🎩 Convocatòries i Concursos
+                </span>
+                <h3 style="color: #ffffff; font-size: 2rem; font-family: var(--font-serif); margin-bottom: 0.75rem;">
+                    Vols consultar les Bases i Convocatòries?
+                </h3>
+                <p style="color: #cbd5e1; max-width: 650px; margin: 0 auto 1.5rem; font-size: 1.05rem; line-height: 1.6;">
+                    Accedeix a l'espai de participació per consultar les bases de les convocatòries d'aquesta edició. <em>(Nota: El Concurs de Decoració de Barrets 2026 ha quedat desert).</em>
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="participa-pluja-art.html" class="btn-primary" style="background: #7c3aed; border-color: #7c3aed; color: white; font-weight: 700; padding: 0.85rem 1.75rem; font-size: 1rem;">
+                        📋 Anar a la Secció Participa
+                    </a>
+                    <a href="docs/Bases_Concurs_Decoracio_Barrets_2026.pdf" target="_blank" class="btn-secondary" style="border: 1px solid rgba(255,255,255,0.3); color: white; background: rgba(255,255,255,0.08); padding: 0.85rem 1.5rem; font-size: 0.95rem;">
+                        📄 Descarregar Bases Barrets (PDF)
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer & Logos Institucionals -->
+    <footer class="footer dark-section" style="background: #020617; border-top: 1px solid rgba(255,255,255,0.1); padding: 5rem 0 3rem;">
+        <div class="container text-center">
+            
+            <!-- BLOC 1: ORGANITZA -->
+            <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Organitza:</p>
+            <div style="display: flex; gap: 3.5rem; justify-content: center; align-items: center; margin-bottom: 4rem; flex-wrap: wrap;">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                    <img src="img/ajuntament.png" alt="Ajuntament de Sant Jordi Desvalls" style="height: 75px; width: auto; object-fit: contain;">
+                    <p style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin: 0;">Ajuntament de<br>Sant Jordi Desvalls</p>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                    <img src="img/associacio.jpg" alt="Associació Desvalls Cultura" style="height: 75px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); object-fit: contain;">
+                    <p style="color: #e2e8f0; font-size: 0.85rem; font-weight: 600; margin: 0;">Associació<br>Desvalls Cultura</p>
+                </div>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); width: 80px; margin: 0 auto 3.5rem auto;">
+
+            <!-- BLOC 2: AMB EL SUPORT DE -->
+            <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Amb el suport de:</p>
+            <div style="display: flex; gap: 3rem; justify-content: center; align-items: center; margin-bottom: 4rem; flex-wrap: wrap;">
+                <div style="background: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center;">
+                    <img src="img/diputacio.jpg" alt="Diputació de Girona" style="height: 48px; width: auto; object-fit: contain;">
+                </div>
+                <div style="background: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center;">
+                    <img src="img/generalitat.png" alt="Generalitat de Catalunya" style="height: 48px; width: auto; object-fit: contain;">
+                </div>
+                <div style="background: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center;">
+                    <img src="img/consell.png" alt="Consell Comarcal del Gironès" style="height: 48px; width: auto; object-fit: contain;">
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); width: 80px; margin: 0 auto 3.5rem auto;">
+
+            <!-- BLOC 3: COL·LABORA -->
+            <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 0.25rem; font-weight: 800;">Col·labora:</p>
+            <div style="display: flex; gap: 3rem; justify-content: center; align-items: center; margin-bottom: 4rem; flex-wrap: wrap;">
+                <img src="img/colaboradors_art.jpg" alt="Col·laboradors del Pluja d'Art: Bòlit Centre d'Art Contemporani, Ajuntament de Girona i Generalitat de Catalunya" style="height: 85px; width: auto; background: white; padding: 0.85rem 1.75rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); max-width: 90%; object-fit: contain;">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); width: 100%; margin: 3rem auto 2.5rem auto;">
+
+            <!-- Enllaços de navegació del peu -->
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                <a href="index.html" style="color: #cbd5e1; text-decoration: none;">Inici</a>
+                <a href="pluja-art-2026.html" style="color: var(--art-accent); font-weight: 700; text-decoration: none;">Pluja d'Art 2026</a>
+                <a href="art-luminic-2026.html" style="color: #38bdf8; font-weight: 800; text-decoration: none;">✨ Art Lumínic</a>
+                <a href="mapa3.html" style="color: #22d3ee; font-weight: 700; text-decoration: none;">🗺️ Plànol Lumínic</a>
+                <a href="marxandatge.html" style="color: #2dd4bf; font-weight: 700; text-decoration: none;">👕 Samarretes</a>
+                <a href="participa-pluja-art.html" style="color: #cbd5e1; text-decoration: none;">Participa & Bases</a>
+                <a href="pluja-lletres-2026.html" style="color: #cbd5e1; text-decoration: none;">Pluja de Lletres</a>
+                <a href="legal.html" style="color: #94a3b8; text-decoration: none;">Avís Legal</a>
+            </div>
+
+            <p style="color: #64748b; font-size: 0.85rem;">
+                &copy; 2026 Associació Desvalls Cultura - Sant Jordi Desvalls. Tots els drets reservats.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Script de filtratge de dies i menú mòbil -->
+    <script>
+        // Filtratge de dies
+        function filterDay(day, btn) {
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const groups = document.querySelectorAll('.day-group');
+            if (day === 'all') {
+                groups.forEach(g => g.style.display = 'block');
+            } else {
+                groups.forEach(g => {
+                    if (g.classList.contains('day-' + day)) {
+                        g.style.display = 'block';
+                    } else {
+                        g.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Menú Mòbil
+        const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+        const navLinks = document.querySelector('.nav-links');
+        if (mobileMenuIcon && navLinks) {
+            mobileMenuIcon.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

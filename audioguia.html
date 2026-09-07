@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <title>🎧 Audioguia GPS Interactiva · Mar Mediterrània (Art Lumínic 2026)</title>
+    <meta name="description" content="Audioguia interactiva amb navegació GPS en viu pel Festival d'Art Lumínic «Mar Mediterrània» 2026 a Sant Jordi Desvalls. Música i disseny sonor marítim automàtic a cada punt sincronitzat amb Supabase.">
+    
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🎧 Audioguia GPS Interactiva · Festival d'Art Lumínic 2026">
+    <meta property="og:description" content="Navega pel circuit d'art lumínic amb OpenStreetMap i GPS. La música de cada instal·lació s'activa automàticament en acostar-t'hi!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&w=1200&q=80">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --sea-abyss: #020712;
+            --sea-deep: #031429;
+            --sea-mid: #052447;
+            --sea-cyan: #06b6d4;
+            --sea-neon: #22d3ee;
+            --sea-glow: #38bdf8;
+            --bio-pink: #ec4899;
+            --bio-purple: #a855f7;
+            --candle-gold: #f59e0b;
+            --card-glass: rgba(5, 20, 42, 0.92);
+            --card-border: rgba(56, 189, 248, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--sea-abyss);
+            color: #f1f5f9;
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Capçalera Superior Mòbil */
+        .app-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(2, 7, 18, 0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 0.6rem 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding-top: max(0.6rem, env(safe-area-inset-top));
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .header-brand span.highlight {
+            color: var(--sea-neon);
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+        }
+
+        .gps-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 20px;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .gps-status-badge.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #6ee7b7;
+        }
+
+        .gps-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulseGps 2s infinite;
+        }
+
+        @keyframes pulseGps {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-header-icon {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-header-icon:active {
+            background: var(--sea-cyan);
+            transform: scale(0.95);
+        }
+
+        /* Contenidor del Mapa */
+        #map-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #020712;
+            z-index: 1;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #020712;
+        }
+
+        /* Botons flotants sobre el mapa */
+        .map-fab-stack {
+            position: absolute;
+            right: 0.85rem;
+            top: calc(3.8rem + env(safe-area-inset-top));
+            z-index: 990;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-fab {
+            background: rgba(3, 20, 42, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-fab:active {
+            transform: scale(0.92);
+            background: #0284c7;
+        }
+
+        .btn-fab.active {
+            border-color: #facc15;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+        }
+
+        /* Banner d'avís inicial per activar so al primer toc */
+        .audio-unlock-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(1, 6, 15, 0.92);
+            backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        .audio-unlock-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .unlock-card {
+            background: linear-gradient(145deg, rgba(5, 36, 71, 0.9) 0%, rgba(2, 18, 38, 0.95) 100%);
+            border: 2px solid var(--sea-cyan);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .unlock-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: bounceJelly 2s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        @keyframes bounceJelly {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.08); }
+        }
+
+        .btn-start-tour {
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+            border: 2px solid #38bdf8;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 0.9rem 1.6rem;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.5);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        }
+
+        .btn-start-tour:active {
+            transform: scale(0.96);
+        }
+
+        /* Targeta Inferior de Guiaje & Reproductor Flotant */
+        .bottom-sheet {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--card-border);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+            padding: 0.9rem 1.1rem max(1.1rem, env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sheet-drag-handle {
+            width: 38px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.25);
+            align-self: center;
+            margin-bottom: 0.2rem;
+            cursor: pointer;
+        }
+
+        .target-nav-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(6, 182, 212, 0.14);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 14px;
+            padding: 0.6rem 0.85rem;
+        }
+
+        .nav-direction-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            overflow: hidden;
+        }
+
+        .nav-arrow-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #0284c7;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-target-text {
+            overflow: hidden;
+        }
+
+        .nav-target-text h4 {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        .nav-target-text p {
+            font-size: 0.92rem;
+            color: #ffffff;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-distance-badge {
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .nav-distance-badge .dist-val {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #facc15;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+
+        .nav-distance-badge .dist-label {
+            font-size: 0.68rem;
+            color: #cbd5e1;
+        }
+
+        /* Secció de Reproductor d'Àudio Principal */
+        .player-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: rgba(2, 15, 34, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 0.85rem;
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            overflow: hidden;
+        }
+
+        .player-badge-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #000000;
+            border: 2px solid var(--sea-cyan);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.7);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .player-titles {
+            overflow: hidden;
+        }
+
+        .player-titles h3 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #f8fafc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-titles p {
+            font-size: 0.75rem;
+            color: #7dd3fc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Visualitzador d'ones de so */
+        .audio-equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+            padding: 0 4px;
+        }
+
+        .eq-bar {
+            width: 3px;
+            height: 4px;
+            background: var(--sea-neon);
+            border-radius: 2px;
+            transition: height 0.15s ease;
+        }
+
+        .audio-equalizer.playing .eq-bar:nth-child(1) { animation: eqPulse 0.8s infinite alternate 0.1s; }
+        .audio-equalizer.playing .eq-bar:nth-child(2) { animation: eqPulse 0.6s infinite alternate 0.2s; }
+        .audio-equalizer.playing .eq-bar:nth-child(3) { animation: eqPulse 0.9s infinite alternate 0.05s; }
+        .audio-equalizer.playing .eq-bar:nth-child(4) { animation: eqPulse 0.7s infinite alternate 0.3s; }
+        .audio-equalizer.playing .eq-bar:nth-child(5) { animation: eqPulse 0.85s infinite alternate 0.15s; }
+
+        @keyframes eqPulse {
+            0% { height: 4px; opacity: 0.4; }
+            100% { height: 18px; opacity: 1; }
+        }
+
+        /* Controls de Reproducció Mòbil */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .btn-ctrl {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.55rem 0.9rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.15s;
+        }
+
+        .btn-ctrl:active {
+            transform: scale(0.94);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-ctrl.primary {
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+            border-color: #38bdf8;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-ctrl.mute-active {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        /* Modal de llista d'estacions d'àudio */
+        .tracklist-drawer {
+            position: absolute;
+            inset: 0;
+            z-index: 1500;
+            background: rgba(1, 6, 15, 0.92);
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            padding-top: max(1rem, env(safe-area-inset-top));
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tracklist-drawer.open {
+            transform: translateY(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.75rem;
+        }
+
+        .drawer-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+
+        .track-item {
+            background: rgba(3, 20, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .track-item.active {
+            border-color: #38bdf8;
+            background: rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .track-item:active {
+            transform: scale(0.98);
+        }
+
+        /* Custom Leaflet Marker Styling */
+        .user-gps-marker {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #0284c7;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 15px #38bdf8, 0 0 30px rgba(56, 189, 248, 0.8);
+            position: relative;
+        }
+
+        .user-gps-pulse {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 2px solid #38bdf8;
+            opacity: 0.8;
+            animation: radarPulse 2s infinite ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes radarPulse {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        .spot-marker-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #000000;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .spot-marker-circle.is-target {
+            border-color: #facc15;
+            box-shadow: 0 0 20px #facc15;
+            transform: scale(1.15);
+            animation: targetBounce 1.5s infinite alternate;
+        }
+
+        .spot-marker-circle.is-playing {
+            border-color: #ec4899;
+            box-shadow: 0 0 22px #ec4899;
+        }
+
+        @keyframes targetBounce {
+            0% { transform: scale(1.1); }
+            100% { transform: scale(1.25); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Superior -->
+    <header class="app-header">
+        <a href="art-luminic-2026.html" class="header-brand">
+            <span>🌊</span>
+            <span>Mar <span class="highlight">Mediterrània</span></span>
+        </a>
+
+        <div class="gps-status-badge" id="gps-badge">
+            <span class="gps-dot"></span>
+            <span id="gps-status-text">Cercant GPS...</span>
+        </div>
+
+        <div class="header-actions">
+            <button type="button" class="btn-header-icon" onclick="openTracklist()" title="Llista d'instal·lacions">
+                📋
+            </button>
+            <a href="mapa3.html" class="btn-header-icon" title="Obrir Mapa General">
+                🗺️
+            </a>
+        </div>
+    </header>
+
+    <!-- Mapa Leaflet Fullscreen (OpenStreetMap) -->
+    <div id="map-container">
+        <div id="map"></div>
+
+        <!-- Botons flotants sobre el mapa -->
+        <div class="map-fab-stack">
+            <button type="button" class="btn-fab" id="btn-recenter" onclick="centerOnUser()" title="Centrar a la meva ubicació">
+                🎯
+            </button>
+            <button type="button" class="btn-fab" id="btn-toggle-layer" onclick="toggleMapLayer()" title="Canviar Capa Mapa (OSM / Satèl·lit)">
+                🗺️
+            </button>
+            <button type="button" class="btn-fab" id="btn-toggle-sim" onclick="toggleSimulatorMode()" title="Mode Simulador / Prova">
+                🧪
+            </button>
+            <button type="button" class="btn-fab" id="btn-guide-target" onclick="centerOnTarget()" title="Centrar al punt d'objectiu">
+                🚩
+            </button>
+        </div>
+    </div>
+
+    <!-- Targeta Inferior de Guiaje & Reproductor -->
+    <div class="bottom-sheet" id="bottom-sheet">
+        <div class="sheet-drag-handle" onclick="toggleSheetExpansion()"></div>
+
+        <!-- Banner de navegació cap al següent punt -->
+        <div class="target-nav-banner">
+            <div class="nav-direction-indicator">
+                <div class="nav-arrow-box" id="nav-arrow">⬆️</div>
+                <div class="nav-target-text">
+                    <h4>Punt d'Objectiu (<span id="target-index-num">1/10</span>)</h4>
+                    <p id="target-name-display">Carregant itinerari de Supabase...</p>
+                </div>
+            </div>
+            <div class="nav-distance-badge">
+                <div class="dist-val" id="target-distance-val">-- m</div>
+                <div class="dist-label">Distància</div>
+            </div>
+        </div>
+
+        <!-- Targeta de Reproductor d'Àudio -->
+        <div class="player-card">
+            <div class="player-header">
+                <div class="player-info">
+                    <div class="player-badge-num" id="player-badge">🚩</div>
+                    <div class="player-titles">
+                        <h3 id="player-title">Camí d'Espelmes &amp; Benvinguda</h3>
+                        <p id="player-subtitle">Atmosfera de Costa &amp; Mar en Calma</p>
+                    </div>
+                </div>
+                <div class="audio-equalizer" id="audio-equalizer">
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                </div>
+            </div>
+
+            <div class="player-controls">
+                <button type="button" class="btn-ctrl" onclick="stepPreviousPoint()" title="Punt anterior">
+                    ⏮️
+                </button>
+                <button type="button" class="btn-ctrl primary" id="btn-play-pause" onclick="toggleAudioPlayback()">
+                    <span id="btn-play-icon">▶️</span>
+                    <span id="btn-play-text">Escoltar</span>
+                </button>
+                <button type="button" class="btn-ctrl" id="btn-mute" onclick="toggleAudioMute()" title="Silenciar / Activar">
+                    🔊
+                </button>
+                <button type="button" class="btn-ctrl" onclick="stepNextPoint()" title="Següent punt">
+                    ⏭️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'activació inicial de so (Gesture Unlock) -->
+    <div class="audio-unlock-overlay" id="unlock-overlay">
+        <div class="unlock-card">
+            <div class="unlock-icon">🤿✨</div>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 0.6rem;">
+                Audioguia GPS Immersiva
+            </h2>
+            <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.5; margin-bottom: 0.5rem;">
+                Posa't els auriculars i camina pel circuit! Quan estiguis a <strong>menys de 10 metres</strong> de cada instal·lació, el GPS activarà automàticament la música marítima en bucle.
+            </p>
+            <button type="button" class="btn-start-tour" onclick="unlockAudioAndStart()">
+                <span>🎧</span> Iniciar Experiència Sonora
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Drawer: Llista de Totes les Estacions -->
+    <div class="tracklist-drawer" id="tracklist-drawer">
+        <div class="drawer-header">
+            <h3 style="font-size: 1.15rem; color: white; display: flex; align-items: center; gap: 0.5rem;">
+                <span>✨</span> Circuit Marítim Oficial
+            </h3>
+            <button type="button" class="btn-header-icon" onclick="closeTracklist()">✖</button>
+        </div>
+        <div class="drawer-list" id="drawer-list-items">
+            <!-- Renderitzat dinàmicament per JS -->
+        </div>
+    </div>
+
+    <!-- Element Audio HTML5 ocult -->
+    <audio id="main-audio" preload="auto" loop></audio>
+
+    <script>
+        // --- CREDENCIALS SUPABASE (IDÈNTIQUES A MAPA3.HTML) ---
+        const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
+        const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function') 
+            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+            : null;
+
+        // Dades base de reserva oficials de mapa3.html
+        const BASE_LOCATIONS = [
+            {
+                id: 'lum_start',
+                type: 'start',
+                code: '🚩',
+                name: "Punt d'Inici · Circuit d'Art Lumínic",
+                artist: 'Organització',
+                project: 'Benvinguda & Camí d\'Espelmes',
+                descripcio: "Punt de partida recomanat per iniciar l'itinerari de les 9 instal·lacions lumíniques nocturnes seguint el camí d'espelmes.",
+                lat: 42.07255,
+                lng: 2.95380,
+                ordre: 1
+            },
+            {
+                id: 'lum_octubre',
+                type: 'show',
+                code: '🪼1',
+                name: "1. Plaça 1 d'Octubre · «El jardí de les meduses»",
+                artist: 'Gran Medusa 1 · mathr & netz',
+                project: 'Espectacle Inaugural (21:30h) & Live AV Ommatidia (21:45h)',
+                descripcio: "La plaça s'omple de vida marina amb la primera gran Medusa inflable gegant. Espectacle inaugural («Vida i Mort») i Live AV «Ommatidia».",
+                lat: 42.07168,
+                lng: 2.95315,
+                ordre: 2
+            },
+            {
+                id: 'lum_baix',
+                type: 'lum',
+                code: '🌊',
+                name: "2. Carrer de Baix · «Onades Olímpiques»",
+                artist: 'Instal·lació Dinàmica',
+                project: 'Moviment d\'Onades i Disseny Olímpic',
+                descripcio: "Instal·lació inspirada en el moviment de les onades i l'esperit del disseny dels Jocs Olímpics amb un joc de formes i llums visuals.",
+                lat: 42.07140,
+                lng: 2.95390,
+                ordre: 3
+            },
+            {
+                id: 'lum_tarongeta',
+                type: 'lum',
+                code: '🪼2',
+                name: "3. Carrer Tarongeta · «El túnel blau»",
+                artist: 'Passatge Immersiu & Medusa 2',
+                project: 'Teles, Llum Blava i Medusa 2',
+                descripcio: "Passatge envoltat de teles i atmosferes de llum blava. Inclou la Medusa 2 en un punt d'il·luminació ambiental submarina.",
+                lat: 42.07210,
+                lng: 2.95340,
+                ordre: 4
+            },
+            {
+                id: 'lum_clos_garriga',
+                type: 'lum',
+                code: '⚡',
+                name: "4. Plaça Clos Garriga · «Profunditats residuals»",
+                artist: 'Art Lumínic & Làser',
+                project: 'Làser, Teles i Raigs de Sol Submarins',
+                descripcio: "Composició immersiva amb teles, tirants, raig làser i punts de llum simulant els raigs de sol penetrant aigües profundes.",
+                lat: 42.07240,
+                lng: 2.95290,
+                ordre: 5
+            },
+            {
+                id: 'lum_escola',
+                type: 'lum',
+                code: '🏛️',
+                name: "5. Antiga Escola · «Punt de Llum»",
+                artist: 'Intervenció Patrimonial',
+                project: 'Ressalt Arquitectònic i Espai de Pau',
+                descripcio: "Espai de pau i ressalt arquitectònic on la il·luminació puntual posa en valor la història de l'edifici escolar.",
+                lat: 42.07075,
+                lng: 2.95360,
+                ordre: 6
+            },
+            {
+                id: 'lum_esglesia',
+                type: 'lum',
+                code: '🌋',
+                name: "6. Església · «L'abisme i el fum»",
+                artist: 'Instal·lació Atmosfèrica Industrial',
+                project: 'Tubs de Llum i Fumaroles Marines',
+                descripcio: "Instal·lació d'estil industrial basada en tubs de llum i efectes de fum que simulen fumaroles i corrents de fosses marines.",
+                lat: 42.07283,
+                lng: 2.95475,
+                ordre: 7
+            },
+            {
+                id: 'lum_generalitat',
+                type: 'lum',
+                code: '🪼3',
+                name: "7. Avinguda Generalitat · «Corrents marines»",
+                artist: 'Meduses Flotants',
+                project: 'Eixam de Meduses i Filtres Cromàtics',
+                descripcio: "Artèria transformada amb un conjunt de meduses flotants i filtres cromàtics jugant amb perspectives i altures.",
+                lat: 42.07190,
+                lng: 2.95260,
+                ordre: 8
+            },
+            {
+                id: 'lum_diposit',
+                type: 'lum',
+                code: '👑',
+                name: "8. Dipòsit de l'Aigua · «La Reina del Festival»",
+                artist: 'Instal·lació Monumental',
+                project: 'La Serp de Sant Jordi (Reina del Mar)',
+                descripcio: "Serp gegant inflable viva amb focus de gran potència i ventilació contínua, governant i presidint el festival des de les altures.",
+                lat: 42.07235,
+                lng: 2.95420,
+                ordre: 9
+            },
+            {
+                id: 'lum_airearte',
+                type: 'lum',
+                code: '🎨',
+                name: "9. Airearte · «Medusa & Mostra Col·lectiva Local»",
+                artist: 'Artistes Locals & Airearte',
+                project: 'Medusa Lumínica, Exposició d\'Art i Bar',
+                descripcio: "Punt final amb una medusa lumínica i la gran exposició col·lectiva dels artistes locals del Festival Pluja d'Art.",
+                lat: 42.07185,
+                lng: 2.95440,
+                ordre: 10
+            }
+        ];
+
+        // Mapeig de fitxers de so marítims per ID o índex canònic
+        const AUDIO_MAP = {
+            'lum_start': 'sons/00_inici_cami_espelmes.mp3',
+            'lum_octubre': 'sons/01_placa_octubre_jardi_meduses.mp3',
+            'lum_baix': 'sons/02_carrer_baix_onades_olimpiques.mp3',
+            'lum_tarongeta': 'sons/03_carrer_tarongeta_tunel_blau.mp3',
+            'lum_clos_garriga': 'sons/04_clos_garriga_profunditats_residuals.mp3',
+            'lum_escola': 'sons/05_escola_punt_de_llum.mp3',
+            'lum_esglesia': 'sons/06_esglesia_abisme_fum.mp3',
+            'lum_generalitat': 'sons/07_generalitat_corrents_marines.mp3',
+            'lum_diposit': 'sons/08_diposit_reina_del_mar.mp3',
+            'lum_airearte': 'sons/09_airearte_mostra_artistes.mp3'
+        };
+
+        const AUDIO_INDEX_FALLBACK = [
+            'sons/00_inici_cami_espelmes.mp3',
+            'sons/01_placa_octubre_jardi_meduses.mp3',
+            'sons/02_carrer_baix_onades_olimpiques.mp3',
+            'sons/03_carrer_tarongeta_tunel_blau.mp3',
+            'sons/04_clos_garriga_profunditats_residuals.mp3',
+            'sons/05_escola_punt_de_llum.mp3',
+            'sons/06_esglesia_abisme_fum.mp3',
+            'sons/07_generalitat_corrents_marines.mp3',
+            'sons/08_diposit_reina_del_mar.mp3',
+            'sons/09_airearte_mostra_artistes.mp3'
+        ];
+
+        let DEFAULT_ROUTE_POINTS = [
+            [42.07255, 2.95380],
+            [42.07235, 2.95420],
+            [42.07283, 2.95475],
+            [42.07246, 2.95358],
+            [42.07240, 2.95290],
+            [42.07190, 2.95260],
+            [42.07168, 2.95315],
+            [42.07140, 2.95390],
+            [42.07075, 2.95360],
+            [42.07185, 2.95440]
+        ];
+
+        // --- ESTAT GLOBAL DE L'APLICACIÓ ---
+        let spots = [];
+        let routePoints = [...DEFAULT_ROUTE_POINTS];
+        let luminicTableName = 'art_luminic_locations';
+
+        let map = null;
+        let baseLayers = {};
+        let currentTileLayerName = 'osm';
+        
+        let userLocationMarker = null;
+        let userAccuracyCircle = null;
+        let guidanceLine = null;
+        let spotMarkersLayer = null;
+        let routePolylineLayer = null;
+
+        let currentUserCoords = null;
+        let currentTargetIndex = 0;
+        let currentPlayingSpotId = null;
+        let isAudioUnlocked = false;
+        let isSimulating = false;
+        let watchPositionId = null;
+
+        const audioElement = document.getElementById('main-audio');
+
+        // --- CÀRREGA DE DADES DE SUPABASE I LOCALSTORAGE (COM A MAPA3.HTML) ---
+        async function loadSupabaseData() {
+            let loadedFromSupabase = false;
+
+            if (supabaseClient) {
+                try {
+                    let { data, error } = await supabaseClient
+                        .from('art_luminic_locations')
+                        .select('*')
+                        .order('ordre', { ascending: true });
+
+                    if (error || !data || data.length === 0) {
+                        luminicTableName = 'festival_locations';
+                        const res = await supabaseClient
+                            .from('festival_locations')
+                            .select('*')
+                            .or('id.like.lum_*,id.in.(food_1,wc_1,wc_2,wc_acc_1,wc_acc_2,serv_p1,serv_p2,serv_info,serv_lila,luminic_route_polyline)')
+                            .order('ordre', { ascending: true });
+                        data = res.data;
+                        error = res.error;
+                    } else {
+                        luminicTableName = 'art_luminic_locations';
+                    }
+
+                    if (!error && data && data.length > 0) {
+                        const locsFromDb = [];
+                        data.forEach(item => {
+                            if (item.id === 'luminic_route_polyline') {
+                                try {
+                                    const parsed = JSON.parse(item.descripcio);
+                                    if (Array.isArray(parsed.points)) {
+                                        routePoints = parsed.points;
+                                    }
+                                } catch (e) {}
+                            } else {
+                                let isLine = false;
+                                let coords = null;
+                                let color = null;
+                                let badgeLat = null;
+                                let badgeLng = null;
+                                let descText = item.descripcio || '';
+
+                                if (descText && descText.startsWith('{') && descText.includes('"isLine":true')) {
+                                    try {
+                                        const parsed = JSON.parse(descText);
+                                        if (parsed.isLine && Array.isArray(parsed.coords)) {
+                                            isLine = true;
+                                            coords = parsed.coords;
+                                            color = parsed.color || '#38bdf8';
+                                            descText = parsed.text || '';
+                                            if (parsed.badgeLat != null && parsed.badgeLng != null) {
+                                                badgeLat = parseFloat(parsed.badgeLat);
+                                                badgeLng = parseFloat(parsed.badgeLng);
+                                            }
+                                        }
+                                    } catch (errP) {}
+                                }
+
+                                locsFromDb.push({
+                                    id: item.id,
+                                    isLine: isLine,
+                                    coords: coords,
+                                    color: color,
+                                    badgeLat: badgeLat,
+                                    badgeLng: badgeLng,
+                                    type: item.type || 'lum',
+                                    code: item.code || '💡',
+                                    name: item.name || '',
+                                    artist: item.artist || '',
+                                    project: item.project || '',
+                                    descripcio: descText,
+                                    lat: parseFloat(item.lat),
+                                    lng: parseFloat(item.lng),
+                                    ordre: item.ordre || 99
+                                });
+                            }
+                        });
+
+                        if (locsFromDb.length > 0) {
+                            processLocationsToSpots(locsFromDb);
+                            loadedFromSupabase = true;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Supabase fetch fallback to local:', err);
+                }
+            }
+
+            if (!loadedFromSupabase) {
+                const savedLocal = localStorage.getItem('art_luminic_locations_custom');
+                const savedRoute = localStorage.getItem('art_luminic_route_polyline');
+                if (savedRoute) {
+                    try { routePoints = JSON.parse(savedRoute); } catch(e){}
+                }
+
+                if (savedLocal) {
+                    try {
+                        const localData = JSON.parse(savedLocal);
+                        if (Array.isArray(localData) && localData.length > 0) {
+                            processLocationsToSpots(localData);
+                            return;
+                        }
+                    } catch (e) {}
+                }
+
+                // Fallback final a BASE_LOCATIONS
+                processLocationsToSpots(BASE_LOCATIONS);
+            }
+        }
+
+        // Processar i ordenar estrictament els punts del circuit lumínic per a l'audioguia
+        function processLocationsToSpots(rawList) {
+            // Filtrar exclusivament instal·lacions lumíniques i inici (EXCLOENT estrictament espectacles i serveis)
+            const circuitItems = rawList.filter(item => 
+                item.type !== 'show' && (item.type === 'start' || item.type === 'lum')
+            );
+
+            // Ordenar estrictament per l'ordre configurat a mapa3.html
+            circuitItems.sort((a, b) => (a.ordre || 99) - (b.ordre || 99));
+
+            spots = circuitItems.map((item, idx) => {
+                let actualLat = item.lat;
+                let actualLng = item.lng;
+
+                // Si és instal·lació lineal, prioritzar badge personalitzat o punt mig
+                if (item.isLine && Array.isArray(item.coords) && item.coords.length > 0) {
+                    if (item.badgeLat != null && item.badgeLng != null) {
+                        actualLat = item.badgeLat;
+                        actualLng = item.badgeLng;
+                    } else {
+                        const midIdx = Math.floor(item.coords.length / 2);
+                        actualLat = item.coords[midIdx][0];
+                        actualLng = item.coords[midIdx][1];
+                    }
+                }
+
+                // Assignar fitxer d'àudio per ID o per posició a l'itinerari
+                const audioFile = AUDIO_MAP[item.id] || AUDIO_INDEX_FALLBACK[idx % AUDIO_INDEX_FALLBACK.length];
+
+                return {
+                    id: item.id,
+                    index: idx,
+                    ordre: item.ordre || (idx + 1),
+                    numLabel: item.code || (idx === 0 ? '🚩' : String(idx)),
+                    name: item.name,
+                    artist: item.artist || item.project || 'Art Lumínic 2026',
+                    project: item.project || '',
+                    desc: item.descripcio || '',
+                    audioFile: audioFile,
+                    lat: actualLat,
+                    lng: actualLng,
+                    radius: 10, // radi de detecció geofence exacte a 10 metres
+                    isLine: item.isLine,
+                    coords: item.coords,
+                    color: item.color || '#38bdf8'
+                };
+            });
+        }
+
+        // --- CÀLCULS GEOGRÀFICS (HAVERSINE & BEARING) ---
+        function getDistanceMeters(lat1, lon1, lat2, lon2) {
+            const R = 6371000;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return Math.round(R * c);
+        }
+
+        function getBearing(lat1, lon1, lat2, lon2) {
+            const y = Math.sin((lon2 - lon1) * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180);
+            const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+                      Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos((lon2 - lon1) * Math.PI / 180);
+            const brng = Math.atan2(y, x) * 180 / Math.PI;
+            return (brng + 360) % 360;
+        }
+
+        function getCompassArrow(bearing) {
+            const arrows = ['⬆️', '↗️', '➡️', '↘️', '⬇️', '↙️', '⬅️', '↖️'];
+            const idx = Math.round(bearing / 45) % 8;
+            return arrows[idx];
+        }
+
+        // --- INICIALITZACIÓ DEL MAPA (OPENSTREETMAP OFICIAL) ---
+        async function initMap() {
+            await loadSupabaseData();
+
+            // Mapa Leaflet centrat a Sant Jordi Desvalls
+            const startCenter = spots.length > 0 ? [spots[0].lat, spots[0].lng] : [42.07210, 2.95350];
+            
+            map = L.map('map', {
+                center: startCenter,
+                zoom: 18,
+                zoomControl: false,
+                attributionControl: false
+            });
+
+            // 1. Capa Oficial OpenStreetMap
+            baseLayers['osm'] = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            });
+
+            // 2. Capa Satèl·lit Esri
+            baseLayers['satellit'] = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 19,
+                attribution: 'Tiles &copy; Esri'
+            });
+
+            // Afegir OpenStreetMap per defecte
+            baseLayers['osm'].addTo(map);
+
+            // Capes de grup
+            routePolylineLayer = L.layerGroup().addTo(map);
+            spotMarkersLayer = L.layerGroup().addTo(map);
+
+            // Dibuixar el traçat del camí d'espelmes / ruta
+            renderRoute();
+
+            // Renderitzar marcadors seguint l'ordre exacte de Supabase
+            renderSpotMarkers();
+
+            // Línia dinàmica de guiaje
+            guidanceLine = L.polyline([], {
+                color: '#06b6d4',
+                weight: 3.5,
+                opacity: 0.85,
+                dashArray: '5, 8'
+            }).addTo(map);
+
+            // Clic sobre el mapa en mode simulador
+            map.on('click', (e) => {
+                if (isSimulating) {
+                    updateUserPosition(e.latlng.lat, e.latlng.lng, 5);
+                }
+            });
+
+            renderTracklistDrawer();
+            updateTargetUI();
+        }
+
+        function toggleMapLayer() {
+            if (currentTileLayerName === 'osm') {
+                map.removeLayer(baseLayers['osm']);
+                baseLayers['satellit'].addTo(map);
+                currentTileLayerName = 'satellit';
+            } else {
+                map.removeLayer(baseLayers['satellit']);
+                baseLayers['osm'].addTo(map);
+                currentTileLayerName = 'osm';
+            }
+        }
+
+        function renderRoute() {
+            routePolylineLayer.clearLayers();
+            if (!routePoints || routePoints.length === 0) return;
+
+            L.polyline(routePoints, {
+                color: '#f59e0b',
+                weight: 8,
+                opacity: 0.3,
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(routePolylineLayer);
+
+            L.polyline(routePoints, {
+                color: '#fbbf24',
+                weight: 3.5,
+                opacity: 0.95,
+                dashArray: '6, 8',
+                lineCap: 'round',
+                lineJoin: 'round'
+            }).addTo(routePolylineLayer);
+        }
+
+        function renderSpotMarkers() {
+            spotMarkersLayer.clearLayers();
+
+            spots.forEach((spot, idx) => {
+                // Si és línia, dibuixar també el seu traçat
+                if (spot.isLine && spot.coords) {
+                    L.polyline(spot.coords, {
+                        color: spot.color,
+                        weight: 6,
+                        opacity: 0.8,
+                        lineCap: 'round',
+                        lineJoin: 'round'
+                    }).addTo(spotMarkersLayer);
+                }
+
+                // Marcador circular numerat
+                const icon = L.divIcon({
+                    className: 'custom-spot-marker',
+                    html: `<div class="spot-marker-circle" id="spot-marker-${spot.id}">${spot.numLabel}</div>`,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
+                });
+
+                const marker = L.marker([spot.lat, spot.lng], { icon: icon }).addTo(spotMarkersLayer);
+                marker.on('click', () => {
+                    selectTargetSpot(idx, true);
+                });
+
+                // Geofence translúcid
+                L.circle([spot.lat, spot.lng], {
+                    radius: spot.radius,
+                    color: '#06b6d4',
+                    weight: 1.5,
+                    fillColor: '#06b6d4',
+                    fillOpacity: 0.08,
+                    interactive: false
+                }).addTo(spotMarkersLayer);
+            });
+        }
+
+        // --- SISTEMA D'AUDIO & MEDIA SESSION ---
+        function unlockAudioAndStart() {
+            isAudioUnlocked = true;
+            document.getElementById('unlock-overlay').classList.add('hidden');
+            
+            if (spots.length > 0) {
+                playSpotAudio(spots[currentTargetIndex]);
+            }
+            startGpsTracking();
+            
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+        }
+
+        function playSpotAudio(spot, userInitiated = false) {
+            if (!spot || !spot.audioFile) return;
+            currentPlayingSpotId = spot.id;
+
+            audioElement.src = spot.audioFile;
+            audioElement.currentTime = 0;
+            audioElement.play().then(() => {
+                updatePlayerUI(spot, true);
+                setupMediaSession(spot);
+            }).catch(e => {
+                console.warn('Audio play prevented:', e);
+                updatePlayerUI(spot, false);
+            });
+
+            // Destacar marcador visualment
+            document.querySelectorAll('.spot-marker-circle').forEach(el => el.classList.remove('is-playing'));
+            const markerEl = document.getElementById(`spot-marker-${spot.id}`);
+            if (markerEl) markerEl.classList.add('is-playing');
+        }
+
+        function toggleAudioPlayback() {
+            if (audioElement.paused) {
+                if (currentPlayingSpotId) {
+                    audioElement.play();
+                    const spot = spots.find(s => s.id === currentPlayingSpotId) || spots[currentTargetIndex];
+                    updatePlayerUI(spot, true);
+                } else {
+                    playSpotAudio(spots[currentTargetIndex], true);
+                }
+            } else {
+                audioElement.pause();
+                const spot = spots.find(s => s.id === currentPlayingSpotId) || spots[currentTargetIndex];
+                updatePlayerUI(spot, false);
+            }
+        }
+
+        function toggleAudioMute() {
+            audioElement.muted = !audioElement.muted;
+            const btnMute = document.getElementById('btn-mute');
+            if (audioElement.muted) {
+                btnMute.innerText = '🔇';
+                btnMute.classList.add('mute-active');
+            } else {
+                btnMute.innerText = '🔊';
+                btnMute.classList.remove('mute-active');
+            }
+        }
+
+        function updatePlayerUI(spot, isPlaying) {
+            if (!spot) return;
+            document.getElementById('player-badge').innerText = spot.numLabel;
+            document.getElementById('player-title').innerText = spot.name;
+            document.getElementById('player-subtitle').innerText = spot.artist;
+
+            const eq = document.getElementById('audio-equalizer');
+            const playIcon = document.getElementById('btn-play-icon');
+            const playText = document.getElementById('btn-play-text');
+
+            if (isPlaying) {
+                eq.classList.add('playing');
+                playIcon.innerText = '⏸️';
+                playText.innerText = 'Pausar';
+            } else {
+                eq.classList.remove('playing');
+                playIcon.innerText = '▶️';
+                playText.innerText = 'Escoltar';
+            }
+        }
+
+        function setupMediaSession(spot) {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: spot.name,
+                    artist: spot.artist,
+                    album: "Mar Mediterrània · Art Lumínic 2026",
+                    artwork: [
+                        { src: 'img/logo.jpg', sizes: '512x512', type: 'image/jpeg' }
+                    ]
+                });
+
+                navigator.mediaSession.setActionHandler('play', () => toggleAudioPlayback());
+                navigator.mediaSession.setActionHandler('pause', () => toggleAudioPlayback());
+                navigator.mediaSession.setActionHandler('nexttrack', () => stepNextPoint());
+                navigator.mediaSession.setActionHandler('previoustrack', () => stepPreviousPoint());
+            }
+        }
+
+        // --- GEOLOCALITZACIÓ GPS EN TEMPS REAL ---
+        function startGpsTracking() {
+            const gpsBadge = document.getElementById('gps-badge');
+            const gpsText = document.getElementById('gps-status-text');
+
+            if (!navigator.geolocation) {
+                gpsText.innerText = 'GPS no disponible';
+                activateSimulatorDefault();
+                return;
+            }
+
+            gpsText.innerText = 'Connectant GPS...';
+
+            watchPositionId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    const acc = Math.round(pos.coords.accuracy || 10);
+
+                    gpsBadge.classList.add('active');
+                    gpsText.innerText = `GPS Actiu (±${acc}m)`;
+                    updateUserPosition(lat, lng, acc);
+                },
+                (err) => {
+                    console.warn('Geolocation watch error:', err);
+                    gpsBadge.classList.remove('active');
+                    gpsText.innerText = 'Mode Prova / Simulador';
+                    if (!currentUserCoords) {
+                        activateSimulatorDefault();
+                    }
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 2000,
+                    timeout: 10000
+                }
+            );
+        }
+
+        function updateUserPosition(lat, lng, accuracy = 10) {
+            currentUserCoords = [lat, lng];
+
+            // 1. Dibuixar o actualitzar marcador d'usuari
+            if (!userLocationMarker) {
+                const userIcon = L.divIcon({
+                    className: 'user-gps-container',
+                    html: `<div class="user-gps-marker"><div class="user-gps-pulse"></div></div>`,
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
+                });
+                userLocationMarker = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+                userAccuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: '#38bdf8',
+                    weight: 1,
+                    fillColor: '#38bdf8',
+                    fillOpacity: 0.12
+                }).addTo(map);
+            } else {
+                userLocationMarker.setLatLng([lat, lng]);
+                userAccuracyCircle.setLatLng([lat, lng]);
+                userAccuracyCircle.setRadius(accuracy);
+            }
+
+            // 2. Comprovar proximitat amb tots els punts (Geofence Trigger)
+            checkProximityTriggers(lat, lng);
+
+            // 3. Actualitzar navegació cap al punt d'objectiu actual
+            updateNavigationGuidance(lat, lng);
+        }
+
+        function checkProximityTriggers(userLat, userLng) {
+            for (let i = 0; i < spots.length; i++) {
+                const spot = spots[i];
+                const dist = getDistanceMeters(userLat, userLng, spot.lat, spot.lng);
+
+                // Si l'usuari entra dins del radi de la instal·lació (ex: 28m)
+                if (dist <= spot.radius) {
+                    if (currentPlayingSpotId !== spot.id) {
+                        console.log(`📍 Has arribat a: ${spot.name} (${dist}m) -> Activant àudio!`);
+                        
+                        if (navigator.vibrate) {
+                            navigator.vibrate([120, 80, 120]);
+                        }
+                        
+                        currentTargetIndex = spot.index;
+                        updateTargetUI();
+                        playSpotAudio(spot);
+                    }
+                    break;
+                }
+            }
+        }
+
+        function updateNavigationGuidance(userLat, userLng) {
+            if (spots.length === 0) return;
+            const targetSpot = spots[currentTargetIndex];
+            if (!targetSpot) return;
+
+            const dist = getDistanceMeters(userLat, userLng, targetSpot.lat, targetSpot.lng);
+            const bearing = getBearing(userLat, userLng, targetSpot.lat, targetSpot.lng);
+            const arrow = getCompassArrow(bearing);
+
+            document.getElementById('target-distance-val').innerText = `${dist} m`;
+            document.getElementById('nav-arrow').innerText = arrow;
+
+            // Actualitzar línia de guiaje al mapa
+            if (guidanceLine) {
+                guidanceLine.setLatLngs([
+                    [userLat, userLng],
+                    [targetSpot.lat, targetSpot.lng]
+                ]);
+            }
+        }
+
+        // --- GESTIÓ DE PUNTS D'OBJECTIU ---
+        function selectTargetSpot(index, playImmediate = false) {
+            if (spots.length === 0) return;
+            currentTargetIndex = index;
+            const spot = spots[currentTargetIndex];
+            updateTargetUI();
+
+            if (currentUserCoords) {
+                updateNavigationGuidance(currentUserCoords[0], currentUserCoords[1]);
+            }
+
+            if (playImmediate && isAudioUnlocked) {
+                playSpotAudio(spot, true);
+            }
+
+            if (map && spot) {
+                map.flyTo([spot.lat, spot.lng], 18, { duration: 0.6 });
+            }
+        }
+
+        function stepNextPoint() {
+            if (spots.length === 0) return;
+            const nextIdx = (currentTargetIndex + 1) % spots.length;
+            selectTargetSpot(nextIdx, true);
+        }
+
+        function stepPreviousPoint() {
+            if (spots.length === 0) return;
+            const prevIdx = (currentTargetIndex - 1 + spots.length) % spots.length;
+            selectTargetSpot(prevIdx, true);
+        }
+
+        function updateTargetUI() {
+            if (spots.length === 0) return;
+            const spot = spots[currentTargetIndex];
+            if (!spot) return;
+
+            document.getElementById('target-index-num').innerText = `${spot.index + 1}/${spots.length}`;
+            document.getElementById('target-name-display').innerText = spot.name;
+
+            // Destacar marcador d'objectiu
+            document.querySelectorAll('.spot-marker-circle').forEach(el => el.classList.remove('is-target'));
+            const markerEl = document.getElementById(`spot-marker-${spot.id}`);
+            if (markerEl) markerEl.classList.add('is-target');
+
+            // Actualitzar element actiu a la llista
+            document.querySelectorAll('.track-item').forEach(el => el.classList.remove('active'));
+            const trackItem = document.getElementById(`track-item-${spot.id}`);
+            if (trackItem) trackItem.classList.add('active');
+        }
+
+        function centerOnUser() {
+            if (currentUserCoords && map) {
+                map.flyTo(currentUserCoords, 18, { duration: 0.8 });
+            } else {
+                activateSimulatorDefault();
+            }
+        }
+
+        function centerOnTarget() {
+            if (spots.length === 0) return;
+            const spot = spots[currentTargetIndex];
+            if (spot && map) {
+                map.flyTo([spot.lat, spot.lng], 18, { duration: 0.8 });
+            }
+        }
+
+        // --- MODE SIMULADOR PER A PROVES ---
+        function activateSimulatorDefault() {
+            isSimulating = true;
+            document.getElementById('btn-toggle-sim').classList.add('active');
+            const simStart = spots.length > 0 ? [spots[0].lat + 0.0001, spots[0].lng + 0.0001] : [42.07265, 2.95388];
+            updateUserPosition(simStart[0], simStart[1], 5);
+            if (map) {
+                map.flyTo(simStart, 18);
+            }
+        }
+
+        function toggleSimulatorMode() {
+            isSimulating = !isSimulating;
+            const btn = document.getElementById('btn-toggle-sim');
+            if (isSimulating) {
+                btn.classList.add('active');
+                alert("🧪 Mode Simulador Actiu: Toca qualsevol carrer o punt del mapa per moure la teva posició virtual i provar com s'activen els àudios automàticament!");
+                if (!currentUserCoords) {
+                    activateSimulatorDefault();
+                }
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        // --- DRAWER DE LA LLISTA D'ESTACIONS ---
+        function renderTracklistDrawer() {
+            const container = document.getElementById('drawer-list-items');
+            container.innerHTML = '';
+
+            spots.forEach((spot, idx) => {
+                const item = document.createElement('div');
+                item.className = 'track-item';
+                item.id = `track-item-${spot.id}`;
+                item.onclick = () => {
+                    selectTargetSpot(idx, true);
+                    closeTracklist();
+                };
+
+                item.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.65rem;">
+                        <span style="width: 28px; height: 28px; border-radius: 50%; background: #000; border: 2px solid #38bdf8; color: #38bdf8; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+                            ${spot.numLabel}
+                        </span>
+                        <div>
+                            <h4 style="font-size: 0.88rem; color: #ffffff; font-weight: 700;">${spot.name}</h4>
+                            <p style="font-size: 0.75rem; color: #94a3b8;">🎨 ${spot.artist}</p>
+                        </div>
+                    </div>
+                    <span style="font-size: 1.1rem; color: #38bdf8;">▶️</span>
+                `;
+
+                container.appendChild(item);
+            });
+        }
+
+        function openTracklist() {
+            document.getElementById('tracklist-drawer').classList.add('open');
+        }
+
+        function closeTracklist() {
+            document.getElementById('tracklist-drawer').classList.remove('open');
+        }
+
+        function toggleSheetExpansion() {
+            const sheet = document.getElementById('bottom-sheet');
+            sheet.classList.toggle('expanded');
+        }
+
+        // Inicialitzar quan carregui el DOM
+        window.addEventListener('DOMContentLoaded', () => {
+            initMap();
+        });
+    </script>
+</body>
+</html>

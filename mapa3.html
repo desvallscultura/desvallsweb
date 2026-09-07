@@ -1,0 +1,3227 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plànol Oficial · Circuit d'Art Lumínic 2026 · Sant Jordi Desvalls</title>
+    <meta name="description" content="Plànol interactiu i itinerari recomanat del Circuit d'Art Lumínic de Pluja d'Art 2026 a Sant Jordi Desvalls. Dissabte 19 de setembre de 21:30h a 01:30h.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet JS, dom-to-image, html2canvas & Supabase SDK -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --primary: #06b6d4;
+            --primary-glow: rgba(6, 182, 212, 0.45);
+            --secondary: #ec4899;
+            --accent-start: #f59e0b;
+            --accent-lum: #38bdf8;
+            --accent-show: #f43f5e;
+            --accent-route: #facc15;
+            --accent-food: #ea580c;
+            --accent-wc: #0d9488;
+            --accent-wc-acc: #7c3aed;
+            --dark: #050811;
+            --sidebar-bg: #0b0f19;
+            --card-bg: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .topbar-brand img {
+            height: 36px;
+            border-radius: 6px;
+            background: white;
+            padding: 2px;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+        }
+
+        .topbar-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .topbar-title .badge-glow {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+        }
+
+        .topbar-subtitle {
+            font-size: 0.8rem;
+            color: #7dd3fc;
+            font-weight: 600;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-action.primary {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border-color: #38bdf8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+        }
+
+        .btn-action.primary:hover {
+            background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.5);
+        }
+
+        .btn-action.editor-toggle {
+            background: rgba(234, 179, 8, 0.15);
+            border-color: rgba(234, 179, 8, 0.5);
+            color: #fde047;
+            font-weight: 700;
+        }
+
+        .btn-action.editor-toggle.active {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            color: #000000;
+            border-color: #fef08a;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+        }
+
+        /* Banner Mode Editor */
+        .editor-banner {
+            display: none;
+            background: linear-gradient(90deg, #1e1b4b 0%, #0f172a 50%, #1e1b4b 100%);
+            border-bottom: 2px solid #eab308;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.85rem;
+            color: #fef08a;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .editor-banner.active {
+            display: flex;
+        }
+
+        .editor-banner-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-editor-op {
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.15s ease;
+        }
+
+        .btn-editor-save {
+            background: #10b981;
+            color: white;
+            border-color: #34d399;
+        }
+
+        .btn-editor-save:hover {
+            background: #059669;
+        }
+
+        .btn-editor-reset {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-editor-reset:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-editor-add {
+            background: rgba(56, 189, 248, 0.15);
+            color: #7dd3fc;
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-editor-add:hover {
+            background: rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-editor-route {
+            background: rgba(250, 204, 21, 0.2);
+            color: #fef08a;
+            border-color: rgba(250, 204, 21, 0.5);
+        }
+
+        .btn-editor-route.active {
+            background: #facc15;
+            color: #000000;
+            border-color: #fef08a;
+            box-shadow: 0 0 14px rgba(250, 204, 21, 0.8);
+            animation: pulse-route-btn 1.5s infinite;
+        }
+
+        @keyframes pulse-route-btn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        /* Estils per a l'edició de Nodes de l'Itinerari Lumínic */
+        .route-node-wrapper, .route-mid-wrapper {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .route-node-handle {
+            width: 22px;
+            height: 22px;
+            background: #facc15;
+            border: 2px solid #000000;
+            color: #000000;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.9), 0 2px 6px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10.5px;
+            font-weight: 900;
+            user-select: none;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .route-node-handle:hover {
+            transform: scale(1.35);
+            background: #ffffff;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 1);
+        }
+
+        .route-node-handle:active {
+            cursor: grabbing;
+        }
+
+        .route-midpoint-handle {
+            width: 16px;
+            height: 16px;
+            background: #0284c7;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            line-height: 1;
+            user-select: none;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .route-midpoint-handle:hover {
+            transform: scale(1.45);
+            background: #38bdf8;
+            box-shadow: 0 0 14px rgba(56, 189, 248, 1);
+        }
+
+        /* Handles de Nodes per a Instal·lacions Lineals */
+        .line-node-wrapper, .line-mid-wrapper {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .line-node-handle {
+            width: 22px;
+            height: 22px;
+            background: #ec4899;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 0 12px rgba(236, 72, 153, 0.9), 0 2px 6px rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+            user-select: none;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .line-node-handle:hover {
+            transform: scale(1.35);
+            background: #f43f5e;
+            box-shadow: 0 0 16px rgba(244, 63, 94, 1);
+        }
+
+        .line-node-handle:active,
+        .leaflet-drag-target .line-node-handle,
+        .leaflet-drag-target .line-midpoint-handle,
+        .leaflet-drag-target .route-node-handle {
+            cursor: grabbing !important;
+            transition: none !important;
+            transform: scale(1.25);
+        }
+
+        .line-midpoint-handle {
+            width: 16px;
+            height: 16px;
+            background: #a855f7;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            line-height: 1;
+            user-select: none;
+            transition: transform 0.15s ease;
+        }
+
+        .line-midpoint-handle:hover {
+            transform: scale(1.45);
+            background: #c084fc;
+            box-shadow: 0 0 14px rgba(192, 132, 252, 1);
+        }
+
+        .sidebar-item-badge.line-badge {
+            border-radius: 8px !important;
+            border: 1.5px solid #38bdf8 !important;
+            background: rgba(6, 182, 212, 0.15) !important;
+        }
+
+        /* App Container */
+        .app-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Map Canvas */
+        #map-wrapper {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            background: #050811;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #050811;
+        }
+
+        /* Custom Selector de Capes */
+        .map-layer-switcher {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 998;
+            background: rgba(11, 15, 25, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 0.4rem;
+            display: flex;
+            gap: 0.35rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-layer-opt {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #94a3b8;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-layer-opt:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-layer-opt.active {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+        }
+
+        /* Control de mida de símbols */
+        .symbol-size-control {
+            position: absolute;
+            bottom: 2rem;
+            right: 1.25rem;
+            background: rgba(11, 15, 25, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 0.45rem 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 998;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            color: #f8fafc;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .btn-symbol-scale {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-symbol-scale:hover {
+            background: #0284c7;
+            border-color: #38bdf8;
+            transform: scale(1.08);
+        }
+
+        .sidebar {
+            width: 380px;
+            min-width: 380px;
+            background: var(--sidebar-bg);
+            border-left: 1px solid rgba(6, 182, 212, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            z-index: 999;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s ease;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        .sidebar.hidden {
+            width: 0 !important;
+            min-width: 0 !important;
+            opacity: 0;
+            pointer-events: none;
+            border-left: none;
+            box-shadow: none;
+        }
+
+        .sidebar-header {
+            padding: 1.25rem 1.25rem 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-search {
+            margin-top: 0.75rem;
+            position: relative;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 0.55rem 0.75rem 0.55rem 2.2rem;
+            color: white;
+            font-family: inherit;
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-search input:focus {
+            border-color: #38bdf8;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .sidebar-search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-filter-pills {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            overflow-x: auto;
+            padding-bottom: 0.2rem;
+        }
+
+        .filter-pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #94a3b8;
+            padding: 0.3rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+
+        .filter-pill:hover,
+        .filter-pill.active {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border-color: #38bdf8;
+        }
+
+        .sidebar-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-item {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sidebar-item:hover {
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .sidebar-item.selected {
+            border-color: #facc15;
+            background: rgba(250, 204, 21, 0.08);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
+        }
+
+        .sidebar-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .sidebar-item-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #000000;
+            border: 1.5px solid #ffffff;
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(0,0,0,0.6);
+        }
+
+        .sidebar-item-badge.start {
+            background: #f59e0b;
+            color: #000000;
+            border-color: #fef08a;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+        }
+
+        .sidebar-item-badge.lum {
+            background: #000000;
+            border-color: #38bdf8;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .sidebar-item-badge.show {
+            background: #000000;
+            border-color: #f43f5e;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+        }
+
+        .sidebar-item-name {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.25;
+        }
+
+        .sidebar-item-sub {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-left: 2.35rem;
+            line-height: 1.35;
+        }
+
+        .sidebar-item-actions {
+            display: none;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+            margin-left: 2.35rem;
+        }
+
+        .editor-banner.active ~ .app-container .sidebar-item-actions,
+        body.editor-active .sidebar-item-actions {
+            display: flex;
+        }
+
+        .btn-item-op {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.06);
+            color: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .btn-item-op:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .btn-item-op.delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-item-op.delete:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        /* Marker Styles (Custom Leaflet DivIcon) */
+        .custom-marker-wrapper {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .custom-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            font-weight: 800;
+            transition: filter 0.15s ease, box-shadow 0.15s ease;
+            user-select: none;
+            text-align: center;
+        }
+
+        .custom-marker:hover {
+            filter: brightness(1.25);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.8), 0 4px 12px rgba(0,0,0,0.9);
+        }
+
+        .marker-start {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            border: 2px solid #fef08a !important;
+            color: #000000 !important;
+            font-weight: 900;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.8), 0 2px 8px rgba(0,0,0,0.8) !important;
+            animation: pulse-glow-start 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow-start {
+            0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.8); }
+            50% { box-shadow: 0 0 22px rgba(254, 240, 138, 1); }
+        }
+
+        .marker-lum,
+        .marker-show,
+        .marker-food,
+        .marker-wc,
+        .marker-wc-acc,
+        .marker-serv,
+        .marker-park-acc,
+        .marker-lila {
+            background: linear-gradient(135deg, #18181b 0%, #000000 100%) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+            color: #ffffff !important;
+        }
+
+        .marker-lum {
+            border: 2px solid #38bdf8 !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.6), 0 2px 8px rgba(0,0,0,0.8) !important;
+        }
+
+        .marker-show {
+            border: 2px solid #f43f5e !important;
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.6), 0 2px 8px rgba(0,0,0,0.8) !important;
+        }
+
+        /* Custom Popup & Tooltip Leaflet */
+        .leaflet-popup-content-wrapper {
+            background: #0b0f19 !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(6, 182, 212, 0.4) !important;
+            border-radius: 12px !important;
+            padding: 0 !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .leaflet-popup-content {
+            margin: 0 !important;
+            line-height: 1.5 !important;
+            padding: 1.25rem !important;
+            min-width: 270px;
+        }
+
+        .leaflet-popup-tip {
+            background: #0b0f19 !important;
+        }
+
+        .custom-leaflet-tooltip {
+            background: rgba(11, 15, 25, 0.96) !important;
+            border: 1px solid rgba(6, 182, 212, 0.6) !important;
+            color: #f8fafc !important;
+            font-family: inherit !important;
+            font-size: 0.82rem !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+            padding: 0.4rem 0.7rem !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.7) !important;
+        }
+
+        .custom-leaflet-tooltip::before {
+            border-top-color: rgba(6, 182, 212, 0.6) !important;
+        }
+
+        .popup-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .popup-badge.start { background: rgba(245, 158, 11, 0.25); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.5); }
+        .popup-badge.lum { background: rgba(56, 189, 248, 0.25); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.5); }
+        .popup-badge.show { background: rgba(244, 63, 94, 0.25); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.5); }
+        .popup-badge.food { background: rgba(234, 88, 12, 0.25); color: #fb923c; border: 1px solid rgba(234, 88, 12, 0.5); }
+        .popup-badge.wc { background: rgba(13, 148, 136, 0.25); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.5); }
+        .popup-badge.wc_accessible { background: rgba(124, 58, 237, 0.25); color: #c4b5fd; border: 1px solid rgba(124, 58, 237, 0.5); }
+        .popup-badge.serv { background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); }
+
+        .popup-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .popup-artist {
+            font-size: 0.92rem;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .popup-project {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-desc {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+
+        .popup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
+        }
+
+        .popup-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f8fafc;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .popup-btn:hover {
+            background: #0284c7;
+            border-color: #38bdf8;
+            color: white;
+        }
+
+        .popup-btn.delete {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .popup-btn.delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Llegenda Flotant al Mapa */
+        .map-legend {
+            position: absolute;
+            bottom: 1.25rem;
+            left: 1rem;
+            background: rgba(11, 15, 25, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            z-index: 998;
+            font-size: 0.8rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            max-width: 310px;
+        }
+
+        .map-legend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.35rem;
+        }
+
+        .map-legend-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.4rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cbd5e1;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-dot-num {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #000000;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+            color: #38bdf8;
+            font-size: 8.5px;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .legend-line {
+            width: 22px;
+            height: 4px;
+            border-radius: 2px;
+            flex-shrink: 0;
+            background: #facc15;
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+        }
+
+        /* Classes especials per a l'exportació d'imatges */
+        #map-wrapper.is-exporting .map-layer-switcher,
+        #map-wrapper.is-exporting .symbol-size-control,
+        #map-wrapper.is-exporting .leaflet-control-zoom {
+            display: none !important;
+        }
+
+        #map-wrapper.export-bg-only .leaflet-marker-pane,
+        #map-wrapper.export-bg-only .leaflet-overlay-pane,
+        #map-wrapper.export-bg-only .map-legend {
+            display: none !important;
+        }
+
+        #map-wrapper.export-symbols-only .leaflet-tile-pane {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        #map-wrapper.export-no-legend .map-legend {
+            display: none !important;
+        }
+
+        /* Modal Editor de Targetes */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeInModal 0.2s ease-out;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card-edit-dialog {
+            background: #0b0f19;
+            border: 1px solid rgba(6, 182, 212, 0.45);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 530px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(6, 182, 212, 0.25);
+            animation: scaleInModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        @keyframes scaleInModal {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .card-edit-header {
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-close-modal {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close-modal:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #f87171;
+        }
+
+        #card-edit-form {
+            padding: 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 0.6rem 0.8rem;
+            color: #f8fafc;
+            font-family: inherit;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #38bdf8;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 85px;
+            line-height: 1.45;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-color-preset {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: transform 0.15s ease;
+        }
+
+        .btn-color-preset:hover {
+            transform: scale(1.18);
+        }
+
+        .card-edit-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <a href="pluja-art-2026.html" class="topbar-brand">
+            <img src="img/logo.jpg" alt="Logo">
+            <div>
+                <div class="topbar-title">
+                    Pluja d'Art 2026 · Circuit d'Art Lumínic
+                    <span class="badge-glow">Mode Gestió</span>
+                </div>
+                <div class="topbar-subtitle">Sant Jordi Desvalls · Dissabte 19 de setembre (21:30h - 01:30h)</div>
+            </div>
+        </a>
+
+        <div class="topbar-actions">
+            <a href="audioguia.html" class="btn-action" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(2, 132, 199, 0.4) 100%); border-color: #38bdf8; color: #ffffff; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4); font-weight: 800;">
+                🎧 Audioguia GPS Mòbil
+            </a>
+            <button type="button" class="btn-action" id="btn-topbar-sidebar" onclick="toggleSidebarDesktop()" title="Amagar o Mostrar la llista d'espais">
+                📋 <span id="topbar-sidebar-text">Amagar Espais</span>
+            </button>
+            <button type="button" class="btn-action editor-toggle" id="btn-editor-mode" onclick="toggleEditorMode()">
+                ✏️ Mode Editor Ubicacions
+            </button>
+            <button type="button" class="btn-action primary" onclick="exportMapImage()">
+                📸 Exportar DIN A3 (300 DPI)
+            </button>
+            <a href="art-luminic-2026.html" class="btn-action" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5); color: #38bdf8;">
+                🌊 Guia «Mar Mediterrània»
+            </a>
+            <a href="pluja-art-2026.html" class="btn-action">
+                🔙 Programa Pluja d'Art
+            </a>
+        </div>
+    </header>
+
+    <!-- Banner Mode Editor -->
+    <div class="editor-banner" id="editor-banner">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.1rem;">✏️</span>
+                <strong>MODE EDITOR ACTIU:</strong>
+                <span>Arrossega els símbols o fes servir les eines per afegir/modificar nodes de l'itinerari lumínic.</span>
+                <span id="route-edit-status" style="color: #38bdf8; font-weight: 700; margin-left: 0.5rem;"></span>
+            </div>
+            <div style="display: flex; gap: 0.4rem;">
+                <button type="button" class="btn-editor-op btn-editor-save" onclick="saveCustomCoords()">
+                    💾 Guardar a Supabase
+                </button>
+                <button type="button" class="btn-editor-op btn-editor-reset" onclick="resetToDefault()">
+                    🔄 Restablir Tot
+                </button>
+            </div>
+        </div>
+        <div class="editor-banner-actions" style="margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid rgba(255, 255, 255, 0.1); width: 100%;">
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('lum')">
+                ➕ Instal·lació Puntual (💡)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" style="background: rgba(56, 189, 248, 0.25); color: #7dd3fc; border-color: #38bdf8;" onclick="addNewLineInstallation('lum')">
+                ➕ Línia Instal·lació (💡〰️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('show')">
+                ➕ Espectacle Puntual (✨)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" style="background: rgba(244, 63, 94, 0.25); color: #fda4af; border-color: #f43f5e;" onclick="addNewLineInstallation('show')">
+                ➕ Línia Espectacle (✨〰️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('start')">
+                ➕ Punt Inici (🚩)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('food')">
+                ➕ Foodtruck (🚚)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('wc')">
+                ➕ WC (🚻)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('wc_accessible')">
+                ➕ WC Adaptat (♿)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('serv')">
+                ➕ Pàrquing (🅿️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-route" id="btn-toggle-route-edit" onclick="toggleRouteEdit()">
+                🌟 Traçar / Afegir Nodes Itinerari
+            </button>
+            <button type="button" class="btn-editor-op" id="btn-stop-line-edit" style="display: none; background: #10b981; color: white; border-color: #34d399;" onclick="stopEditingLineNodes()">
+                ✅ Finalitzar Nodes Línia
+            </button>
+            <button type="button" class="btn-editor-op" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.35);" onclick="clearRoute()">
+                🗑️ Buidar Traçat
+            </button>
+            <button type="button" class="btn-editor-op" style="background: rgba(250, 204, 21, 0.12); color: #fef08a; border-color: rgba(250, 204, 21, 0.35);" onclick="resetRoute()">
+                🔄 Traçat Inicial
+            </button>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        
+        <!-- Map Canvas -->
+        <div id="map-wrapper">
+            <div id="map"></div>
+
+            <!-- Selector de Capes Base -->
+            <div class="map-layer-switcher">
+                <button type="button" class="btn-layer-opt active" id="layer-osm" onclick="switchLayer('osm')">
+                    🌍 OpenStreetMap
+                </button>
+                <button type="button" class="btn-layer-opt" id="layer-satellit" onclick="switchLayer('googleHybrid')">
+                    🛰️ Satèl·lit Real
+                </button>
+            </div>
+
+            <!-- Control de mida de símbols -->
+            <div class="symbol-size-control">
+                <span>Mida símbols:</span>
+                <button type="button" class="btn-symbol-scale" onclick="changeSymbolScale(-0.15)" title="Fer símbols més petits">−</button>
+                <span id="symbol-scale-val" style="min-width: 36px; text-align: center;">100%</span>
+                <button type="button" class="btn-symbol-scale" onclick="changeSymbolScale(0.15)" title="Fer símbols més grans">+</button>
+            </div>
+
+            <!-- Llegenda Flotant -->
+            <div class="map-legend" id="map-legend">
+                <div class="map-legend-header">
+                    <span>✨ LLEGENDA ART LUMÍNIC</span>
+                    <button type="button" onclick="toggleLegend()" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem;">✖</button>
+                </div>
+                <div class="map-legend-grid">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #f59e0b; border: 2px solid #fef08a;"></span>
+                        <span><strong>Punt d'Inici (🚩)</strong> · Inici Recomanat</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line"></span>
+                        <span><strong>Itinerari Lumínic</strong> (Traçat Recomanat)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot-num">1..9</span>
+                        <span><strong>Instal·lacions Lumíniques (1 a 9)</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #000000; border: 2px solid #f43f5e;"></span>
+                        <span><strong>Espectacles Nocturns (✨, 🪼)</strong></span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #000000; border: 1.5px solid #ffffff;"></span>
+                        <span><strong>Foodtrucks, WCs & Serveis (🚚, 🚻, ♿, 🅿️)</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Llista d'Espais -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <span>✨ Espais i Itinerari</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span id="count-badge" style="background: rgba(6, 182, 212, 0.2); color: #38bdf8; font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 12px; font-weight: 800;">17 Punts</span>
+                        <button type="button" onclick="toggleSidebarDesktop()" title="Amagar el panell" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; width: 26px; height: 26px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s; flex-shrink: 0;" onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.color='white'" onmouseout="this.style.background='rgba(255,255,255,0.07)'; this.style.color='#94a3b8'">✖</button>
+                    </div>
+                </div>
+                <div class="sidebar-search">
+                    <span class="sidebar-search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Cercar instal·lació, espectacle..." oninput="filterLocations()">
+                </div>
+                <div class="sidebar-filter-pills">
+                    <button type="button" class="filter-pill active" onclick="setFilterType('all', this)">🌟 Tots</button>
+                    <button type="button" class="filter-pill" onclick="setFilterType('lum', this)">💡 Instal·lacions</button>
+                    <button type="button" class="filter-pill" onclick="setFilterType('show', this)">✨ Espectacles</button>
+                    <button type="button" class="filter-pill" onclick="setFilterType('serv', this)">ℹ️ Serveis & Food</button>
+                </div>
+            </div>
+
+            <div class="sidebar-list" id="sidebar-list">
+                <!-- Renderitzat dinàmicament per JS -->
+            </div>
+        </aside>
+
+        <!-- Botó flotant per mostrar la Sidebar quan és amagada -->
+        <button type="button" id="btn-show-sidebar" onclick="toggleSidebarDesktop()" title="Mostrar la llista d'Espais i Itinerari"
+            style="display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+                   z-index: 1000; background: rgba(6, 182, 212, 0.85); border: none; color: white;
+                   padding: 0.7rem 0.5rem; border-radius: 10px 0 0 10px; cursor: pointer;
+                   box-shadow: -4px 0 12px rgba(0,0,0,0.5); writing-mode: vertical-rl;
+                   font-size: 0.8rem; font-weight: 800; font-family: 'Outfit', sans-serif;
+                   letter-spacing: 0.05em; backdrop-filter: blur(8px);
+                   transition: background 0.2s, transform 0.2s;"
+            onmouseover="this.style.background='rgba(6, 182, 212, 1)'"
+            onmouseout="this.style.background='rgba(6, 182, 212, 0.85)'">
+            ✨ Espais &amp; Itinerari
+        </button>
+
+    </div>
+
+    <!-- Modal per a Modificar Textos de la Targeta / Instal·lació -->
+    <div id="card-edit-modal" class="modal-backdrop" style="display: none;" onclick="handleModalBackdropClick(event)">
+        <div class="card-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="card-edit-modal-title">
+            <div class="card-edit-header">
+                <h3 id="card-edit-modal-title" style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; color: #f8fafc; font-weight: 800;">
+                    <span>✏️ Modificar Textos de la Targeta</span>
+                </h3>
+                <button type="button" class="btn-close-modal" onclick="closeCardEditModal()" title="Tancar">✖</button>
+            </div>
+
+            <form id="card-edit-form" onsubmit="event.preventDefault(); saveCardEditForm();">
+                <input type="hidden" id="edit-card-id">
+
+                <div class="form-group">
+                    <label for="edit-card-name">Nom / Títol de l'Espai o Espectacle</label>
+                    <input type="text" id="edit-card-name" required placeholder="Ex: 1. Plaça 1 d'Octubre · «El jardí de les meduses»">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1.2;">
+                        <label for="edit-card-type">Tipus de Punt</label>
+                        <select id="edit-card-type" onchange="handleCardTypeChange()">
+                            <option value="lum">💡 Instal·lació Lumínica</option>
+                            <option value="show">✨ Espectacle Nocturn</option>
+                            <option value="start">🚩 Punt d'Inici</option>
+                            <option value="food">🚚 Foodtruck & Gastronomia</option>
+                            <option value="wc">🚻 Lavabos</option>
+                            <option value="wc_accessible">♿ WC Adaptat (PMR)</option>
+                            <option value="serv">🅿️ Aparcament & Serveis</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 0.8;">
+                        <label for="edit-card-code">Símbol / Emoji / Codi</label>
+                        <input type="text" id="edit-card-code" placeholder="Ex: 💡, 🪼1, 🌊, ✨, 🚩">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-artist">Artista, Cia o Responsable</label>
+                    <input type="text" id="edit-card-artist" placeholder="Ex: Gran Medusa 1 · mathr & netz / Artistes Locals">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-project">Subtítol / Horari / Projecte</label>
+                    <input type="text" id="edit-card-project" placeholder="Ex: Horari: 21:30h i 22:45h / Passatge Immersiu">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-desc">Descripció Detallada (Text de la Targeta)</label>
+                    <textarea id="edit-card-desc" rows="4" placeholder="Escriu aquí el text complet que apareixerà a la targeta informativa..."></textarea>
+                </div>
+
+                <div id="edit-card-line-options" class="form-group" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.75rem;">
+                    <label style="color: #7dd3fc; font-weight: 700; margin-bottom: 0.4rem; display: block;">🎨 Color del Traçat Lineal</label>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <input type="color" id="edit-card-line-color" value="#38bdf8" style="cursor: pointer; width: 36px; height: 36px; border: none; border-radius: 6px; background: transparent;">
+                        <div style="display: flex; gap: 0.35rem;">
+                            <button type="button" class="btn-color-preset" style="background:#38bdf8;" onclick="setLineColorPreset('#38bdf8')" title="Cian"></button>
+                            <button type="button" class="btn-color-preset" style="background:#f43f5e;" onclick="setLineColorPreset('#f43f5e')" title="Rosa / Espectacle"></button>
+                            <button type="button" class="btn-color-preset" style="background:#facc15;" onclick="setLineColorPreset('#facc15')" title="Groc"></button>
+                            <button type="button" class="btn-color-preset" style="background:#10b981;" onclick="setLineColorPreset('#10b981')" title="Verd"></button>
+                            <button type="button" class="btn-color-preset" style="background:#a855f7;" onclick="setLineColorPreset('#a855f7')" title="Lila"></button>
+                            <button type="button" class="btn-color-preset" style="background:#ea580c;" onclick="setLineColorPreset('#ea580c')" title="Taronja"></button>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.6rem; border-top: 1px solid rgba(56, 189, 248, 0.2); padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                        <span style="font-size: 0.75rem; color: #94a3b8;">💡 Pots arrossegar el símbol de la línia sobre el mapa per moure'l de lloc.</span>
+                        <button type="button" class="btn-item-op" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.4); padding: 0.25rem 0.6rem; font-size: 0.72rem;" onclick="resetLineBadgePosition()" title="Tornar a situar el símbol al centre geomètric del traçat">📍 Re-centrar símbol</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="edit-card-ordre">Ordre al Circuit</label>
+                        <input type="number" id="edit-card-ordre" min="1" max="999" value="1">
+                    </div>
+                </div>
+
+                <div class="card-edit-footer">
+                    <button type="button" class="btn-editor-op btn-editor-reset" onclick="deleteCurrentEditingCard()">🗑️ Eliminar</button>
+                    <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                        <button type="button" class="btn-action" onclick="closeCardEditModal()">✖ Cancel·lar</button>
+                        <button type="submit" class="btn-action primary">💾 Desar Canvis</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Credentials
+        const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
+        const supabaseClient = (window.supabase && typeof window.supabase.createClient === 'function') 
+            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+            : null;
+
+        // Dades base oficials del Circuit d'Art Lumínic 2026 - Mar Mediterrània
+        const BASE_LOCATIONS = [
+            {
+                id: 'lum_start',
+                type: 'start',
+                code: '🚩',
+                name: "Punt d'Inici · Circuit d'Art Lumínic",
+                artist: 'Organització',
+                project: 'Benvinguda & Camí d\'Espelmes',
+                descripcio: "Punt de partida recomanat per iniciar l'itinerari de les 9 instal·lacions lumíniques nocturnes seguint el camí d'espelmes.",
+                lat: 42.07255,
+                lng: 2.95380,
+                ordre: 1
+            },
+            {
+                id: 'lum_octubre',
+                type: 'show',
+                code: '🪼1',
+                name: "1. Plaça 1 d'Octubre · «El jardí de les meduses»",
+                artist: 'Gran Medusa 1 · mathr & netz',
+                project: 'Espectacle Inaugural (21:30h) & Live AV Ommatidia (21:45h)',
+                descripcio: "La plaça s'omple de vida marina amb la primera gran Medusa inflable gegant. Espectacle inaugural («Vida i Mort») i Live AV «Ommatidia».",
+                lat: 42.07168,
+                lng: 2.95315,
+                ordre: 2
+            },
+            {
+                id: 'lum_baix',
+                type: 'lum',
+                code: '🌊',
+                name: "2. Carrer de Baix · «Onades Olímpiques»",
+                artist: 'Instal·lació Dinàmica',
+                project: 'Moviment d\'Onades i Disseny Olímpic',
+                descripcio: "Instal·lació inspirada en el moviment de les onades i l'esperit del disseny dels Jocs Olímpics amb un joc de formes i llums visuals.",
+                lat: 42.07140,
+                lng: 2.95390,
+                ordre: 3
+            },
+            {
+                id: 'lum_tarongeta',
+                type: 'lum',
+                code: '🪼2',
+                name: "3. Carrer Tarongeta · «El túnel blau»",
+                artist: 'Passatge Immersiu & Medusa 2',
+                project: 'Teles, Llum Blava i Medusa 2',
+                descripcio: "Passatge envoltat de teles i atmosferes de llum blava. Inclou la Medusa 2 en un punt d'il·luminació ambiental submarina.",
+                lat: 42.07210,
+                lng: 2.95340,
+                ordre: 4
+            },
+            {
+                id: 'lum_clos_garriga',
+                type: 'lum',
+                code: '⚡',
+                name: "4. Plaça Clos Garriga · «Profunditats residuals»",
+                artist: 'Art Lumínic & Làser',
+                project: 'Làser, Teles i Raigs de Sol Submarins',
+                descripcio: "Composició immersiva amb teles, tirants, raig làser i punts de llum simulant els raigs de sol penetrant aigües profundes.",
+                lat: 42.07240,
+                lng: 2.95290,
+                ordre: 5
+            },
+            {
+                id: 'lum_escola',
+                type: 'lum',
+                code: '🏛️',
+                name: "5. Antiga Escola · «Punt de Llum»",
+                artist: 'Intervenció Patrimonial',
+                project: 'Ressalt Arquitectònic i Espai de Pau',
+                descripcio: "Espai de pau i ressalt arquitectònic on la il·luminació puntual posa en valor la història de l'edifici escolar.",
+                lat: 42.07075,
+                lng: 2.95360,
+                ordre: 6
+            },
+            {
+                id: 'lum_esglesia',
+                type: 'lum',
+                code: '🌋',
+                name: "6. Església · «L'abisme i el fum»",
+                artist: 'Instal·lació Atmosfèrica Industrial',
+                project: 'Tubs de Llum i Fumaroles Marines',
+                descripcio: "Instal·lació d'estil industrial basada en tubs de llum i efectes de fum que simulen fumaroles i corrents de fosses marines.",
+                lat: 42.07283,
+                lng: 2.95475,
+                ordre: 7
+            },
+            {
+                id: 'lum_generalitat',
+                type: 'lum',
+                code: '🪼3',
+                name: "7. Avinguda Generalitat · «Corrents marines»",
+                artist: 'Meduses Flotants',
+                project: 'Eixam de Meduses i Filtres Cromàtics',
+                descripcio: "Artèria transformada amb un conjunt de meduses flotants i filtres cromàtics jugant amb perspectives i altures.",
+                lat: 42.07190,
+                lng: 2.95260,
+                ordre: 8
+            },
+            {
+                id: 'lum_diposit',
+                type: 'lum',
+                code: '👑',
+                name: "8. Dipòsit de l'Aigua · «La Reina del Festival»",
+                artist: 'Instal·lació Monumental',
+                project: 'La Serp de Sant Jordi (Reina del Mar)',
+                descripcio: "Serp gegant inflable viva amb focus de gran potència i ventilació contínua, governant i presidint el festival des de les altures.",
+                lat: 42.07235,
+                lng: 2.95420,
+                ordre: 9
+            },
+            {
+                id: 'lum_airearte',
+                type: 'lum',
+                code: '🎨',
+                name: "9. Airearte · «Medusa & Mostra Col·lectiva Local»",
+                artist: 'Artistes Locals & Airearte',
+                project: 'Medusa Lumínica, Exposició d\'Art i Bar',
+                descripcio: "Punt final amb una medusa lumínica i la gran exposició col·lectiva dels artistes locals del Festival Pluja d'Art.",
+                lat: 42.07185,
+                lng: 2.95440,
+                ordre: 10
+            },
+            {
+                id: 'food_1',
+                type: 'food',
+                code: '🚚',
+                name: 'Zona Foodtrucks & Gastronomia',
+                artist: 'Servei Gastro & Barra',
+                project: 'Àrea Gastronòmica i Punt de Trobada',
+                descripcio: 'Sopar a la fresca, begudes artesanes, tapes i opcions veganes durant tota la nit.',
+                lat: 42.07125,
+                lng: 2.95325,
+                ordre: 9
+            },
+            {
+                id: 'wc_1',
+                type: 'wc',
+                code: '🚻',
+                name: 'Lavabos Públics · Plaça Major',
+                artist: 'Serveis Municipals',
+                project: 'Ajuntament / Plaça Major',
+                descripcio: 'Serveis higiènics disponibles.',
+                lat: 42.07232,
+                lng: 2.95376,
+                ordre: 10
+            },
+            {
+                id: 'wc_2',
+                type: 'wc',
+                code: '🚻',
+                name: 'Lavabos Públics · Zona Foodtrucks',
+                artist: 'Serveis Municipals',
+                project: 'Zona Gastronòmica',
+                descripcio: "Lavabos portàtils a l'àrea de foodtrucks.",
+                lat: 42.07138,
+                lng: 2.95295,
+                ordre: 11
+            },
+            {
+                id: 'wc_acc_1',
+                type: 'wc_accessible',
+                code: '♿',
+                name: 'WC Adaptat (PMR) · Sala Nova',
+                artist: 'Accessibilitat Universal',
+                project: 'Ajuntament / Sala Nova',
+                descripcio: 'Lavabo adaptat per a persones amb mobilitat reduïda.',
+                lat: 42.07246,
+                lng: 2.95358,
+                ordre: 12
+            },
+            {
+                id: 'wc_acc_2',
+                type: 'wc_accessible',
+                code: '♿',
+                name: 'WC Adaptat (PMR) · Zona Foodtrucks',
+                artist: 'Accessibilitat Universal',
+                project: 'Zona Gastronòmica',
+                descripcio: "Mòdul adaptat PMR a la zona de Foodtrucks.",
+                lat: 42.07142,
+                lng: 2.95304,
+                ordre: 13
+            },
+            {
+                id: 'serv_p1',
+                type: 'serv',
+                code: '♿🅿️',
+                name: 'Aparcament Accessible (PMR)',
+                artist: 'Mobilitat',
+                project: 'Pàrquing Reservat',
+                descripcio: 'Places reservades per a vehicles amb targeta PMR.',
+                lat: 42.07268,
+                lng: 2.95332,
+                ordre: 14
+            },
+            {
+                id: 'serv_p2',
+                type: 'serv',
+                code: '🅿️2',
+                name: 'Aparcament Zona Sud / Estació',
+                artist: 'Mobilitat',
+                project: 'Pàrquing General',
+                descripcio: "Aparcament públic gratuït a l'entrada sud.",
+                lat: 42.07005,
+                lng: 2.95425,
+                ordre: 15
+            },
+            {
+                id: 'serv_info',
+                type: 'serv',
+                code: 'ℹ️',
+                name: "Punt d'Informació",
+                artist: 'Organització',
+                project: 'Informació & Guies',
+                descripcio: "Punt d'atenció al visitant i informació del circuit.",
+                lat: 42.07242,
+                lng: 2.95392,
+                ordre: 16
+            },
+            {
+                id: 'serv_lila',
+                type: 'serv',
+                code: '💜',
+                name: 'Punt Lila',
+                artist: 'Atenció & Convivència',
+                project: "Espai Segur i Lliure d'Agressions",
+                descripcio: "Espai d'informació, assessorament i suport.",
+                lat: 42.07222,
+                lng: 2.95385,
+                ordre: 17
+            }
+        ];
+
+        // Itinerari lumínic recomanat inicial (polilínia)
+        const DEFAULT_ROUTE_POINTS = [
+            [42.07255, 2.95380], // Punt d'Inici (Plaça Major)
+            [42.07235, 2.95420], // Drac
+            [42.07283, 2.95475], // Església
+            [42.07260, 2.95430], // Carrer Major
+            [42.07210, 2.95340], // Laberint
+            [42.07190, 2.95260], // Medusa
+            [42.07168, 2.95315], // Plaça U d'Octubre (Inaugural & Ommatidia)
+            [42.07125, 2.95325], // Foodtrucks
+            [42.07075, 2.95360]  // Antiga Escola
+        ];
+
+        // Variables d'estat
+        let locations = JSON.parse(JSON.stringify(BASE_LOCATIONS));
+        let map = null;
+        let markers = {};
+        let lineLayersGroup = null;
+        let lineNodeLayerGroup = null;
+        let isEditorMode = false;
+        let isRouteEditMode = false;
+        let activeLineEditingId = null;
+        let currentEditingCardId = null;
+        let routePolyline = null;
+        let routeGlowPolyline = null;
+        let routeNodeLayerGroup = null;
+        let routePoints = JSON.parse(JSON.stringify(DEFAULT_ROUTE_POINTS));
+        let symbolScale = 1.0;
+        let currentFilterType = 'all';
+        let currentLayerKey = 'osm';
+        let baseTileLayers = {};
+
+        // Inicialització de l'aplicació
+        document.addEventListener('DOMContentLoaded', async () => {
+            initMap();
+            await loadSavedData();
+            renderAllMarkers();
+            renderRoutePolyline();
+            renderSidebar();
+
+            // Tancar modal amb la tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeCardEditModal();
+                }
+            });
+        });
+
+        // Inicialitzar Leaflet Map
+        function initMap() {
+            map = L.map('map', {
+                center: [42.07185, 2.95360],
+                zoom: 17,
+                zoomControl: true,
+                attributionControl: false,
+                zoomSnap: 0.25,       // Permetre increments de zoom de 0.25 (molt fi)
+                zoomDelta: 0.5,       // Cada clic al botó +/- o roda fa 0.5 de zoom
+                wheelPxPerZoomLevel: 80  // Roda del ratolí més suau
+            });
+
+            // Capes base
+            baseTileLayers.osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 20
+            });
+
+            baseTileLayers.googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                maxZoom: 20
+            });
+
+            baseTileLayers.osm.addTo(map);
+
+            // Grups de capes
+            lineLayersGroup = L.layerGroup().addTo(map);
+            routeNodeLayerGroup = L.layerGroup().addTo(map);
+            lineNodeLayerGroup = L.layerGroup().addTo(map);
+
+            // Clic sobre el mapa en mode afegir nodes
+            map.on('click', (e) => {
+                if (!isEditorMode) return;
+
+                // 1. Si s'està editant una línia d'instal·lació concreta
+                if (activeLineEditingId) {
+                    const loc = locations.find(l => l.id === activeLineEditingId);
+                    if (loc && loc.isLine) {
+                        const newCoord = [Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6))];
+                        if (!Array.isArray(loc.coords)) loc.coords = [];
+                        loc.coords.push(newCoord);
+                        recalculateLineCenter(loc);
+                        localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                        renderAllMarkers();
+                        updateLineStatusMessage(loc);
+                    }
+                    return;
+                }
+
+                // 2. Si s'està editant el traçat general de l'itinerari
+                if (isRouteEditMode) {
+                    const newCoord = [Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6))];
+                    routePoints.push(newCoord);
+                    localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+                    renderRoutePolyline();
+                }
+            });
+        }
+
+        // Canviar capa base
+        function switchLayer(layerKey) {
+            if (baseTileLayers[currentLayerKey]) {
+                map.removeLayer(baseTileLayers[currentLayerKey]);
+            }
+            currentLayerKey = layerKey;
+            baseTileLayers[currentLayerKey].addTo(map);
+
+            document.querySelectorAll('.btn-layer-opt').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(layerKey === 'osm' ? 'layer-osm' : 'layer-satellit');
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Canviar escala dels símbols
+        function changeSymbolScale(delta) {
+            symbolScale = Math.max(0.6, Math.min(2.5, symbolScale + delta));
+            const scaleDisplay = Math.round(symbolScale * 100) + '%';
+            document.getElementById('symbol-scale-val').innerText = scaleDisplay;
+            renderAllMarkers();
+            renderRoutePolyline();
+        }
+
+        let luminicTableName = 'art_luminic_locations'; // Taula dedicada per defecte
+
+        // Carregar dades de Supabase o LocalStorage
+        async function loadSavedData() {
+            let loadedFromSupabase = false;
+
+            if (supabaseClient) {
+                try {
+                    // 1. Intentar carregar primer de la taula dedicada 'art_luminic_locations'
+                    let { data, error } = await supabaseClient
+                        .from('art_luminic_locations')
+                        .select('*')
+                        .order('ordre', { ascending: true });
+
+                    if (error || !data) {
+                        // Si la taula dedicada no existeix encara a Supabase (error 404/PGRST204), utilitzar 'festival_locations' amb aïllament estricte
+                        luminicTableName = 'festival_locations';
+                        const res = await supabaseClient
+                            .from('festival_locations')
+                            .select('*')
+                            .or('id.like.lum_*,id.in.(food_1,wc_1,wc_2,wc_acc_1,wc_acc_2,serv_p1,serv_p2,serv_info,serv_lila,luminic_route_polyline)');
+                        data = res.data;
+                        error = res.error;
+                    } else {
+                        luminicTableName = 'art_luminic_locations';
+                    }
+
+                    if (!error && data && data.length > 0) {
+                        const locsFromDb = [];
+                        data.forEach(item => {
+                            if (item.id === 'luminic_route_polyline') {
+                                try {
+                                    const parsed = JSON.parse(item.descripcio);
+                                    if (Array.isArray(parsed.points)) {
+                                        routePoints = parsed.points;
+                                    }
+                                } catch (e) {
+                                    console.warn('Error parsing route polyline:', e);
+                                }
+                            } else {
+                                let isLine = false;
+                                let coords = null;
+                                let color = null;
+                                let badgeLat = null;
+                                let badgeLng = null;
+                                let descText = item.descripcio || '';
+
+                                // Comprovar si descripcio conté dades de línia
+                                if (descText && descText.startsWith('{') && descText.includes('"isLine":true')) {
+                                    try {
+                                        const parsed = JSON.parse(descText);
+                                        if (parsed.isLine && Array.isArray(parsed.coords)) {
+                                            isLine = true;
+                                            coords = parsed.coords;
+                                            color = parsed.color || '#38bdf8';
+                                            descText = parsed.text || '';
+                                            if (parsed.badgeLat != null && parsed.badgeLng != null) {
+                                                badgeLat = parseFloat(parsed.badgeLat);
+                                                badgeLng = parseFloat(parsed.badgeLng);
+                                            }
+                                        }
+                                    } catch (errP) {}
+                                }
+
+                                locsFromDb.push({
+                                    id: item.id,
+                                    isLine: isLine,
+                                    coords: coords,
+                                    color: color,
+                                    badgeLat: badgeLat,
+                                    badgeLng: badgeLng,
+                                    type: item.type || 'lum',
+                                    code: item.code || '💡',
+                                    name: item.name || '',
+                                    artist: item.artist || '',
+                                    project: item.project || '',
+                                    descripcio: descText,
+                                    lat: parseFloat(item.lat),
+                                    lng: parseFloat(item.lng),
+                                    ordre: item.ordre || 99
+                                });
+                            }
+                        });
+
+                        if (locsFromDb.length > 0) {
+                            locations = locsFromDb;
+                            loadedFromSupabase = true;
+                        }
+                    }
+                } catch (err) {
+                    console.warn('Supabase fetch fallback to local:', err);
+                }
+            }
+
+            if (!loadedFromSupabase) {
+                const localData = localStorage.getItem('art_luminic_locations_custom');
+                if (localData) {
+                    try {
+                        locations = JSON.parse(localData);
+                    } catch (e) {
+                        console.error('Error parsing localStorage:', e);
+                    }
+                }
+                const localRoute = localStorage.getItem('art_luminic_route_polyline');
+                if (localRoute) {
+                    try {
+                        routePoints = JSON.parse(localRoute);
+                    } catch (e) {}
+                }
+            }
+        }
+
+        let linePolylines = {};
+
+        // Renderitzar tots els marcadors i instal·lacions (puntuals i lineals) sobre el mapa
+        function renderAllMarkers() {
+            // Netejar marcadors puntuals existents
+            Object.values(markers).forEach(m => {
+                if (map && map.hasLayer(m)) {
+                    map.removeLayer(m);
+                }
+            });
+            markers = {};
+            linePolylines = {};
+
+            // Netejar capes de línies d'instal·lacions
+            if (lineLayersGroup) lineLayersGroup.clearLayers();
+            if (lineNodeLayerGroup) lineNodeLayerGroup.clearLayers();
+
+            locations.forEach(loc => {
+                if (loc.isLine && Array.isArray(loc.coords) && loc.coords.length >= 2) {
+                    // Renderitzar com a instal·lació lineal
+                    renderSingleLineInstallation(loc);
+                } else {
+                    // Renderitzar com a marcador puntual
+                    renderSinglePointMarker(loc);
+                }
+            });
+
+            // Si hi ha una línia en mode edició de nodes, renderitzar els seus controls
+            if (isEditorMode && activeLineEditingId) {
+                renderLineNodeHandles(activeLineEditingId);
+            }
+        }
+
+        // Renderitzar marcador d'un punt únic
+        function renderSinglePointMarker(loc) {
+            let markerClass = 'marker-lum';
+            let iconText = loc.code || '💡';
+            let baseSize = 28;
+
+            if (loc.type === 'start') {
+                markerClass = 'marker-start';
+                baseSize = 34;
+            } else if (loc.type === 'show') {
+                markerClass = 'marker-show';
+                baseSize = 30;
+            } else if (loc.type === 'food') {
+                markerClass = 'marker-food';
+                baseSize = 28;
+            } else if (loc.type === 'wc') {
+                markerClass = 'marker-wc';
+                baseSize = 26;
+            } else if (loc.type === 'wc_accessible') {
+                markerClass = 'marker-wc-acc';
+                baseSize = 26;
+            } else if (loc.type === 'serv') {
+                markerClass = 'marker-serv';
+                baseSize = 26;
+            }
+
+            const currentSize = Math.round(baseSize * symbolScale);
+            const fontSize = Math.max(10, Math.round(currentSize * 0.48));
+
+            const icon = L.divIcon({
+                className: 'custom-marker-wrapper',
+                html: `<div class="custom-marker ${markerClass}" style="width: ${currentSize}px; height: ${currentSize}px; font-size: ${fontSize}px; line-height: ${currentSize}px;">${iconText}</div>`,
+                iconSize: [currentSize, currentSize],
+                iconAnchor: [currentSize / 2, currentSize / 2],
+                popupAnchor: [0, -currentSize / 2]
+            });
+
+            const marker = L.marker([loc.lat, loc.lng], {
+                icon: icon,
+                draggable: isEditorMode,
+                title: loc.name
+            }).addTo(map);
+
+            // Tooltip flotant al passar el cursor
+            const tooltipInfo = `<strong>${loc.name}</strong>${loc.artist ? '<br><span style="color:#38bdf8; font-size:0.75rem;">' + loc.artist + '</span>' : ''}`;
+            marker.bindTooltip(tooltipInfo, {
+                direction: 'top',
+                offset: [0, -Math.round(currentSize / 2)],
+                className: 'custom-leaflet-tooltip'
+            });
+
+            // Esdeveniments d'arrossegament en mode editor
+            marker.on('dragend', (e) => {
+                const newLatLng = e.target.getLatLng();
+                loc.lat = Number(newLatLng.lat.toFixed(6));
+                loc.lng = Number(newLatLng.lng.toFixed(6));
+                localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                renderSidebar();
+            });
+
+            marker.on('click', () => {
+                selectLocation(loc.id);
+                openLocationPopup(loc.id, [loc.lat, loc.lng]);
+            });
+
+            markers[loc.id] = marker;
+        }
+
+        // Renderitzar una instal·lació lineal (polilínia neó + línia interactiva + icona central)
+        function renderSingleLineInstallation(loc) {
+            const lineColor = loc.color || (loc.type === 'show' ? '#f43f5e' : '#38bdf8');
+            const baseWidth = loc.type === 'show' ? 6 : 5;
+
+            // 1. Resplendor neó exterior
+            const glowPoly = L.polyline(loc.coords, {
+                color: lineColor,
+                weight: Math.round((baseWidth + 10) * symbolScale),
+                opacity: 0.38,
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: false
+            }).addTo(lineLayersGroup);
+
+            // 2. Línia principal interactiva
+            const mainPoly = L.polyline(loc.coords, {
+                color: lineColor,
+                weight: Math.round(baseWidth * symbolScale),
+                opacity: 0.95,
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: true
+            }).addTo(lineLayersGroup);
+
+            // Tooltip en passar el cursor
+            mainPoly.bindTooltip(`<strong>${loc.name}</strong> (Instal·lació Lineal)<br><span style="color:#38bdf8; font-size:0.75rem;">${loc.artist || ''}</span>`, {
+                direction: 'top',
+                className: 'custom-leaflet-tooltip'
+            });
+
+            // Clic / toc sobre la línia -> obrir la targeta de l'espectacle
+            mainPoly.on('click', (e) => {
+                L.DomEvent.stopPropagation(e);
+                selectLocation(loc.id);
+                openLocationPopup(loc.id, e.latlng);
+            });
+
+            // 3. Marcador / Insígnia (símbol) de la línia - editable i arrosseglable en Mode Editor
+            const midIdx = Math.floor(loc.coords.length / 2);
+            const defaultMidPos = loc.coords[midIdx] || loc.coords[0];
+            const badgePos = (loc.badgeLat != null && loc.badgeLng != null) ? [loc.badgeLat, loc.badgeLng] : defaultMidPos;
+            const currentSize = Math.round(26 * symbolScale);
+            const fontSize = Math.max(10, Math.round(currentSize * 0.48));
+
+            let badgeTypeClass = loc.type === 'show' ? 'marker-show' : 'marker-lum';
+
+            const icon = L.divIcon({
+                className: 'custom-marker-wrapper',
+                html: `<div class="custom-marker ${badgeTypeClass}" style="width: ${currentSize}px; height: ${currentSize}px; font-size: ${fontSize}px; line-height: ${currentSize}px; border-color: ${lineColor} !important; box-shadow: 0 0 10px ${lineColor} !important;" title="${loc.name}">${loc.code || '〰️'}</div>`,
+                iconSize: [currentSize, currentSize],
+                iconAnchor: [currentSize / 2, currentSize / 2]
+            });
+
+            const badgeMarker = L.marker(badgePos, {
+                icon: icon,
+                draggable: isEditorMode
+            }).addTo(lineLayersGroup);
+
+            if (isEditorMode) {
+                badgeMarker.bindTooltip(`<strong>${loc.name}</strong> (Símbol de la Línia)<br><span style="color:#facc15; font-size:0.75rem;">👉 Arrossega per moure el símbol</span>`, {
+                    direction: 'top',
+                    offset: [0, -Math.round(currentSize / 2)],
+                    className: 'custom-leaflet-tooltip'
+                });
+
+                badgeMarker.on('drag', (e) => {
+                    const newPos = e.target.getLatLng();
+                    loc.badgeLat = Number(newPos.lat.toFixed(6));
+                    loc.badgeLng = Number(newPos.lng.toFixed(6));
+                });
+
+                badgeMarker.on('dragend', (e) => {
+                    const newPos = e.target.getLatLng();
+                    loc.badgeLat = Number(newPos.lat.toFixed(6));
+                    loc.badgeLng = Number(newPos.lng.toFixed(6));
+                    localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                });
+            }
+
+            badgeMarker.on('click', () => {
+                selectLocation(loc.id);
+                openLocationPopup(loc.id, badgeMarker.getLatLng());
+            });
+
+            markers[loc.id] = mainPoly;
+            linePolylines[loc.id] = { glowPoly, mainPoly, badgeMarker };
+        }
+
+        // Renderitzar handles interactius per a l'edició de nodes d'una instal·lació lineal
+        function renderLineNodeHandles(lineId) {
+            if (lineNodeLayerGroup) {
+                lineNodeLayerGroup.clearLayers();
+            }
+            const loc = locations.find(l => l.id === lineId);
+            if (!loc || !loc.isLine || !loc.coords || loc.coords.length === 0) return;
+
+            const handleBg = loc.color || '#ec4899';
+
+            // A) Cada vèrtex de la línia numerat
+            loc.coords.forEach((pt, idx) => {
+                const nodeIcon = L.divIcon({
+                    className: 'line-node-wrapper',
+                    html: `<div class="line-node-handle" style="background: ${handleBg};" title="Node ${idx + 1}: Arrossega per moure o fes clic dret per esborrar">${idx + 1}</div>`,
+                    iconSize: [22, 22],
+                    iconAnchor: [11, 11]
+                });
+
+                const nodeMarker = L.marker(pt, {
+                    icon: nodeIcon,
+                    draggable: true
+                }).addTo(lineNodeLayerGroup);
+
+                // Arrossegament en viu del node
+                nodeMarker.on('drag', function(e) {
+                    const newPos = e.target.getLatLng();
+                    loc.coords[idx] = [Number(newPos.lat.toFixed(6)), Number(newPos.lng.toFixed(6))];
+                    
+                    // Actualitzar la polilínia en viu de manera suau
+                    if (linePolylines[loc.id]) {
+                        linePolylines[loc.id].glowPoly.setLatLngs(loc.coords);
+                        linePolylines[loc.id].mainPoly.setLatLngs(loc.coords);
+                        
+                        // Si l'usuari no ha fixat el símbol manualment, acompanya el punt mig
+                        if (loc.badgeLat == null && loc.badgeLng == null) {
+                            const midIdx = Math.floor(loc.coords.length / 2);
+                            if (loc.coords[midIdx] && linePolylines[loc.id].badgeMarker) {
+                                linePolylines[loc.id].badgeMarker.setLatLng(loc.coords[midIdx]);
+                            }
+                        }
+                    }
+                });
+
+                // Fi d'arrossegar -> recalcular el centre, desar i regenerar els controls intermedis
+                nodeMarker.on('dragend', function() {
+                    recalculateLineCenter(loc);
+                    localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                    renderLineNodeHandles(loc.id);
+                });
+
+                // Clic dret per eliminar node
+                nodeMarker.on('contextmenu', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    if (loc.coords.length <= 2) {
+                        alert("Una instal·lació lineal ha de tenir almenys 2 nodes.");
+                        return;
+                    }
+                    if (confirm(`Vols eliminar el node ${idx + 1} d'aquesta línia?`)) {
+                        loc.coords.splice(idx, 1);
+                        recalculateLineCenter(loc);
+                        localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                        renderAllMarkers();
+                        updateLineStatusMessage(loc);
+                    }
+                });
+
+                nodeMarker.bindTooltip(`Node ${idx + 1} de «${loc.name}» (Arrossega / Clic dret per esborrar)`, {
+                    direction: 'top',
+                    offset: [0, -12]
+                });
+            });
+
+            // B) Midpoints (+) per inserir nous nodes entre vèrtexs
+            for (let i = 0; i < loc.coords.length - 1; i++) {
+                const p1 = loc.coords[i];
+                const p2 = loc.coords[i + 1];
+                const midLat = Number(((p1[0] + p2[0]) / 2).toFixed(6));
+                const midLng = Number(((p1[1] + p2[1]) / 2).toFixed(6));
+
+                const midIcon = L.divIcon({
+                    className: 'line-mid-wrapper',
+                    html: `<div class="line-midpoint-handle" title="Fes clic o arrossega per afegir un node nou">+</div>`,
+                    iconSize: [16, 16],
+                    iconAnchor: [8, 8]
+                });
+
+                const midMarker = L.marker([midLat, midLng], {
+                    icon: midIcon,
+                    draggable: true
+                }).addTo(lineNodeLayerGroup);
+
+                midMarker.on('dragstart', function() {
+                    loc.coords.splice(i + 1, 0, [midLat, midLng]);
+                });
+
+                midMarker.on('drag', function(e) {
+                    const pos = e.target.getLatLng();
+                    loc.coords[i + 1] = [Number(pos.lat.toFixed(6)), Number(pos.lng.toFixed(6))];
+                    if (linePolylines[loc.id]) {
+                        linePolylines[loc.id].glowPoly.setLatLngs(loc.coords);
+                        linePolylines[loc.id].mainPoly.setLatLngs(loc.coords);
+                    }
+                });
+
+                midMarker.on('dragend', function() {
+                    recalculateLineCenter(loc);
+                    localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                    renderAllMarkers();
+                    updateLineStatusMessage(loc);
+                });
+
+                midMarker.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    loc.coords.splice(i + 1, 0, [midLat, midLng]);
+                    recalculateLineCenter(loc);
+                    localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                    renderAllMarkers();
+                    updateLineStatusMessage(loc);
+                });
+            }
+        }
+
+        // Recalcular el centre geomètric d'una línia (per a referència i càlcul de rutes)
+        function recalculateLineCenter(loc) {
+            if (!loc.coords || loc.coords.length === 0) return;
+            let sumLat = 0, sumLng = 0;
+            loc.coords.forEach(pt => {
+                sumLat += pt[0];
+                sumLng += pt[1];
+            });
+            loc.lat = Number((sumLat / loc.coords.length).toFixed(6));
+            loc.lng = Number((sumLng / loc.coords.length).toFixed(6));
+        }
+
+        // Mostrar targeta / popup complet d'un espai o instal·lació
+        function openLocationPopup(locId, latlng) {
+            const loc = locations.find(l => l.id === locId);
+            if (!loc) return;
+
+            let targetLatLng = latlng;
+            if (!targetLatLng) {
+                if (loc.isLine && loc.coords && loc.coords.length > 0) {
+                    const midIdx = Math.floor(loc.coords.length / 2);
+                    targetLatLng = (loc.badgeLat != null && loc.badgeLng != null) ? [loc.badgeLat, loc.badgeLng] : (loc.coords[midIdx] || loc.coords[0]);
+                } else {
+                    targetLatLng = [loc.lat, loc.lng];
+                }
+            }
+
+            const formattedDesc = (loc.descripcio || '').replace(/\n/g, '<br>');
+            const gmapsLat = Array.isArray(targetLatLng) ? targetLatLng[0] : targetLatLng.lat;
+            const gmapsLng = Array.isArray(targetLatLng) ? targetLatLng[1] : targetLatLng.lng;
+            const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${gmapsLat},${gmapsLng}`;
+
+            let editorButtons = '';
+            if (isEditorMode) {
+                editorButtons = `
+                    <div style="margin-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 0.6rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <button type="button" class="popup-btn" style="background: rgba(6, 182, 212, 0.25); border-color: #38bdf8; color: #7dd3fc;" onclick="openCardEditModal('${loc.id}')">✏️ Modificar Textos de la Targeta</button>
+                        ${loc.isLine ? `<button type="button" class="popup-btn" style="background: rgba(236, 72, 153, 0.2); border-color: #ec4899; color: #f472b6;" onclick="startEditingLineNodes('${loc.id}')">🌟 Editar Nodes de la Línia</button>` : ''}
+                        <button type="button" class="popup-btn delete" onclick="deleteLocation('${loc.id}')">🗑️ Eliminar aquest punt</button>
+                    </div>
+                `;
+            }
+
+            const typeLabel = loc.isLine ? `${getTypeBadgeText(loc.type)} (Línia)` : getTypeBadgeText(loc.type);
+            const popupContent = `
+                <div class="popup-content">
+                    <span class="popup-badge ${loc.type}">${typeLabel} · ${loc.code || '💡'}</span>
+                    <div class="popup-title">${loc.name}</div>
+                    ${loc.artist ? `<div class="popup-artist">🎨 ${loc.artist}</div>` : ''}
+                    ${loc.project ? `<div class="popup-project">✨ ${loc.project}</div>` : ''}
+                    ${formattedDesc ? `<div class="popup-desc">${formattedDesc}</div>` : ''}
+                    <div class="popup-actions">
+                        <a href="${gmapsUrl}" target="_blank" class="popup-btn">📍 Com anar-hi (Google Maps)</a>
+                        ${editorButtons}
+                    </div>
+                </div>
+            `;
+
+            L.popup({ offset: [0, -10] })
+                .setLatLng(targetLatLng)
+                .setContent(popupContent)
+                .openOn(map);
+        }
+
+        // Renderitzar l'itinerari lumínic general (polilínia amb efecte neó i nodes interactius)
+        function renderRoutePolyline() {
+            if (routePolyline) {
+                map.removeLayer(routePolyline);
+                routePolyline = null;
+            }
+            if (routeGlowPolyline) {
+                map.removeLayer(routeGlowPolyline);
+                routeGlowPolyline = null;
+            }
+            if (routeNodeLayerGroup) {
+                routeNodeLayerGroup.clearLayers();
+            }
+
+            if (!routePoints || routePoints.length === 0) return;
+
+            // 1. Capa de resplendor neó exterior
+            routeGlowPolyline = L.polyline(routePoints, {
+                color: '#facc15',
+                weight: Math.round(14 * symbolScale),
+                opacity: 0.35,
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: false
+            }).addTo(map);
+
+            // 2. Capa principal de línia lumínica
+            routePolyline = L.polyline(routePoints, {
+                color: '#ffffff',
+                weight: Math.round(5 * symbolScale),
+                opacity: 0.95,
+                dashArray: '8, 8',
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: true
+            }).addTo(map);
+
+            routePolyline.bindPopup(`
+                <div class="popup-title">🌟 Itinerari Lumínic Recomanat</div>
+                <div class="popup-artist">Circuit d'Art Lumínic 2026</div>
+                <div class="popup-desc">Recorregut nocturn suggerit per gaudir de totes les instal·lacions lumíniques, escultures i espectacles audiovisuals en viu.</div>
+            `);
+
+            // 3. Nodes manipulables de l'itinerari general (només en Mode Editor si no s'està editant una línia específica)
+            if (isEditorMode && !activeLineEditingId && routeNodeLayerGroup) {
+                // A) Cada node de la ruta numerat
+                routePoints.forEach((pt, idx) => {
+                    const nodeIcon = L.divIcon({
+                        className: 'route-node-wrapper',
+                        html: `<div class="route-node-handle" title="Node ${idx + 1}: Arrossega per moure o fes clic dret per esborrar">${idx + 1}</div>`,
+                        iconSize: [22, 22],
+                        iconAnchor: [11, 11]
+                    });
+
+                    const nodeMarker = L.marker(pt, {
+                        icon: nodeIcon,
+                        draggable: true
+                    }).addTo(routeNodeLayerGroup);
+
+                    // Arrossegar node en viu
+                    nodeMarker.on('drag', function(e) {
+                        const newPos = e.target.getLatLng();
+                        routePoints[idx] = [Number(newPos.lat.toFixed(6)), Number(newPos.lng.toFixed(6))];
+                        routePolyline.setLatLngs(routePoints);
+                        routeGlowPolyline.setLatLngs(routePoints);
+                    });
+
+                    // Fi d'arrossegar -> desar a memòria i regenerar midpoints
+                    nodeMarker.on('dragend', function() {
+                        localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+                        renderRoutePolyline();
+                    });
+
+                    // Clic dret per eliminar node
+                    nodeMarker.on('contextmenu', function(e) {
+                        L.DomEvent.stopPropagation(e);
+                        if (routePoints.length <= 2) {
+                            alert("Cal mantenir almenys 2 punts al traçat del recorregut lumínic.");
+                            return;
+                        }
+                        if (confirm(`Vols eliminar el node ${idx + 1} de l'itinerari?`)) {
+                            routePoints.splice(idx, 1);
+                            localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+                            renderRoutePolyline();
+                        }
+                    });
+
+                    nodeMarker.bindTooltip(`Node ${idx + 1} de l'Itinerari (Arrossega / Clic dret per esborrar)`, {
+                        direction: 'top',
+                        offset: [0, -12]
+                    });
+                });
+
+                // B) Punts intermedis (+)
+                for (let i = 0; i < routePoints.length - 1; i++) {
+                    const p1 = routePoints[i];
+                    const p2 = routePoints[i + 1];
+                    const midLat = Number(((p1[0] + p2[0]) / 2).toFixed(6));
+                    const midLng = Number(((p1[1] + p2[1]) / 2).toFixed(6));
+
+                    const midIcon = L.divIcon({
+                        className: 'route-mid-wrapper',
+                        html: `<div class="route-midpoint-handle" title="Fes clic o arrossega per afegir un node nou aquí">+</div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    });
+
+                    const midMarker = L.marker([midLat, midLng], {
+                        icon: midIcon,
+                        draggable: true
+                    }).addTo(routeNodeLayerGroup);
+
+                    midMarker.on('dragstart', function() {
+                        routePoints.splice(i + 1, 0, [midLat, midLng]);
+                    });
+
+                    midMarker.on('drag', function(e) {
+                        const pos = e.target.getLatLng();
+                        routePoints[i + 1] = [Number(pos.lat.toFixed(6)), Number(pos.lng.toFixed(6))];
+                        routePolyline.setLatLngs(routePoints);
+                        routeGlowPolyline.setLatLngs(routePoints);
+                    });
+
+                    midMarker.on('dragend', function() {
+                        localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+                        renderRoutePolyline();
+                    });
+
+                    midMarker.on('click', function(e) {
+                        L.DomEvent.stopPropagation(e);
+                        routePoints.splice(i + 1, 0, [midLat, midLng]);
+                        localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+                        renderRoutePolyline();
+                    });
+                }
+            }
+        }
+
+        // Alternar mode editor
+        function toggleEditorMode() {
+            isEditorMode = !isEditorMode;
+            document.body.classList.toggle('editor-active', isEditorMode);
+            const btn = document.getElementById('btn-editor-mode');
+            const banner = document.getElementById('editor-banner');
+
+            if (isEditorMode) {
+                btn.classList.add('active');
+                btn.innerText = '✖ Tancar Editor';
+                banner.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = '✏️ Mode Editor Ubicacions';
+                banner.classList.remove('active');
+                if (isRouteEditMode) toggleRouteEdit();
+                if (activeLineEditingId) stopEditingLineNodes();
+            }
+
+            renderAllMarkers();
+            renderRoutePolyline();
+            renderSidebar();
+        }
+
+        // Alternar mode edició d'itinerari general (afegir nodes fent clics)
+        function toggleRouteEdit() {
+            if (activeLineEditingId) stopEditingLineNodes();
+            isRouteEditMode = !isRouteEditMode;
+            const btn = document.getElementById('btn-toggle-route-edit');
+            const statusMsg = document.getElementById('route-edit-status');
+
+            if (isRouteEditMode) {
+                btn.classList.add('active');
+                btn.innerText = '⏹️ Aturar Dibuix Itinerari';
+                map.getContainer().style.cursor = 'crosshair';
+                if (statusMsg) statusMsg.innerHTML = '👉 Fes clics sobre el mapa per afegir nodes al final de l\'itinerari.';
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = '🌟 Traçar / Afegir Nodes Itinerari';
+                map.getContainer().style.cursor = '';
+                if (statusMsg) statusMsg.innerHTML = '';
+            }
+        }
+
+        // Iniciar mode edició de nodes d'una línia concreta
+        function startEditingLineNodes(id) {
+            if (isRouteEditMode) toggleRouteEdit();
+            activeLineEditingId = id;
+            const loc = locations.find(l => l.id === id);
+            const stopBtn = document.getElementById('btn-stop-line-edit');
+
+            if (loc) {
+                updateLineStatusMessage(loc);
+                if (stopBtn) stopBtn.style.display = 'inline-flex';
+                map.getContainer().style.cursor = 'crosshair';
+            }
+
+            renderAllMarkers();
+            renderRoutePolyline();
+        }
+
+        // Aturar mode edició de nodes de la línia
+        function stopEditingLineNodes() {
+            activeLineEditingId = null;
+            const statusMsg = document.getElementById('route-edit-status');
+            const stopBtn = document.getElementById('btn-stop-line-edit');
+            if (statusMsg) statusMsg.innerHTML = '';
+            if (stopBtn) stopBtn.style.display = 'none';
+            map.getContainer().style.cursor = '';
+            renderAllMarkers();
+            renderRoutePolyline();
+        }
+
+        function updateLineStatusMessage(loc) {
+            const statusMsg = document.getElementById('route-edit-status');
+            if (statusMsg) {
+                const count = (loc && loc.coords) ? loc.coords.length : 0;
+                statusMsg.innerHTML = `✏️ Editant nodes de «<strong>${loc.name}</strong>» (${count} nodes). Clica al mapa per afegir nodes al final o arrossega els punts.`;
+            }
+        }
+
+        // Buidar traçat de l'itinerari general
+        function clearRoute() {
+            if (!confirm("Segur que vols esborrar tot el traçat de l'itinerari lumínic?")) return;
+            routePoints = [];
+            localStorage.removeItem('art_luminic_route_polyline');
+            renderRoutePolyline();
+        }
+
+        // Restablir traçat inicial per defecte
+        function resetRoute() {
+            if (!confirm("Vols restablir el traçat original de l'itinerari lumínic?")) return;
+            routePoints = JSON.parse(JSON.stringify(DEFAULT_ROUTE_POINTS));
+            localStorage.removeItem('art_luminic_route_polyline');
+            renderRoutePolyline();
+        }
+
+        // Afegir un nou punt puntual al circuit
+        function addNewPoint(type) {
+            const center = map.getCenter();
+            const newId = 'lum_' + Date.now();
+            let defaultCode = '💡';
+            let defaultName = 'Nova Instal·lació Lumínica';
+
+            if (type === 'start') {
+                defaultCode = '🚩';
+                defaultName = "Nou Punt d'Inici";
+            } else if (type === 'show') {
+                defaultCode = '✨';
+                defaultName = 'Nou Espectacle Nocturn';
+            } else if (type === 'food') {
+                defaultCode = '🚚';
+                defaultName = 'Nou Punt Foodtruck';
+            } else if (type === 'wc') {
+                defaultCode = '🚻';
+                defaultName = 'Nous Lavabos';
+            } else if (type === 'wc_accessible') {
+                defaultCode = '♿';
+                defaultName = 'Nou Lavabo Adaptat';
+            } else if (type === 'serv') {
+                defaultCode = '🅿️';
+                defaultName = 'Nou Aparcament';
+            }
+
+            const newLoc = {
+                id: newId,
+                isLine: false,
+                type: type,
+                code: defaultCode,
+                name: defaultName,
+                artist: '',
+                project: '',
+                descripcio: '',
+                lat: Number(center.lat.toFixed(6)),
+                lng: Number(center.lng.toFixed(6)),
+                ordre: locations.length + 1
+            };
+
+            locations.push(newLoc);
+            localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+            renderAllMarkers();
+            renderSidebar();
+            selectLocation(newId);
+            openCardEditModal(newId);
+        }
+
+        // Afegir una nova instal·lació lineal (amb nodes editables)
+        function addNewLineInstallation(type = 'lum') {
+            const center = map.getCenter();
+            const newId = 'lum_line_' + Date.now();
+            const offsetLat = 0.00035;
+            const offsetLng = 0.00055;
+
+            const initialCoords = [
+                [Number((center.lat - offsetLat).toFixed(6)), Number((center.lng - offsetLng).toFixed(6))],
+                [Number(center.lat.toFixed(6)), Number(center.lng.toFixed(6))],
+                [Number((center.lat + offsetLat).toFixed(6)), Number((center.lng + offsetLng).toFixed(6))]
+            ];
+
+            const defaultCode = type === 'show' ? '✨' : '🌊';
+            const defaultName = type === 'show' ? 'Nou Espectacle Lineal' : 'Nova Instal·lació Lineal';
+            const defaultColor = type === 'show' ? '#f43f5e' : '#38bdf8';
+
+            const newLoc = {
+                id: newId,
+                isLine: true,
+                type: type,
+                code: defaultCode,
+                name: defaultName,
+                artist: '',
+                project: 'Instal·lació Lineal · Mar Mediterrània',
+                descripcio: 'Instal·lació basada en un traçat lumínic interactiu.',
+                color: defaultColor,
+                coords: initialCoords,
+                lat: Number(center.lat.toFixed(6)),
+                lng: Number(center.lng.toFixed(6)),
+                ordre: locations.length + 1
+            };
+
+            locations.push(newLoc);
+            localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+            renderAllMarkers();
+            renderSidebar();
+
+            // Activar immediatament l'edició de nodes per a aquesta línia
+            startEditingLineNodes(newId);
+            selectLocation(newId);
+
+            // Obrir també el formulari per editar els textos de la targeta
+            openCardEditModal(newId);
+        }
+
+        // --- GESTIÓ DEL MODAL D'EDICIÓ DE TEXTOS DE LES TARGETES ---
+        function openCardEditModal(id) {
+            const loc = locations.find(l => l.id === id);
+            if (!loc) return;
+
+            currentEditingCardId = id;
+            document.getElementById('edit-card-id').value = loc.id;
+            document.getElementById('edit-card-name').value = loc.name || '';
+            document.getElementById('edit-card-type').value = loc.type || 'lum';
+            document.getElementById('edit-card-code').value = loc.code || '💡';
+            document.getElementById('edit-card-artist').value = loc.artist || '';
+            document.getElementById('edit-card-project').value = loc.project || '';
+            document.getElementById('edit-card-desc').value = loc.descripcio || '';
+            document.getElementById('edit-card-ordre').value = loc.ordre || 1;
+
+            const lineOptionsEl = document.getElementById('edit-card-line-options');
+            if (loc.isLine) {
+                lineOptionsEl.style.display = 'block';
+                document.getElementById('edit-card-line-color').value = loc.color || '#38bdf8';
+            } else {
+                lineOptionsEl.style.display = 'none';
+            }
+
+            const modal = document.getElementById('card-edit-modal');
+            modal.style.display = 'flex';
+        }
+
+        function closeCardEditModal() {
+            const modal = document.getElementById('card-edit-modal');
+            modal.style.display = 'none';
+            currentEditingCardId = null;
+        }
+
+        function handleModalBackdropClick(e) {
+            if (e.target.id === 'card-edit-modal') {
+                closeCardEditModal();
+            }
+        }
+
+        function handleCardTypeChange() {
+            const type = document.getElementById('edit-card-type').value;
+            const codeInput = document.getElementById('edit-card-code');
+            const presets = ['💡', '✨', '🚩', '🚚', '🚻', '♿', '🅿️', 'ℹ️', '💜', '〰️', '🌊'];
+            if (!codeInput.value || presets.includes(codeInput.value)) {
+                if (type === 'lum') codeInput.value = '💡';
+                else if (type === 'show') codeInput.value = '✨';
+                else if (type === 'start') codeInput.value = '🚩';
+                else if (type === 'food') codeInput.value = '🚚';
+                else if (type === 'wc') codeInput.value = '🚻';
+                else if (type === 'wc_accessible') codeInput.value = '♿';
+                else if (type === 'serv') codeInput.value = '🅿️';
+            }
+        }
+
+        function setLineColorPreset(color) {
+            document.getElementById('edit-card-line-color').value = color;
+        }
+
+        function resetLineBadgePosition() {
+            if (!currentEditingCardId) return;
+            const loc = locations.find(l => l.id === currentEditingCardId);
+            if (!loc || !loc.isLine) return;
+            loc.badgeLat = null;
+            loc.badgeLng = null;
+            localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+            renderAllMarkers();
+            alert("✅ S'ha restablert el símbol al centre geomètric del traçat.");
+        }
+
+        function saveCardEditForm() {
+            if (!currentEditingCardId) return;
+            const loc = locations.find(l => l.id === currentEditingCardId);
+            if (!loc) return;
+
+            loc.name = document.getElementById('edit-card-name').value.trim() || 'Sense Títol';
+            loc.type = document.getElementById('edit-card-type').value;
+            loc.code = document.getElementById('edit-card-code').value.trim() || '💡';
+            loc.artist = document.getElementById('edit-card-artist').value.trim();
+            loc.project = document.getElementById('edit-card-project').value.trim();
+            loc.descripcio = document.getElementById('edit-card-desc').value.trim();
+            loc.ordre = parseInt(document.getElementById('edit-card-ordre').value, 10) || 1;
+
+            if (loc.isLine) {
+                loc.color = document.getElementById('edit-card-line-color').value || '#38bdf8';
+            }
+
+            localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+            closeCardEditModal();
+            renderAllMarkers();
+            renderSidebar();
+            selectLocation(loc.id);
+        }
+
+        function deleteCurrentEditingCard() {
+            if (!currentEditingCardId) return;
+            const id = currentEditingCardId;
+            closeCardEditModal();
+            deleteLocation(id);
+        }
+
+        // Eliminar punt o línia
+        async function deleteLocation(id) {
+            const loc = locations.find(l => l.id === id);
+            const itemDesc = loc ? `«${loc.name}»` : 'aquest element';
+            if (!confirm(`Segur que vols eliminar ${itemDesc} del circuit lumínic?`)) return;
+
+            if (activeLineEditingId === id) {
+                stopEditingLineNodes();
+            }
+
+            locations = locations.filter(l => l.id !== id);
+            localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from(luminicTableName).delete().eq('id', id);
+                } catch (e) {
+                    console.warn('Supabase delete error:', e);
+                }
+            }
+
+            renderAllMarkers();
+            renderSidebar();
+        }
+
+        // Guardar dades a Supabase i LocalStorage amb aïllament total
+        async function saveCustomCoords() {
+            const btnSave = document.querySelector('.btn-editor-save');
+            const originalText = btnSave ? btnSave.innerText : '💾 Guardar a Supabase';
+            if (btnSave) {
+                btnSave.innerText = '⏳ Guardant...';
+                btnSave.disabled = true;
+            }
+
+            try {
+                // 1. Guardar a LocalStorage com a còpia immediata
+                localStorage.setItem('art_luminic_locations_custom', JSON.stringify(locations));
+                localStorage.setItem('art_luminic_route_polyline', JSON.stringify(routePoints));
+
+                // 2. Sincronitzar amb Supabase
+                if (supabaseClient) {
+                    const rowsToUpsert = locations.map(l => {
+                        let descValue = l.descripcio || '';
+                        if (l.isLine && Array.isArray(l.coords)) {
+                            descValue = JSON.stringify({
+                                isLine: true,
+                                coords: l.coords,
+                                color: l.color || '#38bdf8',
+                                text: l.descripcio || '',
+                                badgeLat: l.badgeLat,
+                                badgeLng: l.badgeLng
+                            });
+                        }
+                        return {
+                            id: l.id,
+                            type: l.type,
+                            code: l.code,
+                            name: l.name,
+                            artist: l.artist,
+                            project: l.project,
+                            descripcio: descValue,
+                            lat: l.lat,
+                            lng: l.lng,
+                            ordre: l.ordre,
+                            updated_at: new Date().toISOString()
+                        };
+                    });
+
+                    // Afegir també la polilínia com a fila especial
+                    rowsToUpsert.push({
+                        id: 'luminic_route_polyline',
+                        type: 'route',
+                        code: '🌟',
+                        name: 'Itinerari Lumínic Recomanat',
+                        artist: 'Organització',
+                        project: 'Traçat Nocturn',
+                        descripcio: JSON.stringify({ points: routePoints }),
+                        lat: 42.07255,
+                        lng: 2.95380,
+                        ordre: 999,
+                        updated_at: new Date().toISOString()
+                    });
+
+                    // Intentar desar a la taula seleccionada (art_luminic_locations o festival_locations)
+                    let { error } = await supabaseClient
+                        .from(luminicTableName)
+                        .upsert(rowsToUpsert, { onConflict: 'id' });
+
+                    if (error && luminicTableName === 'art_luminic_locations') {
+                        // Fallback a festival_locations si art_luminic_locations encara no existeix
+                        luminicTableName = 'festival_locations';
+                        const res = await supabaseClient
+                            .from('festival_locations')
+                            .upsert(rowsToUpsert, { onConflict: 'id' });
+                        error = res.error;
+                    }
+
+                    if (error) throw error;
+
+                    // Sincronitzar eliminacions NOMÉS de punts lumínics
+                    const activeIds = rowsToUpsert.map(r => r.id);
+                    if (luminicTableName === 'festival_locations') {
+                        const { data: dbRows } = await supabaseClient
+                            .from('festival_locations')
+                            .select('id')
+                            .or('id.like.lum_*,id.eq.luminic_route_polyline');
+
+                        if (dbRows && dbRows.length > 0) {
+                            const idsToDelete = dbRows.map(r => r.id).filter(id => !activeIds.includes(id));
+                            for (const delId of idsToDelete) {
+                                await supabaseClient.from('festival_locations').delete().eq('id', delId);
+                            }
+                        }
+                    } else if (luminicTableName === 'art_luminic_locations') {
+                        const { data: dbRows } = await supabaseClient.from('art_luminic_locations').select('id');
+                        if (dbRows && dbRows.length > 0) {
+                            const idsToDelete = dbRows.map(r => r.id).filter(id => !activeIds.includes(id));
+                            for (const delId of idsToDelete) {
+                                await supabaseClient.from('art_luminic_locations').delete().eq('id', delId);
+                            }
+                        }
+                    }
+                }
+
+                alert("✅ Ubicacions, targetes i línies d'Art Lumínic desades correctament a Supabase (" + luminicTableName + ")!");
+            } catch (err) {
+                console.error('Error desant dades:', err);
+                alert("S'ha produït un error al desar a Supabase. Les dades s'han guardat al navegador local.");
+            } finally {
+                if (btnSave) {
+                    btnSave.innerText = originalText;
+                    btnSave.disabled = false;
+                }
+            }
+        }
+
+        // Restablir a les dades per defecte
+        function resetToDefault() {
+            if (!confirm("Vols restablir totes les ubicacions i l'itinerari per defecte?")) return;
+            if (activeLineEditingId) stopEditingLineNodes();
+            locations = JSON.parse(JSON.stringify(BASE_LOCATIONS));
+            routePoints = JSON.parse(JSON.stringify(DEFAULT_ROUTE_POINTS));
+            localStorage.removeItem('art_luminic_locations_custom');
+            localStorage.removeItem('art_luminic_route_polyline');
+            renderAllMarkers();
+            renderRoutePolyline();
+            renderSidebar();
+        }
+
+        // Renderitzar la llista lateral
+        function renderSidebar() {
+            const listEl = document.getElementById('sidebar-list');
+            const searchVal = (document.getElementById('search-input').value || '').toLowerCase();
+            listEl.innerHTML = '';
+
+            const filtered = locations.filter(loc => {
+                const matchesType = (currentFilterType === 'all') || 
+                    (currentFilterType === 'lum' && loc.type === 'lum') ||
+                    (currentFilterType === 'show' && (loc.type === 'show' || loc.type === 'start')) ||
+                    (currentFilterType === 'serv' && (loc.type === 'food' || loc.type === 'wc' || loc.type === 'wc_accessible' || loc.type === 'serv'));
+
+                const matchesSearch = !searchVal || 
+                    (loc.name && loc.name.toLowerCase().includes(searchVal)) ||
+                    (loc.artist && loc.artist.toLowerCase().includes(searchVal)) ||
+                    (loc.project && loc.project.toLowerCase().includes(searchVal));
+
+                return matchesType && matchesSearch;
+            });
+
+            document.getElementById('count-badge').innerText = `${filtered.length} Punts`;
+
+            filtered.forEach(loc => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-item';
+                item.id = `sidebar-item-${loc.id}`;
+                item.onclick = (e) => {
+                    if (e.target.closest('.btn-item-op')) return;
+                    selectLocation(loc.id);
+                };
+
+                let badgeClass = loc.type;
+                if (loc.type === 'food' || loc.type === 'wc' || loc.type === 'wc_accessible' || loc.type === 'serv') badgeClass = 'serv';
+                if (loc.isLine) badgeClass += ' line-badge';
+
+                const lineTag = loc.isLine ? `<span style="font-size: 0.7rem; background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 4px; padding: 0.1rem 0.35rem; margin-left: 0.4rem; font-weight: 700;">Línia (${loc.coords ? loc.coords.length : 0} nodes)</span>` : '';
+
+                item.innerHTML = `
+                    <div class="sidebar-item-header">
+                        <div class="sidebar-item-badge ${badgeClass}" style="${loc.isLine && loc.color ? `border-color: ${loc.color}; box-shadow: 0 0 8px ${loc.color};` : ''}">${loc.code || '💡'}</div>
+                        <div class="sidebar-item-name">${loc.name}${lineTag}</div>
+                    </div>
+                    ${loc.artist ? `<div class="sidebar-item-sub">🎨 ${loc.artist}</div>` : ''}
+                    ${loc.project ? `<div class="sidebar-item-sub">✨ ${loc.project}</div>` : ''}
+                    <div class="sidebar-item-actions">
+                        <button type="button" class="btn-item-op" onclick="openCardEditModal('${loc.id}')" title="Modificar textos de la targeta">✏️ Textos</button>
+                        ${loc.isLine ? `<button type="button" class="btn-item-op" style="color:#f472b6; border-color: rgba(244, 114, 182, 0.4);" onclick="startEditingLineNodes('${loc.id}')" title="Editar els nodes del traçat">〰️ Nodes</button>` : ''}
+                        <button type="button" class="btn-item-op delete" onclick="deleteLocation('${loc.id}')">🗑️ Esborrar</button>
+                    </div>
+                `;
+
+                listEl.appendChild(item);
+            });
+        }
+
+        // Seleccionar i centrar ubicació (marcador puntual o línia)
+        function selectLocation(id) {
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('selected'));
+            const sideItem = document.getElementById(`sidebar-item-${id}`);
+            if (sideItem) {
+                sideItem.classList.add('selected');
+                sideItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            const loc = locations.find(l => l.id === id);
+            if (loc && map) {
+                if (loc.isLine && loc.coords && loc.coords.length > 0) {
+                    const bounds = L.latLngBounds(loc.coords);
+                    map.flyToBounds(bounds, { maxZoom: 18, padding: [60, 60], duration: 0.8 });
+                    const midIdx = Math.floor(loc.coords.length / 2);
+                    const popupPos = (loc.badgeLat != null && loc.badgeLng != null) ? [loc.badgeLat, loc.badgeLng] : (loc.coords[midIdx] || loc.coords[0]);
+                    openLocationPopup(loc.id, popupPos);
+                } else {
+                    map.flyTo([loc.lat, loc.lng], 18, { duration: 0.8 });
+                    openLocationPopup(loc.id, [loc.lat, loc.lng]);
+                }
+            }
+        }
+
+        function setFilterType(type, btn) {
+            currentFilterType = type;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderSidebar();
+        }
+
+        function filterLocations() {
+            renderSidebar();
+        }
+
+        function getTypeBadgeText(type) {
+            switch (type) {
+                case 'start': return "🚩 Punt d'Inici";
+                case 'lum': return "💡 Instal·lació Lumínica";
+                case 'show': return '✨ Espectacle Nocturn';
+                case 'food': return '🚚 Foodtruck & Gastronomia';
+                case 'wc': return '🚻 Lavabos';
+                case 'wc_accessible': return '♿ WC Adaptat PMR';
+                case 'serv': return '🅿️ Aparcament & Serveis';
+                default: return '📍 Espai';
+            }
+        }
+
+        function toggleSidebarDesktop() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleText = document.getElementById('topbar-sidebar-text');
+            const floatBtn = document.getElementById('btn-show-sidebar');
+            sidebar.classList.toggle('hidden');
+            const isHidden = sidebar.classList.contains('hidden');
+            if (toggleText) toggleText.innerText = isHidden ? 'Mostrar Espais' : 'Amagar Espais';
+            if (floatBtn) floatBtn.style.display = isHidden ? 'block' : 'none';
+            setTimeout(() => map && map.invalidateSize(), 320);
+        }
+
+        function toggleLegend() {
+            const leg = document.getElementById('map-legend');
+            leg.style.display = leg.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Inserir metadades de 300 DPI (pHYs chunk) en un PNG base64
+        function injectDpi300(dataUrl) {
+            try {
+                const parts = dataUrl.split(',');
+                const byteString = atob(parts[1]);
+                const byteNumbers = new Uint8Array(byteString.length);
+                for (let i = 0; i < byteString.length; i++) {
+                    byteNumbers[i] = byteString.charCodeAt(i);
+                }
+
+                if (byteNumbers[0] !== 0x89 || byteNumbers[1] !== 0x50 || byteNumbers[2] !== 0x4E || byteNumbers[3] !== 0x47) {
+                    return dataUrl;
+                }
+
+                const ihdrLength = (byteNumbers[8] << 24) | (byteNumbers[9] << 16) | (byteNumbers[10] << 8) | byteNumbers[11];
+                const ihdrEnd = 8 + 12 + ihdrLength;
+
+                const physChunk = new Uint8Array([
+                    0x00, 0x00, 0x00, 0x09,
+                    0x70, 0x48, 0x59, 0x73,
+                    0x00, 0x00, 0x2E, 0x23, // 11811 ppm X
+                    0x00, 0x00, 0x2E, 0x23, // 11811 ppm Y
+                    0x01,
+                    0x98, 0xFC, 0x51, 0x48
+                ]);
+
+                const newBytes = new Uint8Array(byteNumbers.length + physChunk.length);
+                newBytes.set(byteNumbers.subarray(0, ihdrEnd), 0);
+                newBytes.set(physChunk, ihdrEnd);
+                newBytes.set(byteNumbers.subarray(ihdrEnd), ihdrEnd + physChunk.length);
+
+                let binary = '';
+                const len = newBytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(newBytes[i]);
+                }
+                return 'data:image/png;base64,' + btoa(binary);
+            } catch (e) {
+                console.warn('Could not inject 300 DPI metadata:', e);
+                return dataUrl;
+            }
+        }
+
+        // Reescalar a DIN A3 apaisat (4961 x 3508 px) a 300 DPI
+        async function scaleToDINA3_300DPI(sourceDataUrl, isTransparent = false) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const A3_WIDTH = 4961;
+                    const A3_HEIGHT = 3508;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = A3_WIDTH;
+                    canvas.height = A3_HEIGHT;
+                    const ctx = canvas.getContext('2d');
+
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+
+                    if (!isTransparent) {
+                        ctx.fillStyle = '#050811';
+                        ctx.fillRect(0, 0, A3_WIDTH, A3_HEIGHT);
+                    }
+
+                    const srcAspect = img.width / img.height;
+                    const dstAspect = A3_WIDTH / A3_HEIGHT;
+
+                    let drawW, drawH, drawX, drawY;
+                    if (srcAspect > dstAspect) {
+                        drawW = A3_WIDTH;
+                        drawH = A3_WIDTH / srcAspect;
+                        drawX = 0;
+                        drawY = (A3_HEIGHT - drawH) / 2;
+                    } else {
+                        drawH = A3_HEIGHT;
+                        drawW = A3_HEIGHT * srcAspect;
+                        drawX = (A3_WIDTH - drawW) / 2;
+                        drawY = 0;
+                    }
+
+                    ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+                    let finalDataUrl = canvas.toDataURL('image/png');
+                    finalDataUrl = injectDpi300(finalDataUrl);
+                    resolve(finalDataUrl);
+                };
+                img.onerror = () => resolve(sourceDataUrl);
+                img.src = sourceDataUrl;
+            });
+        }
+
+        // Capturar fotograma del mapa
+        async function captureMapFrame(mapEl, isTransparent = false) {
+            let dataUrl = null;
+
+            if (window.domtoimage && typeof window.domtoimage.toPng === 'function') {
+                try {
+                    dataUrl = await window.domtoimage.toPng(mapEl, {
+                        quality: 1,
+                        bgcolor: isTransparent ? null : undefined,
+                        filter: function(node) {
+                            if (node.classList && (
+                                node.classList.contains('map-layer-switcher') ||
+                                node.classList.contains('symbol-size-control') ||
+                                node.classList.contains('editor-banner') ||
+                                node.classList.contains('leaflet-control-zoom')
+                            )) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    });
+                } catch (errDom) {
+                    console.warn('dom-to-image fallback:', errDom);
+                }
+            }
+
+            if (!dataUrl && window.html2canvas) {
+                const canvas = await html2canvas(mapEl, {
+                    useCORS: true,
+                    allowTaint: false,
+                    scale: 2,
+                    backgroundColor: isTransparent ? null : '#050811',
+                    logging: false
+                });
+                dataUrl = canvas.toDataURL('image/png');
+            }
+
+            return dataUrl;
+        }
+
+        // Exportar imatges DIN A3 (300 DPI)
+        async function exportMapImage() {
+            const mapEl = document.getElementById('map-wrapper');
+            const btnExport = document.querySelector('.topbar-actions .btn-action.primary');
+            const originalText = btnExport ? btnExport.innerText : '📸 Exportar DIN A3 (300 DPI)';
+
+            const downloadImage = (dataUrl, filename) => {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+            try {
+                const nomFons = (currentLayerKey === 'googleHybrid') ? 'satellit' : 'planol';
+
+                // 1. Mapa complet amb símbols, itinerari i llegenda
+                if (btnExport) {
+                    btnExport.innerText = '⏳ (1/5) Generant DIN A3 300 DPI amb Llegenda...';
+                    btnExport.disabled = true;
+                }
+                mapEl.classList.remove('export-bg-only', 'export-symbols-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting');
+                await sleep(180);
+
+                let dataUrlFull = await captureMapFrame(mapEl, false);
+                if (dataUrlFull) {
+                    dataUrlFull = await scaleToDINA3_300DPI(dataUrlFull, false);
+                    downloadImage(dataUrlFull, `01-planol-circuit-art-luminic-2026-amb-llegenda-${nomFons}-DIN-A3-300DPI.png`);
+                }
+
+                // 2. Mapa complet sense la capsa de la llegenda
+                if (btnExport) btnExport.innerText = '⏳ (2/5) Generant DIN A3 300 DPI Sense Llegenda...';
+                mapEl.classList.remove('export-bg-only', 'export-symbols-only');
+                mapEl.classList.add('is-exporting', 'export-no-legend');
+                await sleep(180);
+
+                let dataUrlNoLegend = await captureMapFrame(mapEl, false);
+                if (dataUrlNoLegend) {
+                    dataUrlNoLegend = await scaleToDINA3_300DPI(dataUrlNoLegend, false);
+                    downloadImage(dataUrlNoLegend, `02-planol-circuit-art-luminic-2026-sense-llegenda-${nomFons}-DIN-A3-300DPI.png`);
+                }
+
+                // 3. Mapa base net sense símbols
+                if (btnExport) btnExport.innerText = '⏳ (3/5) Generant Mapa Base Net DIN A3...';
+                mapEl.classList.remove('export-symbols-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting', 'export-bg-only');
+                await sleep(180);
+
+                let dataUrlBg = await captureMapFrame(mapEl, false);
+                if (dataUrlBg) {
+                    dataUrlBg = await scaleToDINA3_300DPI(dataUrlBg, false);
+                    downloadImage(dataUrlBg, `03-mapa-base-sense-simbols-${nomFons}-DIN-A3-300DPI.png`);
+                }
+
+                // 4. Símbols i itinerari transparents sense llegenda
+                if (btnExport) btnExport.innerText = '⏳ (4/5) Generant Símbols Transparents DIN A3...';
+                mapEl.classList.remove('export-bg-only');
+                mapEl.classList.add('is-exporting', 'export-symbols-only', 'export-no-legend');
+                await sleep(180);
+
+                let dataUrlSymbolsOnly = await captureMapFrame(mapEl, true);
+                if (dataUrlSymbolsOnly) {
+                    dataUrlSymbolsOnly = await scaleToDINA3_300DPI(dataUrlSymbolsOnly, true);
+                    downloadImage(dataUrlSymbolsOnly, `04-simbols-i-itinerari-transparent-sense-llegenda-DIN-A3-300DPI.png`);
+                }
+
+                // 5. Símbols, itinerari i llegenda amb fons transparent
+                if (btnExport) btnExport.innerText = '⏳ (5/5) Generant Símbols i Llegenda Transparents DIN A3...';
+                mapEl.classList.remove('export-bg-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting', 'export-symbols-only');
+                await sleep(180);
+
+                let dataUrlSymbolsLegend = await captureMapFrame(mapEl, true);
+                if (dataUrlSymbolsLegend) {
+                    dataUrlSymbolsLegend = await scaleToDINA3_300DPI(dataUrlSymbolsLegend, true);
+                    downloadImage(dataUrlSymbolsLegend, `05-simbols-i-llegenda-transparent-DIN-A3-300DPI.png`);
+                }
+
+                if (btnExport) {
+                    btnExport.innerText = '✅ 5 Fitxers DIN A3 (300 DPI) Descarregats!';
+                    await sleep(2500);
+                }
+            } catch (err) {
+                console.error('Error exportant imatges:', err);
+                alert('Error al generar les imatges PNG.');
+            } finally {
+                mapEl.classList.remove('is-exporting', 'export-bg-only', 'export-symbols-only', 'export-no-legend');
+                if (btnExport) {
+                    btnExport.innerText = originalText;
+                    btnExport.disabled = false;
+                }
+            }
+        }
+    </script>
+    <script src="js/main.js?v=ed957a32"></script>
+</body>
+</html>

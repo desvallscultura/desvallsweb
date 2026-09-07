@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripció Concurs de Decoració de Barrets | Fira Pluja d'Art 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #ddd6fe;
+            --secondary: #0284c7;
+            --accent: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6d28d9 0%, #0284c7 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 35px 30px;
+        }
+
+        .highlight-banner {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .highlight-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .highlight-text h4 {
+            color: #166534;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .highlight-text p {
+            color: #15803d;
+            font-size: 0.88rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        label span.required {
+            color: #ef4444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea,
+        select {
+            font-family: inherit;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: white;
+            color: #1e293b;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .checkbox-group a {
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(124, 58, 237, 0.5);
+        }
+
+        /* Modal Ticket Confirmation */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .ticket-modal {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .ticket-header {
+            background: #f5f3ff;
+            border: 2px dashed #8b5cf6;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .ticket-code {
+            font-family: monospace;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #6d28d9;
+            letter-spacing: 2px;
+        }
+
+        .btn-close-modal {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .btn-submit { grid-column: span 1; }
+            .header h1 { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="header-badge">Fira Pluja d'Art 2026</span>
+            <h1>Concurs de Decoració de Barrets</h1>
+            <p>Fase de Lliurament dels Barrets Participants</p>
+        </div>
+
+        <div class="content">
+            <div class="highlight-banner" style="background: #fdf2f8; border-color: #fbcfe8;">
+                <div class="highlight-icon">🔒</div>
+                <div class="highlight-text">
+                    <h4 style="color: #9d174d;">Inscripcions Tancades</h4>
+                    <p style="color: #be185d;">El període d'inscripció va finalitzar el <strong>12 d'agost de 2026</strong>.</p>
+                </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 25px; margin-bottom: 25px; color: #1e293b; line-height: 1.7;">
+                <h3 style="color: #6d28d9; font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span>📦</span> Informació per al Lliurament dels Barrets
+                </h3>
+                <ul style="list-style: none; padding-left: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+                    <li>📅 <strong>Període de lliurament:</strong> Del <strong style="color: #0284c7;">31 d'agost al 4 de setembre de 2026</strong>.</li>
+                    <li>📍 <strong>Lloc de lliurament:</strong> <strong>Ajuntament de Sant Jordi Desvalls</strong>, dins l'horari d'atenció al públic.</li>
+                    <li>🏷️ <strong>Identificació:</strong> En lliurar el barret, facilita el teu nom i telèfon (o número d'inscripció). S'assignarà un número identificatiu per mantenir l'anonimat davant del jurat i durant l'exposició.</li>
+                    <li>🎪 <strong>Exposició i votació:</strong> Els barrets decorats s'exposaran durant la Fira Pluja d'Art (<strong>18, 19 i 20 de setembre de 2026</strong>).</li>
+                    <li>🎁 <strong>Premi:</strong> Un menú per a 2 persones al <strong>Restaurant Els 4 Vents</strong> de Sant Jordi Desvalls.</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+                <a href="docs/Bases_Concurs_Decoracio_Barrets_2026.pdf" target="_blank" style="text-decoration: none; background: #6d28d9; color: white; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);">
+                    📥 Descarregar Bases Oficials (PDF)
+                </a>
+                <a href="index.html" style="text-decoration: none; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+                    🌐 Anar a la Web Principal
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,2979 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plànol Interactiu Pluja d'Art 2026 · Sant Jordi Desvalls</title>
+    <meta name="description" content="Mapa interactiu de la 5a Fira Pluja d'Art 2026 a Sant Jordi Desvalls. Localitza tots els espais d'exposició, escenaris d'espectacles, foodtrucks, lavabos WC i WC adaptats.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Leaflet JS, dom-to-image, html2canvas & Supabase SDK -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image-more@2.8.0/dist/dom-to-image-more.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --primary: #12a298;
+            --secondary: #f43f5e;
+            --accent-food: #ea580c;
+            --accent-wc: #0d9488;
+            --accent-wc-acc: #7c3aed;
+            --accent-amber: #f59e0b;
+            --dark: #090d16;
+            --sidebar-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Bar */
+        .topbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .topbar-brand img {
+            height: 36px;
+            border-radius: 6px;
+            background: white;
+            padding: 2px;
+        }
+
+        .topbar-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .topbar-subtitle {
+            font-size: 0.8rem;
+            color: #fda4af;
+            font-weight: 600;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.45rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: #334155;
+            border-color: #64748b;
+        }
+
+        .btn-action.primary {
+            background: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .btn-action.primary:hover {
+            background: #e11d48;
+        }
+
+        .btn-action.editor-toggle.active {
+            background: #8b5cf6;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 14px rgba(139, 92, 246, 0.6);
+        }
+
+        /* Main Container */
+        .app-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Map Container */
+        #map-wrapper {
+            flex: 1;
+            position: relative;
+            background: #1e293b;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 400px;
+            background: var(--sidebar-bg);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease, opacity 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar.collapsed-desktop {
+            width: 0 !important;
+            min-width: 0 !important;
+            opacity: 0 !important;
+            overflow: hidden !important;
+            border-left: none !important;
+            pointer-events: none !important;
+        }
+
+        .btn-close-sidebar-desktop {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-close-sidebar-desktop:hover {
+            background: rgba(244, 63, 94, 0.2);
+            border-color: rgba(244, 63, 94, 0.4);
+            color: #fda4af;
+        }
+
+        .desktop-sidebar-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1.25rem;
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.55rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 998;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .desktop-sidebar-toggle:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .desktop-sidebar-toggle.visible {
+            display: inline-flex !important;
+        }
+
+        @media (max-width: 768px) {
+            .btn-close-sidebar-desktop,
+            .desktop-sidebar-toggle {
+                display: none !important;
+            }
+            .sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                max-width: 350px;
+                transform: translateX(100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            }
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover, .filter-pill.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-pill.active.espectacles { background: var(--secondary); border-color: var(--secondary); }
+        .filter-pill.active.plastiques { background: #0284c7; border-color: #0284c7; }
+        .filter-pill.active.food { background: var(--accent-food); border-color: var(--accent-food); }
+        .filter-pill.active.wc { background: var(--accent-wc); border-color: var(--accent-wc); }
+        .filter-pill.active.wc-acc { background: var(--accent-wc-acc); border-color: var(--accent-wc-acc); }
+        .filter-pill.active.serveis { background: var(--accent-amber); border-color: var(--accent-amber); color: #0f172a; }
+
+        .search-box {
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.55rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: var(--primary);
+        }
+
+        .sidebar-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        /* Capçaleres de Categoria a la Llista Lateral */
+        .sidebar-section-header {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            background: rgba(15, 23, 42, 0.95);
+            border-left: 3px solid var(--primary);
+            padding: 0.45rem 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.6rem;
+            margin-bottom: 0.1rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-section-header:first-child {
+            margin-top: 0;
+        }
+
+        /* Location Card */
+        .loc-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .loc-card:hover, .loc-card.selected {
+            border-color: var(--primary);
+            background: rgba(18, 162, 152, 0.1);
+            transform: translateX(-3px);
+        }
+
+        .loc-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .badge-expo { background: #0284c7; font-size: 1rem; font-weight: 900; }
+        .badge-show { background: var(--secondary); font-size: 1.35rem; }
+        .badge-food { background: var(--accent-food); font-size: 1.35rem; }
+        .badge-wc { background: var(--accent-wc); font-size: 1.35rem; }
+        .badge-wc-acc { background: var(--accent-wc-acc); font-size: 1.35rem; }
+        .badge-serv { background: #d97706; font-size: 1.15rem; }
+
+        .loc-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .loc-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .loc-artist {
+            font-size: 0.82rem;
+            color: #fda4af;
+            font-weight: 600;
+        }
+
+        .loc-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        /* Custom Markers Leaflet */
+        .custom-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
+            border: 1.5px solid white;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .custom-marker:hover {
+            transform: scale(1.35);
+            z-index: 1000 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+        }
+
+        .marker-expo {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            font-weight: 900;
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+            border: 1.5px solid #ffffff !important;
+        }
+
+        .marker-show,
+        .marker-food,
+        .marker-wc,
+        .marker-wc-acc,
+        .marker-serv,
+        .marker-park-acc,
+        .marker-lila {
+            background: linear-gradient(135deg, #18181b 0%, #000000 100%) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7) !important;
+            color: #ffffff !important;
+        }
+
+        /* Custom Popup Leaflet */
+        .leaflet-popup-content-wrapper {
+            background: #0f172a !important;
+            color: #f8fafc !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border-radius: 12px !important;
+            padding: 0 !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .leaflet-popup-content {
+            margin: 0 !important;
+            line-height: 1.5 !important;
+            padding: 1.25rem !important;
+            min-width: 270px;
+        }
+
+        .leaflet-popup-tip {
+            background: #0f172a !important;
+        }
+
+        .popup-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .popup-badge.expo { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .popup-badge.show { background: rgba(0, 0, 0, 0.6); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.35); }
+        .popup-badge.food { background: rgba(234, 88, 12, 0.2); color: #fb923c; border: 1px solid rgba(234, 88, 12, 0.4); }
+        .popup-badge.wc { background: rgba(13, 148, 136, 0.2); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.4); }
+        .popup-badge.wc_accessible { background: rgba(124, 58, 237, 0.2); color: #c4b5fd; border: 1px solid rgba(124, 58, 237, 0.4); }
+        .popup-badge.serv { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+
+        .popup-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .popup-artist {
+            color: #fda4af;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-desc {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .popup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .popup-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            width: 100%;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .popup-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .popup-btn.delete {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .popup-btn.delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Editor Toolbar */
+        .editor-banner {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid #8b5cf6;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            flex-direction: column;
+            gap: 0.6rem;
+            max-width: 90%;
+        }
+
+        .editor-banner.active {
+            display: flex;
+        }
+
+        .editor-buttons-row {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-add-pin {
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: white;
+            padding: 0.35rem 0.7rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.2s;
+        }
+
+        .btn-add-pin:hover {
+            background: #334155;
+            border-color: #8b5cf6;
+            transform: translateY(-1px);
+        }
+
+        /* Floating Legend / Quick Map Controls */
+        .map-legend {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 14px;
+            padding: 0.9rem 1.35rem;
+            z-index: 1000;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+            width: 540px;
+            max-width: calc(100vw - 3rem);
+            box-sizing: border-box;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .legend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 0.45rem;
+            margin-bottom: 0.65rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .legend-title {
+            color: #ffffff;
+            font-size: 0.92rem;
+            font-weight: 800;
+            line-height: 1.3;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-toggle-legend {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #cbd5e1;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-toggle-legend:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .map-legend.collapsed {
+            width: auto;
+            max-width: fit-content;
+            padding: 0.55rem 0.95rem;
+            border-radius: 25px;
+            cursor: pointer;
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border-color: var(--primary);
+        }
+
+        .map-legend.collapsed .legend-header {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .map-legend.collapsed .legend-content {
+            display: none;
+        }
+
+        .map-legend.collapsed .btn-toggle-legend {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 1.35rem;
+            row-gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #f8fafc;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .legend-icon {
+            width: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-line {
+            width: 22px;
+            height: 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .craft-controls-row {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.45rem 0.85rem;
+            border-radius: 10px;
+            margin-top: 0.35rem;
+        }
+
+        .craft-control-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            color: #cbd5e1;
+        }
+
+        .craft-control-item input[type="range"] {
+            width: 85px;
+            accent-color: #f97316;
+            cursor: pointer;
+        }
+
+        .btn-craft-draw.active {
+            background: #ea580c !important;
+            border-color: #f97316 !important;
+            box-shadow: 0 0 14px rgba(234, 88, 12, 0.8) !important;
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        /* Floating Map Layer Switcher (Google Maps / Satèl·lit / Plànol) */
+        .map-layer-switcher {
+            position: absolute;
+            top: 1rem;
+            left: 1.25rem;
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 0.35rem;
+            display: flex;
+            gap: 0.3rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            flex-wrap: wrap;
+        }
+
+        .map-layer-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .map-layer-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .map-layer-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 10px rgba(18, 162, 152, 0.5);
+        }
+
+        .map-layer-btn.google-sat.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.6);
+        }
+
+        /* Separador de controls */
+        .map-control-divider {
+            width: 1px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: auto 0.15rem;
+            align-self: center;
+        }
+
+        .map-layer-btn.gps-btn {
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.35);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .map-layer-btn.gps-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            color: #ffffff;
+        }
+
+        .map-layer-btn.gps-btn.active {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: #10b981;
+            color: #6ee7b7;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+        }
+
+        .gps-indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #94a3b8;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .map-layer-btn.gps-btn.active .gps-indicator-dot {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-gps-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-gps-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.5; }
+        }
+
+        .map-layer-btn.center-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+        }
+
+        .map-layer-btn.center-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .map-layer-btn.festival-btn {
+            background: rgba(244, 63, 94, 0.15);
+            border-color: rgba(244, 63, 94, 0.4);
+            color: #fda4af;
+        }
+
+        .map-layer-btn.festival-btn:hover {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(244, 63, 94, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Marcador GPS Usuari al Mapa */
+        .user-gps-container {
+            background: transparent;
+            border: none;
+        }
+
+        .user-gps-marker {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #0284c7;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 15px #38bdf8, 0 0 30px rgba(56, 189, 248, 0.8);
+            position: relative;
+        }
+
+        .user-gps-pulse {
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            border: 2px solid #38bdf8;
+            opacity: 0.8;
+            animation: radarPulse 2s infinite ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes radarPulse {
+            0% { transform: scale(0.6); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* Estils dels Nodes i Midpoints d'Edició de Parades */
+        .craft-node-handle {
+            width: 14px;
+            height: 14px;
+            background: #ea580c;
+            border: 2.5px solid #ffffff;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            transition: transform 0.15s ease;
+        }
+
+        .craft-node-handle:hover {
+            transform: scale(1.35);
+            background: #f97316;
+        }
+
+        .craft-midpoint-handle {
+            width: 10px;
+            height: 10px;
+            background: rgba(234, 88, 12, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: transform 0.15s ease;
+        }
+
+        .craft-midpoint-handle:hover {
+            transform: scale(1.4);
+            background: #f97316;
+        }
+
+        /* Ocultar controls de navegació i edició en exportar a imatge PNG */
+        #map-wrapper.is-exporting .map-layer-switcher,
+        #map-wrapper.is-exporting .editor-banner,
+        #map-wrapper.is-exporting .mobile-sidebar-toggle,
+        #map-wrapper.is-exporting .craft-node-wrapper,
+        #map-wrapper.is-exporting .craft-mid-wrapper,
+        #map-wrapper.is-exporting .btn-toggle-legend,
+        #map-wrapper.is-exporting .user-gps-container,
+        #map-wrapper.is-exporting .leaflet-control-zoom {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Forçar llegenda completa i neta en exportació PNG */
+        #map-wrapper.is-exporting .map-legend {
+            display: block !important;
+            width: 540px !important;
+            max-width: 540px !important;
+            padding: 0.9rem 1.35rem !important;
+            border-radius: 14px !important;
+        }
+
+        #map-wrapper.is-exporting .map-legend .legend-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+            padding-bottom: 0.45rem !important;
+            margin-bottom: 0.65rem !important;
+        }
+
+        #map-wrapper.is-exporting .map-legend .legend-content {
+            display: block !important;
+        }
+
+        /* Mode 2 Exportació: Mapa net / base sense símbols */
+        #map-wrapper.is-exporting.export-bg-only .leaflet-marker-pane,
+        #map-wrapper.is-exporting.export-bg-only .leaflet-overlay-pane,
+        #map-wrapper.is-exporting.export-bg-only .leaflet-shadow-pane,
+        #map-wrapper.is-exporting.export-bg-only .map-legend {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Mode 3 Exportació: Símbols, parades i llegenda amb fons transparent */
+        #map-wrapper.is-exporting.export-symbols-only,
+        #map-wrapper.is-exporting.export-symbols-only #map,
+        #map-wrapper.is-exporting.export-symbols-only .leaflet-container {
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+
+        #map-wrapper.is-exporting.export-symbols-only .leaflet-tile-pane {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Mode Exportació Sense Llegenda */
+        #map-wrapper.is-exporting.export-no-legend .map-legend {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* Avís d'Orientació Horitzontal Desactivat */
+        .rotate-device-modal {
+            display: none !important;
+        }
+
+        /* Teló de fons per al calaix mòbil */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 1040;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-backdrop.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Toggle Sidebar Button for Mobile */
+        .mobile-sidebar-toggle {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--sidebar-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.55rem 0.85rem;
+            border-radius: 8px;
+            z-index: 1000;
+            font-weight: 700;
+            font-size: 0.82rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 0.5rem 0.85rem;
+                justify-content: space-between;
+            }
+            .topbar-subtitle {
+                display: none !important;
+            }
+            /* Amagar menú superior d'accions (guia, mode editor, exporta...) a mòbils */
+            .topbar-actions {
+                display: none !important;
+            }
+            .mobile-back-btn {
+                display: inline-flex !important;
+            }
+
+            /* Amagar completament la llista d'espais de la dreta i el botó flotant en mòbil */
+            .sidebar,
+            .mobile-sidebar-toggle,
+            .sidebar-backdrop {
+                display: none !important;
+            }
+
+            .map-layer-switcher {
+                top: 0.65rem;
+                left: 0.65rem;
+                padding: 0.25rem;
+                max-width: calc(100% - 1.5rem);
+            }
+
+            .map-layer-btn {
+                padding: 0.3rem 0.55rem;
+                font-size: 0.75rem;
+            }
+
+            /* Llegenda adaptada a mòbils */
+            .map-legend {
+                bottom: 0.75rem;
+                left: 0.75rem;
+                max-width: calc(100vw - 1.5rem);
+            }
+
+            .map-legend:not(.collapsed) {
+                width: calc(100vw - 1.5rem);
+                max-height: 48vh;
+                overflow-y: auto;
+            }
+
+            .legend-grid {
+                grid-template-columns: 1fr;
+                row-gap: 0.35rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <a href="pluja-art-2026.html" class="topbar-brand">
+            <img src="img/logo.jpg" alt="Logo">
+            <div>
+                <div class="topbar-title">Pluja d'Art 2026 · Plànol Oficial</div>
+                <div class="topbar-subtitle">Sant Jordi Desvalls (18, 19 i 20 de setembre)</div>
+            </div>
+        </a>
+
+        <!-- Botó compacte només per a mòbil per tornar a la web -->
+        <a href="pluja-art-2026.html" class="mobile-back-btn" style="display: none; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.82rem; font-weight: 700; text-decoration: none; align-items: center; gap: 0.3rem;">
+            🔙 Web
+        </a>
+
+        <div class="topbar-actions">
+            <button type="button" class="btn-action" id="btn-topbar-sidebar" onclick="toggleSidebarDesktop()" title="Amagar o Mostrar la llista d'espais">
+                📋 <span id="topbar-sidebar-text">Amagar Espais</span>
+            </button>
+            <a href="pluja-art-2026.html" class="btn-action">
+                🔙 Tornar a la Web
+            </a>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        
+        <!-- Map Canvas -->
+        <div id="map-wrapper">
+            <div id="map"></div>
+
+            <!-- Botó flotant d'escriptori per reobrir la finestra d'espais quan està amagada -->
+            <button type="button" class="desktop-sidebar-toggle" id="btn-toggle-sidebar-desktop" onclick="toggleSidebarDesktop(false)" title="Mostrar Espais i Itinerari">
+                📋 Mostrar Espais ▶
+            </button>
+
+            <!-- Selector de Fons de Mapa (OpenStreetMap i Satèl·lit Real) i Controls GPS / Centrat -->
+            <div class="map-layer-switcher">
+                <button type="button" class="map-layer-btn active" data-layer="osm" onclick="setBaseLayer('osm')">
+                    🌍 OpenStreetMap
+                </button>
+                <button type="button" class="map-layer-btn google-sat" data-layer="googleHybrid" onclick="setBaseLayer('googleHybrid')">
+                    🛰️ Satèl·lit Real
+                </button>
+                <div class="map-control-divider"></div>
+                <button type="button" class="map-layer-btn gps-btn" id="btn-toggle-gps" onclick="toggleGpsTracking()" title="Activar o desactivar localització GPS en temps real">
+                    <span class="gps-indicator-dot"></span>
+                    <span id="btn-gps-text">📍 GPS</span>
+                </button>
+                <button type="button" class="map-layer-btn center-btn" id="btn-center-gps" onclick="centerOnGpsLocation()" title="Centrar el mapa a la meva posició GPS actual">
+                    🎯 La meva posició
+                </button>
+                <button type="button" class="map-layer-btn festival-btn" id="btn-center-festival" onclick="centerOnFestival()" title="Centrar el mapa a tot el recinte del Festival Pluja d'Art">
+                    🎪 Centrar Festival
+                </button>
+            </div>
+
+            <!-- Legend (Amagable / Desplegable) -->
+            <div class="map-legend" id="map-legend">
+                <div class="legend-header" onclick="toggleLegend()">
+                    <div class="legend-title">
+                        <span>📜 Llegenda del Festival</span>
+                    </div>
+                    <button type="button" class="btn-toggle-legend" id="btn-toggle-legend" onclick="event.stopPropagation(); toggleLegend();" title="Amagar o Mostrar la Llegenda">
+                        <span id="legend-toggle-icon">👁️</span> <span id="legend-toggle-text">Amagar</span>
+                    </button>
+                </div>
+                <div class="legend-content" id="legend-content">
+                    <div class="legend-grid">
+                        <!-- Parades i Exposicions -->
+                        <div class="legend-item">
+                            <span class="legend-icon"><div class="legend-line" style="background: rgba(249, 115, 22, 0.85); border: 1px solid #fdba74;"></div></span>
+                            <span>Parades d'Artesania</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-icon"><div class="legend-dot" style="background: #0284c7;"></div></span>
+                            <span>1-16: Exposicions d'Art</span>
+                        </div>
+                        
+                        <!-- Ubicacions d'Espectacles Individuals -->
+                        <div class="legend-item"><span class="legend-icon">🎭</span> <span>Sala Nova</span></div>
+                        <div class="legend-item"><span class="legend-icon">⛲</span> <span>Plaça Major</span></div>
+                        <div class="legend-item"><span class="legend-icon">🏫</span> <span>Les Escoles</span></div>
+                        <div class="legend-item"><span class="legend-icon">🤡</span> <span>Plaça U d'Octubre</span></div>
+                        <div class="legend-item"><span class="legend-icon">🏡</span> <span>Ca la Lluïsa</span></div>
+                        <div class="legend-item"><span class="legend-icon">🌿</span> <span>Plaça Clos Garriga</span></div>
+                        <div class="legend-item"><span class="legend-icon">🍔</span> <span>Zona Foodtrucks & Festa</span></div>
+                        <div class="legend-item"><span class="legend-icon">🥁</span> <span>Carrers de la Vila</span></div>
+
+                        <!-- Gastronomia, Serveis i Accessibilitat -->
+                        <div class="legend-item"><span class="legend-icon">🚚</span> <span>Foodtrucks & Gastronomia</span></div>
+                        <div class="legend-item"><span class="legend-icon">🚻</span> <span>Lavabos WC</span></div>
+                        <div class="legend-item"><span class="legend-icon">♿</span> <span>Lavabo Adaptat PMR</span></div>
+                        <div class="legend-item"><span class="legend-icon">♿🅿️</span> <span>Aparcament PMR</span></div>
+                        <div class="legend-item"><span class="legend-icon">🅿️</span> <span>Aparcaments del Poble</span></div>
+                        <div class="legend-item"><span class="legend-icon">ℹ️</span> <span>Punt d'Informació</span></div>
+                        <div class="legend-item"><span class="legend-icon">💜</span> <span>Punt Lila</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-sidebar-toggle" id="mobile-toggle" onclick="toggleSidebar()">
+                📋 Llista d'Espais
+            </button>
+        </div>
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 800; white-space: nowrap;">Espais i Itinerari</h3>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span id="locations-count" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">-- espais</span>
+                        <button type="button" class="btn-close-sidebar-desktop" onclick="toggleSidebarDesktop(true)" title="Amagar finestra d'espais">
+                            ✖ Amagar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-pills">
+                    <button class="filter-pill active" onclick="setFilter('all', this)">Tots</button>
+                    <button class="filter-pill espectacles" onclick="setFilter('show', this)">🎭 Espectacles</button>
+                    <button class="filter-pill plastiques" onclick="setFilter('expo', this)">🎨 Exposicions</button>
+                    <button class="filter-pill food" onclick="setFilter('food', this)">🚚 Foodtrucks</button>
+                    <button class="filter-pill wc" onclick="setFilter('wc_group', this)">🚻 WC & ♿</button>
+                    <button class="filter-pill serveis" onclick="setFilter('serv', this)">🅿️ Pàrquings</button>
+                </div>
+
+                <input type="text" id="search-input" class="search-box" placeholder="🔍 Cerca artista, espai, WC, foodtruck..." oninput="handleSearch(this.value)">
+            </div>
+
+            <div class="sidebar-list" id="sidebar-list">
+                <!-- Location Cards injected via JS -->
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        // ========================================================
+        // 1. DADES OFICIALS BASE DEL FESTIVAL
+        // ========================================================
+        const BASE_LOCATIONS = [
+    {
+        "id": "show_0",
+        "type": "show",
+        "code": "🎉",
+        "name": "Acte d'Inauguració Oficial",
+        "artist": "Marc Agustí (1ª Residència Pluja d'Art)",
+        "project": "«Una flassada col·lectiva» · Divendres 18 (19:30 h)",
+        "desc": "Divendres 18 a les 19:30 h a la Sala Nova. Acte d'Inauguració oficial de la 5ª Fira Pluja d'Art 2026, benvinguda institucional i presentació de l'obra comunitària «Una flassada col·lectiva» (Marc Agustí i veïns del poble).",
+        "lat": 42.07197,
+        "lng": 2.95115
+    },
+    {
+        "id": "show_1",
+        "type": "show",
+        "code": "🎭",
+        "name": "Sala Nova (Teatre)",
+        "artist": "Els Braves / Pamboli Teatre",
+        "project": "«No Som Tan Diferents» & «L'Adversari»",
+        "desc": "Espectacles teatrals de sala a la Sala Nova:\n• Divendres 18 (20:00 h): Cia. Els Braves - «No Som Tan Diferents».\n• Dissabte 19 (19:00 h): Pamboli Teatre - «L'Adversari».",
+        "lat": 42.07191,
+        "lng": 2.95128
+    },
+    {
+        "id": "show_2",
+        "type": "show",
+        "code": "⛲",
+        "name": "Plaça Major",
+        "artist": "Rumbesia, Teràpia de Riure, Helena i Albert, Duo Belarc, Barretús Garden, La Pulposa, Pau Zabala",
+        "project": "Escenari Central a l'Aire Lliure",
+        "desc": "Escenari central: Divendres (Rumbesia 21:00 h, Taxista Frustrat 22:30 h, Duo Acústic 23:30 h), Dissabte (Duo Belarc 11:00 h, «Abans que el dia acabi» 13:00 h, «Kairós - En temps d'equilibri» 18:00 h), Diumenge (Pau Zabala 12:00 h, Acte de clausura 13:00 h).",
+        "lat": 42.07205,
+        "lng": 2.953344
+    },
+    {
+        "id": "show_3",
+        "type": "show",
+        "code": "🏫",
+        "name": "Les Escoles",
+        "artist": "Cia. CabraCadabra",
+        "project": "«Les Granotes» (Espectacle Infantil i Familiar)",
+        "desc": "Dissabte 19 a les 10:00 h. Titelles, moviment i teatre sensorial per a tota la família.",
+        "lat": 42.07079,
+        "lng": 2.953922
+    },
+    {
+        "id": "show_4",
+        "type": "show",
+        "code": "🤡",
+        "name": "Plaça U d’Octubre",
+        "artist": "Marc Agustí i veïns / Djammal / Festival Art Lumínic / mathr & netz",
+        "project": "«Una flassada col·lectiva» (1ª Residència), «Clown on Popping», «Art Lumínic» & «Ommatidia»",
+        "desc": "• Dissabte 19 (al matí): Penjada a la Façana de l'Ajuntament de l'obra comunitària «Una flassada col·lectiva» (Marc Agustí i veïns del poble · 1ª Residència Pluja d'Art).\n• Dissabte 19 (12:00 h): Djammal - «Clown on Popping» (Circ multidisciplinar i clown gestual).\n• Dissabte 19 (21:30 h): Espectacle inaugural del Festival Art Lumínic.\n• Dissabte 19 (21:45 h - 30 min): «Ommatidia» (mathr & netz) - Espectacle audiovisual en viu (Live AV).",
+        "lat": 42.071349,
+        "lng": 2.953418
+    },
+    {
+        "id": "show_5",
+        "type": "show",
+        "code": "🏡",
+        "name": "Ca la Lluïsa",
+        "artist": "Lia Alonso i Margarida Codina",
+        "project": "«Paraula, Emoció, Fang» (Taller Espectacle)",
+        "desc": "Dissabte 19 a les 16:30 h (Durada: 90 min). Diuen que modelar el fang és l'única poesia que pot ser tocada, on les mans escriuen versos amb forma de corbes, textures i imperfeccions... Així com el poeta usa paraules per evocar emocions, el ceramista usa el fang, els esmalts i el foc per modelar emocions tangibles. En aquest taller experimentem com a partir de paraules arribem a emocions que les nostres mans transmeten al fang, creant-se un procés creatiu terapèutic. Vine a transformar la paraula en fang. Fes que l'emoció agafi forma i sorgeixi un poema de les teves mans.",
+        "lat": 42.07205,
+        "lng": 2.951106
+    },
+    {
+        "id": "show_6",
+        "type": "show",
+        "code": "🌿",
+        "name": "Plaça Clos Garriga",
+        "artist": "Urban Sketchers / Llegim teatre",
+        "project": "«Exposició de dibuixos fets durant el matí» & «Poesia, Colors i Consciència»",
+        "desc": "• Dissabte 19 (10:00 h - 12:15 h): Urban Sketchers - Dibuix urbà in situ pels carrers i trobada final / Exposició de dibuixos fets durant el matí a les 12:15 h a la plaça per compartir llibretes d'esbossos.\n• Diumenge 20 (11:00 h): Llegim teatre - «Poesia, Colors i Consciència» (Performance: A partir d'una performance que comença a la plaça Major, deixa't portar fins la plaça Clos Garriga i entra en un espai de reflexió on la paraula, la poesia i els colors donen forma a pensaments. Els versos i colors et poden connectar amb l'emoció, l'emoció amb l'art, tot lligat amb l'objectiu de la lluita per una transició energètica justa).",
+        "lat": 42.071992,
+        "lng": 2.953772
+    },
+    {
+        "id": "show_7",
+        "type": "show",
+        "code": "🍔",
+        "name": "Zona Foodtrucks & Festa",
+        "artist": "DJ Pipa",
+        "project": "«Música per a Tothom» (Sessió de Ball)",
+        "desc": "Dissabte 19 a la 01:00 h (Nit). Gran sessió de ball amb DJ Pipa a l'espai gastronòmic.",
+        "lat": 42.071212,
+        "lng": 2.955084
+    },
+    {
+        "id": "show_8",
+        "type": "show",
+        "code": "🥁",
+        "name": "Carrers de la Vila",
+        "artist": "Colles Geganteres de Sant Jordi Desvalls, Celrà i Flaçà",
+        "project": "Cercavila de Gegants (inici plaça 1 d'Octubre)",
+        "desc": "Diumenge 20 a les 10:00 h. Cercavila tradicional dels Gegants de Sant Jordi Desvalls amb la participació de les colles geganteres de Celrà i Flaçà. Inici a la Plaça 1 d'Octubre i recorregut pels carrers del poble.",
+        "lat": 42.072109,
+        "lng": 2.9531
+    },
+    {
+        "id": "food_1",
+        "type": "food",
+        "code": "🚚",
+        "name": "Zona Foodtrucks & Gastronomia",
+        "artist": "Foodtrucks d'Autor & Bar Social",
+        "project": "Espai Gastronòmic a la Fresca",
+        "desc": "Crepes, hamburgueses gourmet, opcions vegetarianes i begudes artesanes. Horaris: Divendres i dissabte de 19:00 h a 21:00 h.",
+        "lat": 42.071311,
+        "lng": 2.955035
+    },
+    {
+        "id": "wc_1",
+        "type": "wc",
+        "code": "🚻",
+        "name": "Lavabos Públics · Plaça Major / Ajuntament",
+        "artist": "Servei Municipal",
+        "project": "Lavabos Públics",
+        "desc": "Lavabos de l'Ajuntament i la Plaça Major en horari de fira.",
+        "lat": 42.071506,
+        "lng": 2.953525
+    },
+    {
+        "id": "wc_2",
+        "type": "wc",
+        "code": "🚻",
+        "name": "Lavabos · Zona Foodtrucks",
+        "artist": "Servei Municipal",
+        "project": "Lavabos Mòbils Zona Gastro",
+        "desc": "Mòduls de WC disponibles durant tot el dia i la nit de concerts.",
+        "lat": 42.071208,
+        "lng": 2.954912
+    },
+    {
+        "id": "wc_acc_1",
+        "type": "wc_accessible",
+        "code": "♿",
+        "name": "WC Adaptat (PMR) · Sala Nova / Ajuntament",
+        "artist": "Accessibilitat Universal",
+        "project": "Lavabo Adaptat per a Mobilitat Reduïda",
+        "desc": "Cabina accessible a peu pla amb baranes homologades.",
+        "lat": 42.071533,
+        "lng": 2.953355
+    },
+    {
+        "id": "wc_acc_2",
+        "type": "wc_accessible",
+        "code": "♿",
+        "name": "WC Adaptat (PMR) · Zona Foodtrucks",
+        "artist": "Accessibilitat Universal",
+        "project": "Lavabo Adaptat Zona Gastro",
+        "desc": "Mòdul amb rampa d'accés adaptat a la pista esportiva.",
+        "lat": 42.071202,
+        "lng": 2.95477
+    },
+    {
+        "id": "expo_1",
+        "type": "expo",
+        "code": "1",
+        "name": "Ajuntament (Sala de Regants)",
+        "artist": "Escola de Dibuix i Pintura de Celrà",
+        "project": "«Exposició Col·lectiva d'Alumnes»",
+        "desc": "Mostra col·lectiva amb 18 obres realitzades pels alumnes del taller, explorant tècniques d'oli, acrílic, aquarel·la i composició figurativa.",
+        "lat": 42.071451,
+        "lng": 2.953513
+    },
+    {
+        "id": "expo_2",
+        "type": "expo",
+        "code": "2",
+        "name": "Ajuntament (2on Pis)",
+        "artist": "Cristina Perez (Les Fonts, Terrassa)",
+        "project": "«Memòria i Silenci»",
+        "desc": "4 pintures contemporànies d'atmosfera intimista que reflexionen sobre el pas del temps, el record i la calma dels espais buits.",
+        "lat": 42.071538,
+        "lng": 2.953459
+    },
+    {
+        "id": "expo_3",
+        "type": "expo",
+        "code": "3",
+        "name": "Ajuntament (2on pis - Sala de Plens)",
+        "artist": "Rosa Aguilò (Palafrugell)",
+        "project": "«RASTRES. UNA MIRADA DIFERENT AL PAISATGE»",
+        "desc": "Sèrie de 5-6 pintures de gran format (105 cm cadascuna) amb una visió suggerent, texturada i cromàtica del paisatge empordanès.",
+        "lat": 42.071533,
+        "lng": 2.953586
+    },
+    {
+        "id": "expo_4",
+        "type": "expo",
+        "code": "4",
+        "name": "Can Ministral (Porta Darrere)",
+        "artist": "Daniel Ministral / Paz Muntades & Majo Menendez",
+        "project": "«Caixetes de Fusta d'Autor» & «Ensoñaciones»",
+        "desc": "• Daniel Ministral: «Caixetes de Fusta d'Autor» (Col·lecció de caixes d'artesania en fusta ensamblades a mà amb gran precisió).\n• Paz Muntades & Majo Menendez: «Ensoñaciones» (Gran muntatge de 10 peces: abstraccions poètiques de la natura i retrats).",
+        "lat": 42.071634,
+        "lng": 2.953341
+    },
+    {
+        "id": "expo_5",
+        "type": "expo",
+        "code": "5",
+        "name": "Can Felip",
+        "artist": "Àngel Martinez (Subirats)",
+        "project": "«Muntanyes»",
+        "desc": "Col·lecció de pintures de petit format muntades sobre cavallets, explorant l'orografia, les línies de l'horitzó i la serenor del paisatge muntanyós.",
+        "lat": 42.071604,
+        "lng": 2.953978
+    },
+    {
+        "id": "expo_7",
+        "type": "expo",
+        "code": "6",
+        "name": "Cal Coix",
+        "artist": "Teresa Ferro (Sant Just Desvern)",
+        "project": "«Alabastre, Ceràmica i Pedres»",
+        "desc": "Escultures esculpides en alabastre translúcid, ceràmica i pedres naturals que juguen amb la llum, les textures i la puresa mineral.",
+        "lat": 42.071873,
+        "lng": 2.953852
+    },
+    {
+        "id": "expo_8",
+        "type": "expo",
+        "code": "7",
+        "name": "Can Ministral (Porta Principal)",
+        "artist": "Angela Batlle (Sant Jordi Desvalls)",
+        "project": "«Quadres i Dibuixos de Tota una Vida»",
+        "desc": "Emotiva retrospectiva de quadres i dibuixos realitzats per artista local de 88 anys, testimoni de sensibilitat artística i memòria viva del poble.",
+        "lat": 42.071917,
+        "lng": 2.953407
+    },
+    {
+        "id": "expo_9",
+        "type": "expo",
+        "code": "8",
+        "name": "El Castell (Balcó)",
+        "artist": "Montse Planas (Girona)",
+        "project": "«Obra col·lectiva»",
+        "desc": "Espectacular instal·lació tèxtil de grans dimensions (2,75 x 1,84 m) integrada a l'arquitectura històrica del balcó del Castell de Sant Jordi.",
+        "lat": 42.07215,
+        "lng": 2.953244
+    },
+    {
+        "id": "expo_10",
+        "type": "expo",
+        "code": "9",
+        "name": "Can Batlle (Entrada)",
+        "artist": "Dolores Duran (Girona)",
+        "project": "«MIRADAS»",
+        "desc": "4 pintures de rostres femenins de gran intensitat expressiva sobre fons fosc, explorant la necessitat de ser observada, els desitjos i les emocions humanes.",
+        "lat": 42.072122,
+        "lng": 2.95256
+    },
+    {
+        "id": "expo_10b",
+        "type": "expo",
+        "code": "10",
+        "name": "Can Roca",
+        "artist": "Cristina Bueno (Sant Jordi Desvalls)",
+        "project": "«Figures de ganxet»",
+        "desc": "Mostra d'artesania i figures fetes a mà amb la tècnica del ganxet.",
+        "lat": 42.07215,
+        "lng": 2.95235
+    },
+    {
+        "id": "expo_11",
+        "type": "expo",
+        "code": "11",
+        "name": "Ca la Catarineta",
+        "artist": "Laia Vallès (Sant Jordi Desvalls)",
+        "project": "«Disseny Tèxtil d'Autor»",
+        "desc": "Mostra d'artesania de moda, patronatge i confecció exclusiva de biquinis i peces d'estiu amb materials sostenibles i estampats únics.",
+        "lat": 42.072183,
+        "lng": 2.952023
+    },
+    {
+        "id": "expo_12",
+        "type": "expo",
+        "code": "12",
+        "name": "Ca la Montserrat",
+        "artist": "Elisenda Serradell (Badalona)",
+        "project": "«JO TACO»",
+        "desc": "Obres de pintura i tècniques tradicionals de gravat japonès (Moku Hanga) exposades a l'aire lliure al costat bell de Ca la Montserrat.",
+        "lat": 42.072104,
+        "lng": 2.951546
+    },
+    {
+        "id": "expo_13",
+        "type": "expo",
+        "code": "13",
+        "name": "Can Casademont",
+        "artist": "Conrad Owen Lyon / Emili Biarnès",
+        "project": "«Pintura i Fusta d'Arrel» & «Formes de Fang i Foc»",
+        "desc": "• Conrad Owen Lyon: «Pintura i Fusta d'Arrel» (Treball artístic en fusta noble i pintura arrelada a la terra).\n• Emili Biarnès: «Formes de Fang i Foc» (Peces de ceràmica artística cuita a alta temperatura, amb esmalts subtils i volums geomètrics).",
+        "lat": 42.07211,
+        "lng": 2.951452
+    },
+    {
+        "id": "expo_14",
+        "type": "expo",
+        "code": "14",
+        "name": "Can Burcet (Planta Baixa)",
+        "artist": "Lourdes Doñate & Cesc Oliveras (El Bruc)",
+        "project": "«Diàleg de Fang i Matèria»",
+        "desc": "Exposició conjunta que uneix escultures ceràmiques d'autor i quadres matèrics en diferents textures i pigments minerals.",
+        "lat": 42.071964,
+        "lng": 2.95142
+    },
+    {
+        "id": "expo_6",
+        "type": "expo",
+        "code": "15",
+        "name": "Les Escoles",
+        "artist": "Antonio Majuelos (Girona)",
+        "project": "«L’aigua que pensa en colors»",
+        "desc": "Aquarel·les lluminoses i performance de pintura en directe sota carpa, on l'aigua i el pigment flueixen de manera orgànica i espontània a l'espai de les Escoles.",
+        "lat": 42.07079,
+        "lng": 2.953922
+    },
+    {
+        "id": "expo_15",
+        "type": "expo",
+        "code": "16",
+        "name": "Airearte",
+        "artist": "Bussoga, Marta Sastre, Pere Amilibia, Alba Dhaya, Lia Alonso, Viki Barragán, Eva Is, Lluis Mohedano, Francesc Carreras",
+        "project": "«Mostra col·lectiva d'autors locals»",
+        "desc": "Mostra col·lectiva d'arts plàstiques amb obres creades pel talent i la creativitat del municipi: ceràmica, pintura, escultura i disseny.",
+        "lat": 42.070638,
+        "lng": 2.95765
+    },
+    {
+        "id": "serv_p1",
+        "type": "serv",
+        "code": "♿🅿️",
+        "name": "Aparcament Accessible",
+        "artist": "Pàrquing Gratuït Exclusiu per distintius amb Mobilitat Reduïda",
+        "project": "PMR & Mobilitat Reduïda",
+        "desc": "Pàrquing gratuït reservat exclusivament per a vehicles amb distintius i targeta de mobilitat reduïda (PMR).",
+        "lat": 42.071011,
+        "lng": 2.953557
+    },
+    {
+        "id": "serv_p2",
+        "type": "serv",
+        "code": "🅿️2",
+        "name": "Aparcament Zona Sud / Estació",
+        "artist": "Pàrquing Gratuït",
+        "project": "Accés Sud & Estació de Tren",
+        "desc": "Aparcament habilitat a la zona sud propera a l'estació i a l'accés de vianants.",
+        "lat": 42.07076,
+        "lng": 2.956878
+    },
+    {
+        "id": "serv_info",
+        "type": "serv",
+        "code": "ℹ️",
+        "name": "Punt d'Informació Oficial",
+        "artist": "Organització Desvalls Cultura",
+        "project": "Atenció al Visitant & Programes en Mà",
+        "desc": "Punt d'informació central, recollida de tríptics en paper i atenció a artistes.",
+        "lat": 42.072084,
+        "lng": 2.953423
+    },
+    {
+        "id": "serv_lila",
+        "type": "serv",
+        "code": "💜",
+        "name": "Punt Lila",
+        "artist": "Comissió d'Igualtat & Espai Segur",
+        "project": "Espai d'Informació, Sensibilització i Atenció",
+        "desc": "Espai segur d'informació, assessorament i prevenció contra agressions masclistes i LGTBIfòbiques durant el festival.",
+        "lat": 42.072075,
+        "lng": 2.95346
+    }
+];
+        // ========================================================
+        // 2. GESTIÓ D'ESTAT I PERSISTÈNCIA LOCAL
+        // ========================================================
+        let locations = [...BASE_LOCATIONS];
+        let isEditorMode = false;
+        let currentFilter = 'all';
+        let markers = {};
+
+        // ========================================================
+        // 2. CAPES DE MAPA (ICGC, STADIA SUAU, STAMEN TONER, GOOGLE MAPS I SATÈL·LIT)
+        // ========================================================
+        const STADIA_API_KEY = '8aa83533-f933-4a49-8f5d-c3809624bf93';
+
+        const mapLayers = {
+            icgc: L.tileLayer('https://geoserveis.icgc.cat/servei/catalunya/mapa-base/wmts/topografic/MON3857NW/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.icgc.cat/" target="_blank">ICGC</a>',
+                maxNativeZoom: 19,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            stadiaSmooth: L.tileLayer(`https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=${STADIA_API_KEY}`, {
+                attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>',
+                maxNativeZoom: 20,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            stamenToner: L.tileLayer(`https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png?api_key=${STADIA_API_KEY}`, {
+                attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>',
+                maxNativeZoom: 20,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            esriGray: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; Esri, HERE, Garmin',
+                maxNativeZoom: 16,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            googleStreets: L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                attribution: '&copy; Google Maps',
+                subdomains: ['0', '1', '2', '3'],
+                maxNativeZoom: 20,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            googleHybrid: L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+                attribution: '&copy; Google Maps Satèl·lit',
+                subdomains: ['0', '1', '2', '3'],
+                maxNativeZoom: 20,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            }),
+            osm: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+                maxNativeZoom: 19,
+                maxZoom: 22,
+                keepBuffer: 8,
+                updateWhenIdle: false,
+                crossOrigin: true
+            })
+        };
+
+        // Inicialitzar mapa Leaflet amb zoom fraccional fi i precisió millorada
+        const map = L.map('map', {
+            center: [42.0722, 2.9540],
+            zoom: 17,
+            minZoom: 14,
+            maxZoom: 22,
+            zoomSnap: 0.25,              // Permet nivells de zoom molt més exactes i graduals
+            zoomDelta: 0.5,               // Increment suau dels controls de zoom
+            wheelPxPerZoomLevel: 100,
+            zoomAnimation: true,
+            fadeAnimation: true,
+            markerZoomAnimation: true,
+            zoomControl: false
+        });
+
+        // Controls de zoom a baix a la dreta
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // Variable global de la capa activa (OpenStreetMap per defecte)
+        let currentLayerKey = 'osm';
+
+        // Capa per defecte: OpenStreetMap
+        mapLayers.osm.addTo(map);
+
+        function setBaseLayer(layerKey) {
+            currentLayerKey = layerKey;
+            Object.values(mapLayers).forEach(l => {
+                if (map.hasLayer(l)) map.removeLayer(l);
+            });
+
+            if (mapLayers[layerKey]) {
+                mapLayers[layerKey].addTo(map);
+                if (typeof mapLayers[layerKey].redraw === 'function') {
+                    mapLayers[layerKey].redraw();
+                }
+            }
+
+            document.querySelectorAll('.map-layer-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.layer === layerKey);
+            });
+
+            // Forçar actualització immediata de la vista del mapa
+            setTimeout(() => {
+                if (map && typeof map.invalidateSize === 'function') {
+                    map.invalidateSize({ pan: false });
+                }
+            }, 50);
+        }
+
+        // ========================================================
+        // 3. CONTROL D'ORIENTACIÓ I CENTRAT DEL MAPA (MÒBILS)
+        // ========================================================
+        function checkOrientationPrompt() {
+            // Desactivat: la notificació de posar en horitzontal ha estat eliminada
+            return;
+        }
+
+        function dismissRotateModal() {
+            return;
+        }
+
+        function fitMapToAllSymbols() {
+            try {
+                if (!map) return;
+                const pts = [];
+                if (Array.isArray(locations)) {
+                    locations.forEach(l => {
+                        if (l.lat && l.lng) pts.push([l.lat, l.lng]);
+                    });
+                }
+                if (Array.isArray(craftZoneCoords) && craftZoneCoords.length > 0) {
+                    craftZoneCoords.forEach(c => pts.push(c));
+                }
+                if (pts.length > 0) {
+                    const bounds = L.latLngBounds(pts);
+                    const pad = (window.innerWidth <= 768) ? [15, 15] : [35, 35];
+                    map.fitBounds(bounds, { padding: pad, animate: false });
+                }
+            } catch (e) {
+                console.error("fitMapToAllSymbols error:", e);
+            }
+        }
+
+        function centerOnFestival() {
+            if (!map) return;
+            let targetCoords = [42.07135, 2.95342]; // Coordenades Plaça 1 d'Octubre (Sant Jordi Desvalls)
+
+            // Si existeix el punt a la llista d'ubicacions (ex: show_4 o lum_octubre), utilitzar les seves coordenades exactes
+            if (Array.isArray(locations)) {
+                const locOctubre = locations.find(l => (l.id === 'show_4' || l.id === 'lum_octubre' || (l.name && (l.name.includes("Octubre") || l.name.includes("1 d'Octubre")))));
+                if (locOctubre && locOctubre.lat && locOctubre.lng) {
+                    targetCoords = [parseFloat(locOctubre.lat), parseFloat(locOctubre.lng)];
+                }
+            }
+
+            const targetZoom = (window.innerWidth <= 768) ? 17.5 : 18;
+            map.flyTo(targetCoords, targetZoom, {
+                animate: true,
+                duration: 0.8
+            });
+        }
+
+        // ========================================================
+        // 3B. CONTROL DE LOCALITZACIÓ GPS EN TEMPS REAL
+        // ========================================================
+        let isGpsTrackingActive = false;
+        let gpsWatchId = null;
+        let userGpsCoords = null;
+        let userGpsMarker = null;
+        let userGpsAccuracyCircle = null;
+
+        function toggleGpsTracking(autoCenter = false) {
+            const btn = document.getElementById('btn-toggle-gps');
+            const txt = document.getElementById('btn-gps-text');
+
+            if (isGpsTrackingActive && !autoCenter) {
+                // Desactivar seguiment GPS
+                if (gpsWatchId !== null && navigator.geolocation) {
+                    navigator.geolocation.clearWatch(gpsWatchId);
+                    gpsWatchId = null;
+                }
+                isGpsTrackingActive = false;
+                if (btn) btn.classList.remove('active');
+                if (txt) txt.innerText = '📍 GPS';
+                if (userGpsMarker) {
+                    map.removeLayer(userGpsMarker);
+                    userGpsMarker = null;
+                }
+                if (userGpsAccuracyCircle) {
+                    map.removeLayer(userGpsAccuracyCircle);
+                    userGpsAccuracyCircle = null;
+                }
+                userGpsCoords = null;
+                return;
+            }
+
+            if (!navigator.geolocation) {
+                alert("La geolocalització GPS no està suportada pel teu navegador.");
+                return;
+            }
+
+            isGpsTrackingActive = true;
+            if (btn) btn.classList.add('active');
+            if (txt) txt.innerText = '📍 Cercant GPS...';
+
+            let isFirstFix = true;
+
+            gpsWatchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    const acc = Math.round(pos.coords.accuracy || 10);
+                    userGpsCoords = [lat, lng];
+
+                    if (txt) txt.innerText = `📍 GPS (±${acc}m)`;
+
+                    // Dibuixar o actualitzar marcador d'usuari
+                    if (!userGpsMarker) {
+                        const userIcon = L.divIcon({
+                            className: 'user-gps-container',
+                            html: '<div class="user-gps-marker"><div class="user-gps-pulse"></div></div>',
+                            iconSize: [22, 22],
+                            iconAnchor: [11, 11]
+                        });
+                        userGpsMarker = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 2000 }).addTo(map);
+                        userGpsMarker.bindPopup(`
+                            <div style="font-family:'Outfit',sans-serif; text-align:center; padding:0.25rem;">
+                                <strong style="color:#0284c7; font-size:0.95rem;">📍 La teva posició</strong><br>
+                                <span style="font-size:0.8rem; color:#64748b;">Precisió GPS: ±${acc} m</span>
+                            </div>
+                        `);
+
+                        userGpsAccuracyCircle = L.circle([lat, lng], {
+                            radius: acc,
+                            color: '#0284c7',
+                            weight: 1.5,
+                            fillColor: '#38bdf8',
+                            fillOpacity: 0.12
+                        }).addTo(map);
+                    } else {
+                        userGpsMarker.setLatLng([lat, lng]);
+                        userGpsMarker.setPopupContent(`
+                            <div style="font-family:'Outfit',sans-serif; text-align:center; padding:0.25rem;">
+                                <strong style="color:#0284c7; font-size:0.95rem;">📍 La teva posició</strong><br>
+                                <span style="font-size:0.8rem; color:#64748b;">Precisió GPS: ±${acc} m</span>
+                            </div>
+                        `);
+                        if (userGpsAccuracyCircle) {
+                            userGpsAccuracyCircle.setLatLng([lat, lng]);
+                            userGpsAccuracyCircle.setRadius(acc);
+                        }
+                    }
+
+                    if (isFirstFix || autoCenter) {
+                        isFirstFix = false;
+                        map.flyTo([lat, lng], 18, { animate: true, duration: 0.8 });
+                    }
+                },
+                (err) => {
+                    console.warn("GPS Geolocation error:", err);
+                    isGpsTrackingActive = false;
+                    if (btn) btn.classList.remove('active');
+                    if (txt) txt.innerText = '📍 GPS';
+                    alert("No s'ha pogut obtenir la teva posició GPS. Comprova que tens el GPS activat i has donat permisos de localització al navegador.");
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 2000,
+                    timeout: 10000
+                }
+            );
+        }
+
+        function centerOnGpsLocation() {
+            if (userGpsCoords && map) {
+                map.flyTo(userGpsCoords, 18, { animate: true, duration: 0.8 });
+                if (userGpsMarker) {
+                    setTimeout(() => userGpsMarker.openPopup(), 850);
+                }
+            } else {
+                toggleGpsTracking(true);
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            checkOrientationPrompt();
+            setTimeout(fitMapToAllSymbols, 150);
+        });
+
+        window.addEventListener('orientationchange', () => {
+            checkOrientationPrompt();
+            setTimeout(fitMapToAllSymbols, 250);
+        });
+
+        function getZoomScale() {
+            try {
+                if (map && typeof map.getZoom === 'function') {
+                    const z = map.getZoom();
+                    if (z >= 20) return 1.05;
+                    if (z >= 19) return 0.92;
+                    if (z >= 18) return 0.80;
+                    if (z >= 17) return 0.68;
+                    if (z >= 16) return 0.55;
+                    if (z >= 15) return 0.45;
+                    return 0.38;
+                }
+            } catch (e) {}
+            return 0.65;
+        }
+
+        // ========================================================
+        // 4. RENDERITZACIÓ DELS MARCADORS (MIDES COMPACTES PER A VISTA GENERAL)
+        // ========================================================
+        function createMarkerIcon(loc) {
+            let markerClass = 'marker-expo';
+            let baseSize = 24;
+            let baseFontSize = 10.5;
+
+            if (loc.type === 'show') {
+                markerClass = 'marker-show';
+                baseSize = 27;
+                baseFontSize = 12.5;
+            } else if (loc.type === 'food') {
+                markerClass = 'marker-food';
+                baseSize = 25;
+                baseFontSize = 11.5;
+            } else if (loc.type === 'wc') {
+                markerClass = 'marker-wc';
+                baseSize = 23;
+                baseFontSize = 10.5;
+            } else if (loc.type === 'wc_accessible') {
+                markerClass = 'marker-wc-acc';
+                baseSize = 25;
+                baseFontSize = 11.5;
+            } else if (loc.type === 'serv') {
+                if (loc.id === 'serv_lila' || loc.code === '💜') {
+                    markerClass = 'marker-lila';
+                    baseSize = 24;
+                    baseFontSize = 11.5;
+                } else if (loc.id === 'serv_p1' || loc.code.includes('♿🅿️')) {
+                    markerClass = 'marker-park-acc';
+                    baseSize = 26;
+                    baseFontSize = 9.5;
+                } else {
+                    markerClass = 'marker-serv';
+                    baseSize = 23;
+                    baseFontSize = 9.5;
+                }
+            }
+
+            const scale = getZoomScale();
+            const size = Math.max(12, Math.round(baseSize * scale));
+            const fontSize = Math.max(7, Math.round(baseFontSize * scale));
+            const borderWidth = (scale < 0.75) ? 1.0 : 1.5;
+
+            return L.divIcon({
+                className: 'custom-marker-wrapper',
+                html: `<div class="custom-marker ${markerClass}" style="width: ${size}px; height: ${size}px; font-size: ${fontSize}px; line-height: ${size}px; border-width: ${borderWidth}px;">${loc.code}</div>`,
+                iconSize: [size, size],
+                iconAnchor: [size / 2, size / 2],
+                popupAnchor: [0, -size / 2]
+            });
+        }
+
+        // Esdeveniment per redimensionar marcadors automàticament en apropar o allunyar el mapa
+        function updateMarkerSizes() {
+            Object.keys(markers).forEach(id => {
+                const loc = locations.find(l => l.id === id);
+                if (loc && markers[id]) {
+                    markers[id].setIcon(createMarkerIcon(loc));
+                }
+            });
+        }
+
+        map.on('zoom', updateMarkerSizes);
+        map.on('zoomend', updateMarkerSizes);
+
+        function renderMarkers() {
+            // Netejar marcadors existents
+            Object.values(markers).forEach(m => map.removeLayer(m));
+            markers = {};
+
+            locations.forEach(loc => {
+                // Filtres
+                if (currentFilter === 'wc_group') {
+                    if (loc.type !== 'wc' && loc.type !== 'wc_accessible') return;
+                } else if (currentFilter !== 'all' && loc.type !== currentFilter) {
+                    return;
+                }
+
+                const marker = L.marker([loc.lat, loc.lng], {
+                    icon: createMarkerIcon(loc),
+                    draggable: isEditorMode,
+                    title: loc.name
+                }).addTo(map);
+
+                // Popup interactiu
+                let badgeClass = loc.type;
+                let badgeLabel = '🎨 Exposició';
+                if (loc.type === 'show') badgeLabel = '🎭 Espectacle';
+                if (loc.type === 'food') badgeLabel = '🚚 Foodtruck';
+                if (loc.type === 'wc') badgeLabel = '🚻 Lavabo WC';
+                if (loc.type === 'wc_accessible') badgeLabel = '♿ Lavabo Adaptat PMR';
+                if (loc.type === 'serv') badgeLabel = '🅿️ Servei';
+
+                const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`;
+
+                let editorButtons = '';
+                if (isEditorMode) {
+                    editorButtons = `
+                        <div style="margin-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;">
+                            <button type="button" class="popup-btn delete" onclick="deletePoint('${loc.id}')">🗑️ Eliminar aquest punt</button>
+                        </div>
+                    `;
+                }
+
+                const formattedDesc = (loc.desc || '').replace(/\n/g, '<br>');
+                const popupContent = `
+                    <div>
+                        <span class="popup-badge ${badgeClass}">${badgeLabel} · ${loc.code}</span>
+                        <div class="popup-title">${loc.name}</div>
+                        ${loc.artist ? `<div class="popup-artist">${loc.artist}</div>` : ''}
+                        <p class="popup-desc" style="line-height: 1.55; margin-top: 0.4rem;">${formattedDesc}</p>
+                        <div class="popup-actions">
+                            <a href="${gmapsUrl}" target="_blank" class="popup-btn">📍 Com anar-hi (Google Maps)</a>
+                            ${editorButtons}
+                        </div>
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+
+                // Event arrossegar en mode editor
+                marker.on('dragend', function(e) {
+                    const newPos = e.target.getLatLng();
+                    loc.lat = Number(newPos.lat.toFixed(6));
+                    loc.lng = Number(newPos.lng.toFixed(6));
+                    console.log(`Posició actualitzada per ${loc.name}: [${loc.lat}, ${loc.lng}]`);
+                });
+
+                marker.on('click', () => {
+                    highlightCard(loc.id);
+                });
+
+                markers[loc.id] = marker;
+            });
+        }
+
+        // ========================================================
+        // 4. ORDENACIÓ I RENDERITZACIÓ DE LA LLISTA LATERAL
+        // ========================================================
+        function getLocationSortWeight(loc) {
+            // 1. ESPECTACLES (ordenats cronològicament per dia i hora)
+            if (loc.type === 'show') {
+                const showOrder = {
+                    'show_0': 100, // Acte d'Inauguració: Dv 19:30 h (Sala Nova) - PRIMER DE TOT
+                    'show_1': 101, // Sala Nova: Dv 20:00 h (Els Braves), Ds 19:00 h (Pamboli Teatre)
+                    'show_2': 102, // Plaça Major: Dv 21:00 h (Rumbesia), 22:30 h, 23:30 h / Ds 11:00 h, 13:00 h, 18:00 h / Dg 12:00 h, 13:00 h
+                    'show_3': 103, // Les Escoles: Ds 10:00 h (Titelles Cia. CabraCadabra)
+                    'show_6': 104, // Plaça Clos Garriga: Ds 10:00 h - 12:15 h (Urban Sketchers) / Dg 11:00 h (Llegim teatre)
+                    'show_4': 105, // Plaça U d’Octubre: Ds matí (Penjada Flassada), Ds 12:00 h (Djammal), Ds 21:30 h (Art Lumínic)
+                    'show_5': 106, // Ca la Lluïsa: Ds 16:30 h (Taller Ceràmica Lia Alonso i Margarida Codina)
+                    'show_7': 107, // Zona Foodtrucks: Ds nit / 01:00 h (DJ Pipa)
+                    'show_8': 108  // Carrers de la Vila: Dg 10:00 h (Cercavila de Gegants)
+                };
+                return showOrder[loc.id] || 199;
+            }
+
+            // 2. EXPOSICIONS (de l'1 al 16 segons el seu número)
+            if (loc.type === 'expo') {
+                const num = parseInt(loc.code, 10);
+                return 200 + (isNaN(num) ? 99 : num);
+            }
+
+            // 3. SERVEIS (Foodtrucks, Lavabos, WCs Adaptats, Pàrquings, Informació, Punt Lila)
+            if (loc.type === 'food') return 301;
+            if (loc.type === 'wc') return 310 + (loc.id === 'wc_1' ? 1 : 2);
+            if (loc.type === 'wc_accessible') return 320 + (loc.id === 'wc_acc_1' ? 1 : 2);
+            if (loc.type === 'serv') {
+                const servOrder = {
+                    'serv_p1': 331,
+                    'serv_p2': 332,
+                    'serv_info': 333,
+                    'serv_lila': 334
+                };
+                return servOrder[loc.id] || 339;
+            }
+
+            return 999;
+        }
+
+        function renderSidebar(filtered = locations) {
+            const listEl = document.getElementById('sidebar-list');
+            listEl.innerHTML = '';
+
+            // Filtrar segons el filtre seleccionat
+            let itemsToRender = filtered.filter(loc => {
+                if (currentFilter === 'wc_group') {
+                    return loc.type === 'wc' || loc.type === 'wc_accessible';
+                } else if (currentFilter !== 'all') {
+                    return loc.type === currentFilter;
+                }
+                return true;
+            });
+
+            // Ordenar estrictament: 1. Espectacles (dia i hora), 2. Exposicions (1 a 16), 3. Serveis
+            itemsToRender.sort((a, b) => getLocationSortWeight(a) - getLocationSortWeight(b));
+
+            let currentCategoryGroup = '';
+
+            itemsToRender.forEach(loc => {
+                // Separadors de categoria quan es mostra la llista completa (filtre 'Tots')
+                if (currentFilter === 'all') {
+                    let groupTitle = '';
+                    if (loc.type === 'show') {
+                        groupTitle = '🎭 Espectacles (Per dia i hora)';
+                    } else if (loc.type === 'expo') {
+                        groupTitle = '🎨 Exposicions d\'Arts Plàstiques (1 a 16)';
+                    } else {
+                        groupTitle = 'ℹ️ Serveis, Foodtrucks & WCs';
+                    }
+
+                    if (groupTitle !== currentCategoryGroup) {
+                        currentCategoryGroup = groupTitle;
+                        const headerEl = document.createElement('div');
+                        headerEl.className = 'sidebar-section-header';
+                        headerEl.innerText = groupTitle;
+                        listEl.appendChild(headerEl);
+                    }
+                }
+
+                let badgeClass = 'badge-expo';
+                if (loc.type === 'show') badgeClass = 'badge-show';
+                if (loc.type === 'food') badgeClass = 'badge-food';
+                if (loc.type === 'wc') badgeClass = 'badge-wc';
+                if (loc.type === 'wc_accessible') badgeClass = 'badge-wc-acc';
+                if (loc.type === 'serv') badgeClass = 'badge-serv';
+
+                const card = document.createElement('div');
+                card.className = 'loc-card';
+                card.id = `card-${loc.id}`;
+                card.onclick = () => selectLocation(loc.id);
+
+                card.innerHTML = `
+                    <div class="loc-badge ${badgeClass}">${loc.code}</div>
+                    <div class="loc-info">
+                        <div class="loc-name">${loc.name}</div>
+                        ${loc.artist ? `<div class="loc-artist">${loc.artist}</div>` : ''}
+                        <div class="loc-sub">${loc.project}</div>
+                    </div>
+                `;
+
+                listEl.appendChild(card);
+            });
+
+            document.getElementById('locations-count').innerText = `${itemsToRender.length} espais`;
+        }
+
+        function selectLocation(id) {
+            const loc = locations.find(l => l.id === id);
+            if (!loc) return;
+
+            map.flyTo([loc.lat, loc.lng], 18, { duration: 0.8 });
+
+            if (markers[id]) {
+                markers[id].openPopup();
+            }
+
+            highlightCard(id);
+
+            if (window.innerWidth <= 768) {
+                toggleSidebar(false);
+            }
+        }
+
+        function highlightCard(id) {
+            document.querySelectorAll('.loc-card').forEach(c => c.classList.remove('selected'));
+            const activeCard = document.getElementById(`card-${id}`);
+            if (activeCard) {
+                activeCard.classList.add('selected');
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // ========================================================
+        // 5. FILTRES I CERCA
+        // ========================================================
+        function setFilter(type, btn) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            renderMarkers();
+            renderSidebar();
+        }
+
+        function handleSearch(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) {
+                renderSidebar(locations);
+                return;
+            }
+
+            const filtered = locations.filter(loc => {
+                return loc.name.toLowerCase().includes(q) ||
+                       (loc.artist && loc.artist.toLowerCase().includes(q)) ||
+                       loc.project.toLowerCase().includes(q) ||
+                       loc.desc.toLowerCase().includes(q) ||
+                       String(loc.code).toLowerCase().includes(q);
+            });
+
+            renderSidebar(filtered);
+        }
+
+        // ========================================================
+        // 6. CREACIÓ DINÀMICA DE NOUS PUNTS (WC, WC ADAPTAT, FOODTRUCK...)
+        // ========================================================
+        function addNewPoint(type) {
+            const center = map.getCenter();
+            const timestamp = Date.now();
+            let newId = `${type}_${timestamp}`;
+            let newPoint = {};
+
+            if (type === 'wc') {
+                const count = locations.filter(l => l.type === 'wc').length + 1;
+                newPoint = {
+                    id: newId,
+                    type: 'wc',
+                    code: '🚻',
+                    name: `Lavabo WC ${count}`,
+                    artist: 'Servei Municipal',
+                    project: 'Mòdul de WC Públic',
+                    desc: 'Lavabos públics senyalitzats.',
+                    lat: Number(center.lat.toFixed(6)),
+                    lng: Number(center.lng.toFixed(6))
+                };
+            } else if (type === 'wc_accessible') {
+                const count = locations.filter(l => l.type === 'wc_accessible').length + 1;
+                newPoint = {
+                    id: newId,
+                    type: 'wc_accessible',
+                    code: '♿',
+                    name: `Lavabo Adaptat PMR ${count}`,
+                    artist: 'Accessibilitat Universal',
+                    project: 'WC Adaptat per a Mobilitat Reduïda',
+                    desc: 'Lavabo 100% accessible amb rampa i baranes de suport.',
+                    lat: Number(center.lat.toFixed(6)),
+                    lng: Number(center.lng.toFixed(6))
+                };
+            } else if (type === 'food') {
+                const count = locations.filter(l => l.type === 'food').length + 1;
+                newPoint = {
+                    id: newId,
+                    type: 'food',
+                    code: '🚚',
+                    name: `Parada Foodtruck ${count}`,
+                    artist: 'Gastronomia d\'Autor',
+                    project: 'Servei de Restauració',
+                    desc: 'Menjar, begudes i servei ràpid.',
+                    lat: Number(center.lat.toFixed(6)),
+                    lng: Number(center.lng.toFixed(6))
+                };
+            } else {
+                newPoint = {
+                    id: newId,
+                    type: 'serv',
+                    code: '🅿️',
+                    name: 'Nou Espai / Pàrquing',
+                    artist: 'Servei del Festival',
+                    project: 'Zona d\'Aparcament',
+                    desc: 'Aparcament senyalitzat.',
+                    lat: Number(center.lat.toFixed(6)),
+                    lng: Number(center.lng.toFixed(6))
+                };
+            }
+
+            locations.push(newPoint);
+            renderMarkers();
+            renderSidebar();
+            selectLocation(newId);
+
+            alert(`✅ S'ha afegit "${newPoint.name}" al centre del mapa. Arrossega'l al lloc exacte on vols col·locar-lo i fes clic a "💾 Guardar a Supabase".`);
+        }
+
+        function deletePoint(id) {
+            if (!confirm("Vols eliminar aquest punt del plànol?")) return;
+            locations = locations.filter(l => l.id !== id);
+            renderMarkers();
+            renderSidebar();
+        }
+
+        // ========================================================
+        // 7. MODE EDITOR & CONNEXIÓ SUPABASE (TAULA: festival_locations)
+        // ========================================================
+        const SUPABASE_URL = 'https://ojqhexrqbfwcubyactuj.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_eV7n7kB-tnt00ScrveNm-A_gsFBqJtG';
+        let supabaseClient = null;
+
+        try {
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
+        } catch (e) {
+            console.warn("Supabase init warning:", e);
+        }
+
+        function toggleEditorMode() {
+            isEditorMode = !isEditorMode;
+            const btn = document.getElementById('btn-editor-mode');
+            const banner = document.getElementById('editor-banner');
+
+            if (isEditorMode) {
+                btn.classList.add('active');
+                btn.innerHTML = '✅ Sortir del Mode Editor';
+                banner.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '✏️ Mode Editor Ubicacions';
+                banner.classList.remove('active');
+                if (isDrawingCraft) toggleCraftDrawing();
+            }
+
+            renderMarkers();
+            renderCraftZone();
+        }
+
+        // ========================================================
+        // 8. GESTIÓ I DIBUIX DE LA ZONA DE PARADES D'ARTESANIA (AMB EDICIÓ DE NODES)
+        // ========================================================
+        const DEFAULT_CRAFT_POINTS = [
+            [42.07255, 2.95380], // Plaça Major
+            [42.07220, 2.95350], // Carrer Major cap a Can Batlle
+            [42.07190, 2.95300], // Can Felip
+            [42.07160, 2.95325]  // Cap a Plaça U d'Octubre
+        ];
+
+        let craftPoints = JSON.parse(localStorage.getItem('pluja_art_craft_points')) || DEFAULT_CRAFT_POINTS;
+        let craftPolyline = null;
+        let craftNodeLayerGroup = L.layerGroup();
+        let isDrawingCraft = false;
+        let craftOpacity = 0.55;
+        let craftWidth = 16;
+
+        // Afegir el layerGroup al mapa
+        craftNodeLayerGroup.addTo(map);
+
+        function renderCraftZone() {
+            if (craftPolyline) {
+                map.removeLayer(craftPolyline);
+                craftPolyline = null;
+            }
+            craftNodeLayerGroup.clearLayers();
+
+            if (!craftPoints || craftPoints.length < 2) return;
+
+            // 1. Dibuixar la polilínia ampla
+            craftPolyline = L.polyline(craftPoints, {
+                color: '#ea580c',
+                weight: craftWidth,
+                opacity: craftOpacity,
+                lineCap: 'round',
+                lineJoin: 'round',
+                className: 'craft-market-polyline'
+            }).addTo(map);
+
+            if (!isEditorMode) {
+                craftPolyline.bindPopup(`
+                    <div>
+                        <span class="popup-badge food">🛒 Parades d'Artesania</span>
+                        <div class="popup-title">Zona de Paradetes i Mostra Artesana</div>
+                        <p class="popup-desc">Espai reservat al llarg del carrer per a parades d'artesans, productes de proximitat, tallers i mostres d'oficis.</p>
+                    </div>
+                `);
+            } else {
+                // En Mode Editor: Clic a la línia per afegir un node nou
+                craftPolyline.on('click', function(e) {
+                    if (isDrawingCraft) return;
+                    insertCraftNodeNear(e.latlng);
+                });
+
+                // 2. Dibuixar els Nodes (vèrtexs) existents per moure o esborrar
+                craftPoints.forEach((pt, index) => {
+                    const nodeIcon = L.divIcon({
+                        className: 'craft-node-wrapper',
+                        html: `<div class="craft-node-handle" title="Node #${index + 1}: Arrossega per moure o clic per esborrar."></div>`,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    });
+
+                    const nodeMarker = L.marker(pt, {
+                        icon: nodeIcon,
+                        draggable: true
+                    }).addTo(craftNodeLayerGroup);
+
+                    nodeMarker.on('drag', function(e) {
+                        const pos = e.target.getLatLng();
+                        craftPoints[index] = [Number(pos.lat.toFixed(6)), Number(pos.lng.toFixed(6))];
+                        craftPolyline.setLatLngs(craftPoints);
+                    });
+
+                    nodeMarker.on('dragend', function() {
+                        localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                        renderCraftZone();
+                    });
+
+                    nodeMarker.bindPopup(`
+                        <div style="text-align: center; min-width: 180px;">
+                            <strong style="color: #fdba74; font-size: 0.85rem;">Node #${index + 1} de Parades</strong>
+                            <p style="color: #cbd5e1; font-size: 0.78rem; margin: 0.35rem 0;">Arrossega'l per reubicar-lo o elimina aquest punt.</p>
+                            <button type="button" class="popup-btn delete" onclick="deleteCraftNode(${index})">🗑️ Esborrar aquest node</button>
+                        </div>
+                    `);
+                });
+
+                // 3. Dibuixar Midpoints entre nodes per afegir vèrtexs fàcilment
+                for (let i = 0; i < craftPoints.length - 1; i++) {
+                    const p1 = craftPoints[i];
+                    const p2 = craftPoints[i + 1];
+                    const midLat = Number(((p1[0] + p2[0]) / 2).toFixed(6));
+                    const midLng = Number(((p1[1] + p2[1]) / 2).toFixed(6));
+
+                    const midIcon = L.divIcon({
+                        className: 'craft-mid-wrapper',
+                        html: `<div class="craft-midpoint-handle" title="Fes clic o arrossega per afegir un node nou aquí">+</div>`,
+                        iconSize: [14, 14],
+                        iconAnchor: [7, 7]
+                    });
+
+                    const midMarker = L.marker([midLat, midLng], {
+                        icon: midIcon,
+                        draggable: true
+                    }).addTo(craftNodeLayerGroup);
+
+                    midMarker.on('dragstart', function() {
+                        craftPoints.splice(i + 1, 0, [midLat, midLng]);
+                    });
+
+                    midMarker.on('drag', function(e) {
+                        const pos = e.target.getLatLng();
+                        craftPoints[i + 1] = [Number(pos.lat.toFixed(6)), Number(pos.lng.toFixed(6))];
+                        craftPolyline.setLatLngs(craftPoints);
+                    });
+
+                    midMarker.on('dragend', function() {
+                        localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                        renderCraftZone();
+                    });
+
+                    midMarker.on('click', function() {
+                        craftPoints.splice(i + 1, 0, [midLat, midLng]);
+                        localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                        renderCraftZone();
+                    });
+                }
+            }
+        }
+
+        function deleteCraftNode(index) {
+            if (craftPoints.length <= 2) {
+                alert("El traçat de parades ha de tenir com a mínim 2 nodes. Si vols eliminar tot el traçat, fes clic a 'Esborrar Parades'.");
+                return;
+            }
+            craftPoints.splice(index, 1);
+            localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+            renderCraftZone();
+        }
+
+        function insertCraftNodeNear(latlng) {
+            let bestIndex = -1;
+            let minDistance = Infinity;
+
+            for (let i = 0; i < craftPoints.length - 1; i++) {
+                const p1 = L.latLng(craftPoints[i]);
+                const p2 = L.latLng(craftPoints[i + 1]);
+                const dist = L.LineUtil.pointToSegmentDistance(
+                    map.latLngToLayerPoint(latlng),
+                    map.latLngToLayerPoint(p1),
+                    map.latLngToLayerPoint(p2)
+                );
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    bestIndex = i + 1;
+                }
+            }
+
+            if (bestIndex !== -1) {
+                craftPoints.splice(bestIndex, 0, [Number(latlng.lat.toFixed(6)), Number(latlng.lng.toFixed(6))]);
+                localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                renderCraftZone();
+            }
+        }
+
+        function toggleCraftDrawing() {
+            isDrawingCraft = !isDrawingCraft;
+            const btn = document.getElementById('btn-draw-craft');
+            const status = document.getElementById('craft-draw-status');
+
+            if (isDrawingCraft) {
+                btn.classList.add('active');
+                btn.innerText = '⏹️ Finalitzar Dibuix';
+                if (status) status.innerText = '👉 Fes clics sobre els carrers per continuar afegint nodes.';
+                map.getContainer().style.cursor = 'crosshair';
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = '🛒 Dibuixar Parades d\'Artesania';
+                if (status) status.innerText = '✅ Traçat llest. Pots moure els nodes o afegir-ne de nous.';
+                map.getContainer().style.cursor = '';
+            }
+        }
+
+        // Clic al mapa en mode continu de dibuix
+        map.on('click', function(e) {
+            if (!isDrawingCraft || !isEditorMode) return;
+            const newCoord = [Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6))];
+            craftPoints.push(newCoord);
+            renderCraftZone();
+            localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+        });
+
+        function updateCraftStyle() {
+            const opVal = document.getElementById('craft-opacity');
+            const widVal = document.getElementById('craft-width');
+            if (opVal) craftOpacity = parseFloat(opVal.value);
+            if (widVal) craftWidth = parseInt(widVal.value);
+
+            const opTxt = document.getElementById('opacity-val');
+            const widTxt = document.getElementById('width-val');
+            if (opTxt) opTxt.innerText = `${Math.round(craftOpacity * 100)}%`;
+            if (widTxt) widTxt.innerText = `${craftWidth}px`;
+
+            if (craftPolyline) {
+                craftPolyline.setStyle({
+                    opacity: craftOpacity,
+                    weight: craftWidth
+                });
+            }
+        }
+
+        function clearCraftZone() {
+            if (!confirm("Vols esborrar el traçat de les parades d'artesania?")) return;
+            craftPoints = [];
+            if (craftPolyline) {
+                map.removeLayer(craftPolyline);
+                craftPolyline = null;
+            }
+            craftNodeLayerGroup.clearLayers();
+            localStorage.removeItem('pluja_art_craft_points');
+            const status = document.getElementById('craft-draw-status');
+            if (status) status.innerText = '🗑️ Traçat esborrat.';
+        }
+
+        // Carregar coordenades des de Supabase
+        async function loadLocationsFromSupabase() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('festival_locations')
+                    .select('*')
+                    .order('ordre', { ascending: true });
+
+                if (!error && data && data.length > 0) {
+                    console.log("✅ Coordenades oficials carregades de Supabase:", data.length);
+
+                    // Comprovar si hi ha dades guardades de les parades d'artesania
+                    const craftRow = data.find(d => d.id === 'craft_zone_polyline');
+                    if (craftRow && craftRow.descripcio) {
+                        try {
+                            const parsedCraft = JSON.parse(craftRow.descripcio);
+                            if (parsedCraft.points && parsedCraft.points.length > 0) {
+                                craftPoints = parsedCraft.points;
+                                if (parsedCraft.opacity) craftOpacity = parsedCraft.opacity;
+                                if (parsedCraft.width) craftWidth = parsedCraft.width;
+                                renderCraftZone();
+                            }
+                        } catch (e) {
+                            console.warn("Error parsing craftRow:", e);
+                        }
+                    }
+
+                    // Filtrar la fila de parades i qualsevol registre d'art lumínic per aïllament total
+                    const cleanLocations = data.filter(d => 
+                        d.id !== 'craft_zone_polyline' && 
+                        d.id !== 'luminic_route_polyline' && 
+                        !String(d.id).startsWith('lum_')
+                    );
+
+                    locations = cleanLocations.map(d => ({
+                        id: d.id,
+                        type: d.type,
+                        code: d.code,
+                        name: d.name,
+                        artist: d.artist || '',
+                        project: d.project || '',
+                        desc: d.descripcio || d.desc || '',
+                        lat: Number(d.lat),
+                        lng: Number(d.lng)
+                    }));
+                    locations.sort((a, b) => getLocationSortWeight(a) - getLocationSortWeight(b));
+                    renderMarkers();
+                    renderSidebar();
+                    try { fitMapToAllSymbols(); } catch (e) {}
+                }
+            } catch (err) {
+                console.warn("No s'ha pogut connectar a Supabase (s'utilitzen les dades locals):", err);
+            }
+        }
+
+        // Guardar coordenades i traçat de parades (Local + Supabase)
+        async function saveCustomCoords() {
+            const btnSave = document.querySelector('#editor-banner button');
+            const originalText = btnSave ? btnSave.innerText : '💾 Guardar a Supabase';
+            if (btnSave) {
+                btnSave.innerText = '⏳ Guardant a Supabase...';
+                btnSave.disabled = true;
+            }
+
+            try {
+                // 1. Guardar a LocalStorage
+                localStorage.setItem('pluja_art_map_locations', JSON.stringify(locations));
+                localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+
+                // 2. Guardar a Supabase
+                if (supabaseClient) {
+                    const payload = locations.map((loc, idx) => ({
+                        id: loc.id,
+                        type: loc.type,
+                        code: String(loc.code),
+                        name: loc.name,
+                        artist: loc.artist || '',
+                        project: loc.project || '',
+                        descripcio: loc.desc || '',
+                        lat: Number(loc.lat),
+                        lng: Number(loc.lng),
+                        ordre: idx + 1,
+                        updated_at: new Date().toISOString()
+                    }));
+
+                    // Afegir el traçat de parades com a registre
+                    payload.push({
+                        id: 'craft_zone_polyline',
+                        type: 'craft_zone',
+                        code: '🛒',
+                        name: 'Parades d\'Artesania',
+                        artist: 'Artesans i Creadors Locals',
+                        project: 'Traçat Oficial de Parades',
+                        descripcio: JSON.stringify({ points: craftPoints, opacity: craftOpacity, width: craftWidth }),
+                        lat: 42.0722,
+                        lng: 2.9538,
+                        ordre: 999,
+                        updated_at: new Date().toISOString()
+                    });
+
+                    const { error } = await supabaseClient
+                        .from('festival_locations')
+                        .upsert(payload, { onConflict: 'id' });
+
+                    if (error) throw error;
+                    alert("✅ Tots els espais, WC, Foodtrucks i la Zona de Parades d'Artesania s'han desat a Supabase amb èxit!");
+                } else {
+                    alert("✅ Ubicacions i parades guardades al navegador!");
+                }
+            } catch (err) {
+                console.error("Error desant a Supabase:", err);
+                alert("ℹ️ Ubicacions guardades localment al navegador.\n(Per sincronitzar-ho a Supabase, assegura't d'haver creat la taula 'festival_locations' a la consola SQL de Supabase).");
+            } finally {
+                if (btnSave) {
+                    btnSave.innerText = originalText;
+                    btnSave.disabled = false;
+                }
+            }
+        }
+
+        // Funció auxiliar per capturar un fotograma del mapa amb o sense transparència
+        async function captureMapFrame(mapEl, isTransparent = false) {
+            let dataUrl = null;
+
+            // Intent 1: dom-to-image-more (Ràpid i d'alta fidelitat amb elements SVG / Canvas)
+            if (window.domtoimage && typeof window.domtoimage.toPng === 'function') {
+                try {
+                    dataUrl = await window.domtoimage.toPng(mapEl, {
+                        quality: 1,
+                        bgcolor: isTransparent ? null : undefined,
+                        filter: function(node) {
+                            if (node.classList && (
+                                node.classList.contains('map-layer-switcher') ||
+                                node.classList.contains('symbol-size-control') ||
+                                node.classList.contains('editor-banner') ||
+                                node.classList.contains('mobile-sidebar-toggle') ||
+                                node.classList.contains('desktop-sidebar-toggle') ||
+                                node.classList.contains('leaflet-control-zoom')
+                            )) {
+                                return false;
+                            }
+                            return true;
+                        }
+                    });
+                } catch (errDom) {
+                    console.warn("dom-to-image fallback:", errDom);
+                }
+            }
+
+            // Intent 2: html2canvas si dom-to-image falla
+            if (!dataUrl && window.html2canvas) {
+                const canvas = await html2canvas(mapEl, {
+                    useCORS: true,
+                    allowTaint: false,
+                    scale: 2,
+                    backgroundColor: isTransparent ? null : '#090d16',
+                    logging: false,
+                    ignoreElements: function(element) {
+                        if (element.classList && (
+                            element.classList.contains('map-layer-switcher') ||
+                            element.classList.contains('symbol-size-control') ||
+                            element.classList.contains('editor-banner') ||
+                            element.classList.contains('mobile-sidebar-toggle') ||
+                            element.classList.contains('desktop-sidebar-toggle') ||
+                            element.classList.contains('leaflet-control-zoom')
+                        )) {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                dataUrl = canvas.toDataURL('image/png');
+            }
+
+            return dataUrl;
+        }
+
+        // Exportar imatges PNG d'alta qualitat (amb i sense llegenda, mapa base i capes transparents)
+        async function exportMapImage() {
+            const mapEl = document.getElementById('map-wrapper');
+            const btnExport = document.querySelector('.topbar-actions .btn-action.primary');
+            const originalText = btnExport ? btnExport.innerText : '📸 Exportar Imatge (PNG)';
+
+            const downloadImage = (dataUrl, filename) => {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+            try {
+                const nomFons = (currentLayerKey === 'googleHybrid') ? 'satellit' : ((currentLayerKey === 'googleStreets') ? 'carrers' : 'planol');
+
+                // --- 1. CAPTURA 1: MAPA I SÍMBOLS AMB LLEGENDA ---
+                if (btnExport) {
+                    btnExport.innerText = '⏳ (1/5) Generant Mapa amb Llegenda...';
+                    btnExport.disabled = true;
+                }
+                mapEl.classList.remove('export-bg-only', 'export-symbols-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting');
+                await sleep(180);
+
+                const dataUrlFull = await captureMapFrame(mapEl, false);
+                if (dataUrlFull) {
+                    downloadImage(dataUrlFull, `01-planol-pluja-art-2026-amb-llegenda-${nomFons}.png`);
+                }
+
+                // --- 2. CAPTURA 2: MAPA I SÍMBOLS SENSE LLEGENDA ---
+                if (btnExport) btnExport.innerText = '⏳ (2/5) Generant Mapa Sense Llegenda...';
+                mapEl.classList.remove('export-bg-only', 'export-symbols-only');
+                mapEl.classList.add('is-exporting', 'export-no-legend');
+                await sleep(180);
+
+                const dataUrlNoLegend = await captureMapFrame(mapEl, false);
+                if (dataUrlNoLegend) {
+                    downloadImage(dataUrlNoLegend, `02-planol-pluja-art-2026-sense-llegenda-${nomFons}.png`);
+                }
+
+                // --- 3. CAPTURA 3: MAPA BASE NET SENSE SÍMBOLS NI LLEGENDA ---
+                if (btnExport) btnExport.innerText = '⏳ (3/5) Generant Mapa Base Net...';
+                mapEl.classList.remove('export-symbols-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting', 'export-bg-only');
+                await sleep(180);
+
+                const dataUrlBg = await captureMapFrame(mapEl, false);
+                if (dataUrlBg) {
+                    downloadImage(dataUrlBg, `03-mapa-base-sense-simbols-${nomFons}.png`);
+                }
+
+                // --- 4. CAPTURA 4: SÍMBOLS TRANSPARENTS SENSE LLEGENDA ---
+                if (btnExport) btnExport.innerText = '⏳ (4/5) Generant Símbols Transparents (Sense Llegenda)...';
+                mapEl.classList.remove('export-bg-only');
+                mapEl.classList.add('is-exporting', 'export-symbols-only', 'export-no-legend');
+                await sleep(180);
+
+                const dataUrlSymbolsOnly = await captureMapFrame(mapEl, true);
+                if (dataUrlSymbolsOnly) {
+                    downloadImage(dataUrlSymbolsOnly, `04-simbols-transparent-sense-llegenda.png`);
+                }
+
+                // --- 5. CAPTURA 5: SÍMBOLS I LLEGENDA AMB FONS TRANSPARENT ---
+                if (btnExport) btnExport.innerText = '⏳ (5/5) Generant Símbols i Llegenda Transparents...';
+                mapEl.classList.remove('export-bg-only', 'export-no-legend');
+                mapEl.classList.add('is-exporting', 'export-symbols-only');
+                await sleep(180);
+
+                const dataUrlSymbolsLegend = await captureMapFrame(mapEl, true);
+                if (dataUrlSymbolsLegend) {
+                    downloadImage(dataUrlSymbolsLegend, `05-simbols-i-llegenda-transparent.png`);
+                }
+
+                if (btnExport) {
+                    btnExport.innerText = '✅ Fitxers PNG Descarregats!';
+                    await sleep(2000);
+                }
+            } catch (err) {
+                console.error("Error generant imatges:", err);
+                alert("S'ha produït un error al generar les imatges PNG. Revisa la consola.");
+            } finally {
+                mapEl.classList.remove('is-exporting', 'export-bg-only', 'export-symbols-only', 'export-no-legend');
+                if (btnExport) {
+                    btnExport.innerText = originalText;
+                    btnExport.disabled = false;
+                }
+            }
+        }
+
+        function toggleLegend(forceState) {
+            const legend = document.getElementById('map-legend');
+            const toggleText = document.getElementById('legend-toggle-text');
+            const toggleIcon = document.getElementById('legend-toggle-icon');
+            if (!legend) return;
+
+            let isCollapsed;
+            if (typeof forceState === 'boolean') {
+                isCollapsed = forceState;
+                legend.classList.toggle('collapsed', isCollapsed);
+            } else {
+                isCollapsed = legend.classList.toggle('collapsed');
+            }
+
+            if (toggleText && toggleIcon) {
+                toggleText.innerText = isCollapsed ? 'Mostrar' : 'Amagar';
+                toggleIcon.innerText = isCollapsed ? '📜' : '👁️';
+            }
+            try {
+                localStorage.setItem('pluja_art_legend_collapsed', isCollapsed ? 'true' : 'false');
+            } catch (e) {}
+        }
+
+        function toggleSidebar(forceState) {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sidebar) return;
+
+            let isOpen;
+            if (typeof forceState === 'boolean') {
+                isOpen = forceState;
+                sidebar.classList.toggle('open', isOpen);
+            } else {
+                isOpen = sidebar.classList.toggle('open');
+            }
+
+            if (backdrop) {
+                backdrop.classList.toggle('active', isOpen);
+            }
+        }
+
+        // Funció per amagar/mostrar la finestra d'espais a la versió ordinador (Desktop)
+        function toggleSidebarDesktop(forceState) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('btn-toggle-sidebar-desktop');
+            const topbarText = document.getElementById('topbar-sidebar-text');
+            if (!sidebar) return;
+
+            let isCollapsed;
+            if (typeof forceState === 'boolean') {
+                isCollapsed = forceState;
+                sidebar.classList.toggle('collapsed-desktop', isCollapsed);
+            } else {
+                isCollapsed = sidebar.classList.toggle('collapsed-desktop');
+            }
+
+            if (toggleBtn) {
+                toggleBtn.classList.toggle('visible', isCollapsed);
+            }
+            if (topbarText) {
+                topbarText.innerText = isCollapsed ? 'Mostrar Espais' : 'Amagar Espais';
+            }
+
+            // Ajustar el mapa al nou ample de pantalla completa de forma immediata i al final de l'animació
+            const triggerResize = () => {
+                try {
+                    if (map && typeof map.invalidateSize === 'function') {
+                        map.invalidateSize({ pan: false });
+                    }
+                } catch (e) {}
+            };
+            setTimeout(triggerResize, 50);
+            setTimeout(triggerResize, 150);
+            setTimeout(triggerResize, 350);
+        }
+
+        // Assegurar estat de la llegenda (oberta i visible per defecte a pantalla gran)
+        try {
+            if (window.innerWidth > 768) {
+                toggleLegend(false);
+            }
+        } catch (e) {}
+
+        // Inicialització inicial segura
+        try { checkOrientationPrompt(); } catch (e) { console.error("checkOrientationPrompt:", e); }
+        try { renderCraftZone(); } catch (e) { console.error("renderCraftZone:", e); }
+        try { renderMarkers(); } catch (e) { console.error("renderMarkers:", e); }
+        try { renderSidebar(); } catch (e) { console.error("renderSidebar:", e); }
+        try { fitMapToAllSymbols(); } catch (e) { console.error("fitMapToAllSymbols:", e); }
+        try { loadLocationsFromSupabase(); } catch (e) { console.error("loadLocationsFromSupabase:", e); }
+
+        // Assegurar càrrega correcta de tessel·les de Leaflet i enquadrament
+        setTimeout(() => {
+            try {
+                if (map && typeof map.invalidateSize === 'function') {
+                    map.invalidateSize();
+                }
+                fitMapToAllSymbols();
+            } catch (e) {}
+        }, 150);
+    </script>
+</body>
+</html>
