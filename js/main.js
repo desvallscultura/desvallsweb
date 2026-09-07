@@ -126,14 +126,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// 6. Navegació al Festival d'Art Lumínic
+// 6. Avís Festival d'Art Lumínic (En construcció · Properament accessible)
 window.openArtLuminicPending = function(e) {
     if (e && typeof e.preventDefault === 'function') {
-        // Permetre navegació directa
+        e.preventDefault();
     }
-    window.location.href = 'art-luminic-2026.html';
+    let modal = document.getElementById('modal-art-luminic-pending');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'modal-art-luminic-pending';
+        modal.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(3,7,18,0.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.25rem;animation:fadeInModal 0.25s ease-out;';
+        modal.innerHTML = `
+            <div style="background:#0f172a;border:1.5px solid #06b6d4;border-radius:24px;max-width:490px;width:100%;padding:2.5rem 2rem;text-align:center;box-shadow:0 25px 60px -15px rgba(6,182,212,0.45);position:relative;color:#f8fafc;font-family:'Outfit',sans-serif;">
+                <button type="button" onclick="closeArtLuminicPending()" aria-label="Tancar" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.08);border:none;color:#94a3b8;font-size:1.4rem;cursor:pointer;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.color='#94a3b8';this.style.background='rgba(255,255,255,0.08)'">&times;</button>
+                <div style="font-size:3.5rem;margin-bottom:0.75rem;line-height:1;">✨ 🚧</div>
+                <h3 style="font-family:'Playfair Display',serif;font-size:1.85rem;color:#38bdf8;margin-bottom:0.5rem;font-weight:800;">Festival d'Art Lumínic</h3>
+                <div style="display:inline-block;background:rgba(6,182,212,0.15);color:#67e8f9;border:1px solid rgba(6,182,212,0.45);padding:0.4rem 1.1rem;border-radius:9999px;font-weight:800;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1.25rem;">
+                    En construcció · Properament accessible
+                </div>
+                <p style="color:#cbd5e1;font-size:1.02rem;line-height:1.65;margin-bottom:1.85rem;">
+                    Estem acabant d'ultimar el disseny de les 9 instal·lacions lumíniques, les guies sonores i el plànol interactiu. Molt aviat estarà disponible i obert a tothom!
+                </p>
+                <button type="button" onclick="closeArtLuminicPending()" style="background:linear-gradient(135deg,#0284c7 0%,#06b6d4 100%);color:#ffffff;border:none;padding:0.85rem 2.2rem;border-radius:9999px;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 4px 18px rgba(6,182,212,0.45);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='none'">
+                    Entesos, gràcies!
+                </button>
+            </div>
+        `;
+        modal.addEventListener('click', function(evt) {
+            if (evt.target === modal) window.closeArtLuminicPending();
+        });
+        document.addEventListener('keydown', function(evt) {
+            if (evt.key === 'Escape') window.closeArtLuminicPending();
+        });
+        document.body.appendChild(modal);
+    } else {
+        modal.style.display = 'flex';
+    }
 };
 
 window.closeArtLuminicPending = function() {
-    // Funció buida de compatibilitat
+    const modal = document.getElementById('modal-art-luminic-pending');
+    if (modal) modal.style.display = 'none';
 };
