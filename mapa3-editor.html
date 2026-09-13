@@ -6,8 +6,9 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plànol Oficial · Circuit d'Art Lumínic 2026 · Sant Jordi Desvalls</title>
-    <meta name="description" content="Plànol interactiu i itinerari recomanat del Circuit d'Art Lumínic de Pluja d'Art 2026 a Sant Jordi Desvalls. Dissabte 19 de setembre de 21:30h a 01:30h.">
+    <title>Plànol Oficial · Circuit d'Art Lumínic 2026 [MODE EDITOR] · Sant Jordi Desvalls</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Panell d'edició del Circuit d'Art Lumínic de Pluja d'Art 2026 a Sant Jordi Desvalls.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1162,6 +1163,7 @@
             <div>
                 <div class="topbar-title">
                     Pluja d'Art 2026 · Circuit d'Art Lumínic
+                    <span class="badge-glow">Mode Gestió</span>
                 </div>
                 <div class="topbar-subtitle">Sant Jordi Desvalls · Dissabte 19 de setembre (21:30h - 01:30h)</div>
             </div>
@@ -1174,6 +1176,9 @@
             <button type="button" class="btn-action" id="btn-topbar-sidebar" onclick="toggleSidebarDesktop()" title="Amagar o Mostrar la llista d'espais">
                 📋 <span id="topbar-sidebar-text">Amagar Espais</span>
             </button>
+            <button type="button" class="btn-action editor-toggle" id="btn-editor-mode" onclick="toggleEditorMode()">
+                ✏️ Mode Editor Ubicacions
+            </button>
             <button type="button" class="btn-action primary" onclick="exportMapImage()">
                 📸 Exportar DIN A3 (300 DPI)
             </button>
@@ -1185,6 +1190,67 @@
             </a>
         </div>
     </header>
+
+    <!-- Banner Mode Editor -->
+    <div class="editor-banner" id="editor-banner">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.1rem;">✏️</span>
+                <strong>MODE EDITOR ACTIU:</strong>
+                <span>Arrossega els símbols o fes servir les eines per afegir/modificar nodes de l'itinerari lumínic.</span>
+                <span id="route-edit-status" style="color: #38bdf8; font-weight: 700; margin-left: 0.5rem;"></span>
+            </div>
+            <div style="display: flex; gap: 0.4rem;">
+                <button type="button" class="btn-editor-op btn-editor-save" onclick="saveCustomCoords()">
+                    💾 Guardar a Supabase
+                </button>
+                <button type="button" class="btn-editor-op btn-editor-reset" onclick="resetToDefault()">
+                    🔄 Restablir Tot
+                </button>
+            </div>
+        </div>
+        <div class="editor-banner-actions" style="margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid rgba(255, 255, 255, 0.1); width: 100%;">
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('lum')">
+                ➕ Instal·lació Puntual (💡)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" style="background: rgba(56, 189, 248, 0.25); color: #7dd3fc; border-color: #38bdf8;" onclick="addNewLineInstallation('lum')">
+                ➕ Línia Instal·lació (💡〰️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('show')">
+                ➕ Espectacle Puntual (✨)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" style="background: rgba(244, 63, 94, 0.25); color: #fda4af; border-color: #f43f5e;" onclick="addNewLineInstallation('show')">
+                ➕ Línia Espectacle (✨〰️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('start')">
+                ➕ Punt Inici (🚩)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('food')">
+                ➕ Foodtruck (🚚)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('wc')">
+                ➕ WC (🚻)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('wc_accessible')">
+                ➕ WC Adaptat (♿)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-add" onclick="addNewPoint('serv')">
+                ➕ Pàrquing (🅿️)
+            </button>
+            <button type="button" class="btn-editor-op btn-editor-route" id="btn-toggle-route-edit" onclick="toggleRouteEdit()">
+                🌟 Traçar / Afegir Nodes Itinerari
+            </button>
+            <button type="button" class="btn-editor-op" id="btn-stop-line-edit" style="display: none; background: #10b981; color: white; border-color: #34d399;" onclick="stopEditingLineNodes()">
+                ✅ Finalitzar Nodes Línia
+            </button>
+            <button type="button" class="btn-editor-op" style="background: rgba(239, 68, 68, 0.15); color: #fca5a5; border-color: rgba(239, 68, 68, 0.35);" onclick="clearRoute()">
+                🗑️ Buidar Traçat
+            </button>
+            <button type="button" class="btn-editor-op" style="background: rgba(250, 204, 21, 0.12); color: #fef08a; border-color: rgba(250, 204, 21, 0.35);" onclick="resetRoute()">
+                🔄 Traçat Inicial
+            </button>
+        </div>
+    </div>
 
     <!-- Main App Container -->
     <div class="app-container">
@@ -1283,6 +1349,95 @@
             ✨ Espais &amp; Itinerari
         </button>
 
+    </div>
+
+    <!-- Modal per a Modificar Textos de la Targeta / Instal·lació -->
+    <div id="card-edit-modal" class="modal-backdrop" style="display: none;" onclick="handleModalBackdropClick(event)">
+        <div class="card-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="card-edit-modal-title">
+            <div class="card-edit-header">
+                <h3 id="card-edit-modal-title" style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; color: #f8fafc; font-weight: 800;">
+                    <span>✏️ Modificar Textos de la Targeta</span>
+                </h3>
+                <button type="button" class="btn-close-modal" onclick="closeCardEditModal()" title="Tancar">✖</button>
+            </div>
+
+            <form id="card-edit-form" onsubmit="event.preventDefault(); saveCardEditForm();">
+                <input type="hidden" id="edit-card-id">
+
+                <div class="form-group">
+                    <label for="edit-card-name">Nom / Títol de l'Espai o Espectacle</label>
+                    <input type="text" id="edit-card-name" required placeholder="Ex: 1. Plaça 1 d'Octubre · «El jardí de les meduses»">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1.2;">
+                        <label for="edit-card-type">Tipus de Punt</label>
+                        <select id="edit-card-type" onchange="handleCardTypeChange()">
+                            <option value="lum">💡 Instal·lació Lumínica</option>
+                            <option value="show">✨ Espectacle Nocturn</option>
+                            <option value="start">🚩 Punt d'Inici</option>
+                            <option value="food">🚚 Foodtruck & Gastronomia</option>
+                            <option value="wc">🚻 Lavabos</option>
+                            <option value="wc_accessible">♿ WC Adaptat (PMR)</option>
+                            <option value="serv">🅿️ Aparcament & Serveis</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 0.8;">
+                        <label for="edit-card-code">Símbol / Emoji / Codi</label>
+                        <input type="text" id="edit-card-code" placeholder="Ex: 💡, 🪼1, 🌊, ✨, 🚩">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-artist">Artista, Cia o Responsable</label>
+                    <input type="text" id="edit-card-artist" placeholder="Ex: Gran Medusa 1 · mathr & netz / Artistes Locals">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-project">Subtítol / Horari / Projecte</label>
+                    <input type="text" id="edit-card-project" placeholder="Ex: Horari: 21:30h i 22:45h / Passatge Immersiu">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-card-desc">Descripció Detallada (Text de la Targeta)</label>
+                    <textarea id="edit-card-desc" rows="4" placeholder="Escriu aquí el text complet que apareixerà a la targeta informativa..."></textarea>
+                </div>
+
+                <div id="edit-card-line-options" class="form-group" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.75rem;">
+                    <label style="color: #7dd3fc; font-weight: 700; margin-bottom: 0.4rem; display: block;">🎨 Color del Traçat Lineal</label>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <input type="color" id="edit-card-line-color" value="#38bdf8" style="cursor: pointer; width: 36px; height: 36px; border: none; border-radius: 6px; background: transparent;">
+                        <div style="display: flex; gap: 0.35rem;">
+                            <button type="button" class="btn-color-preset" style="background:#38bdf8;" onclick="setLineColorPreset('#38bdf8')" title="Cian"></button>
+                            <button type="button" class="btn-color-preset" style="background:#f43f5e;" onclick="setLineColorPreset('#f43f5e')" title="Rosa / Espectacle"></button>
+                            <button type="button" class="btn-color-preset" style="background:#facc15;" onclick="setLineColorPreset('#facc15')" title="Groc"></button>
+                            <button type="button" class="btn-color-preset" style="background:#10b981;" onclick="setLineColorPreset('#10b981')" title="Verd"></button>
+                            <button type="button" class="btn-color-preset" style="background:#a855f7;" onclick="setLineColorPreset('#a855f7')" title="Lila"></button>
+                            <button type="button" class="btn-color-preset" style="background:#ea580c;" onclick="setLineColorPreset('#ea580c')" title="Taronja"></button>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.6rem; border-top: 1px solid rgba(56, 189, 248, 0.2); padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                        <span style="font-size: 0.75rem; color: #94a3b8;">💡 Pots arrossegar el símbol de la línia sobre el mapa per moure'l de lloc.</span>
+                        <button type="button" class="btn-item-op" style="background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.4); padding: 0.25rem 0.6rem; font-size: 0.72rem;" onclick="resetLineBadgePosition()" title="Tornar a situar el símbol al centre geomètric del traçat">📍 Re-centrar símbol</button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="edit-card-ordre">Ordre al Circuit</label>
+                        <input type="number" id="edit-card-ordre" min="1" max="999" value="1">
+                    </div>
+                </div>
+
+                <div class="card-edit-footer">
+                    <button type="button" class="btn-editor-op btn-editor-reset" onclick="deleteCurrentEditingCard()">🗑️ Eliminar</button>
+                    <div style="display: flex; gap: 0.5rem; margin-left: auto;">
+                        <button type="button" class="btn-action" onclick="closeCardEditModal()">✖ Cancel·lar</button>
+                        <button type="submit" class="btn-action primary">💾 Desar Canvis</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -2291,9 +2446,28 @@
             }
         }
 
-        // Alternar mode editor (Deshabilitat permanentment a la versió pública)
+        // Alternar mode editor
         function toggleEditorMode() {
-            return false;
+            isEditorMode = !isEditorMode;
+            document.body.classList.toggle('editor-active', isEditorMode);
+            const btn = document.getElementById('btn-editor-mode');
+            const banner = document.getElementById('editor-banner');
+
+            if (isEditorMode) {
+                btn.classList.add('active');
+                btn.innerText = '✖ Tancar Editor';
+                banner.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = '✏️ Mode Editor Ubicacions';
+                banner.classList.remove('active');
+                if (isRouteEditMode) toggleRouteEdit();
+                if (activeLineEditingId) stopEditingLineNodes();
+            }
+
+            renderAllMarkers();
+            renderRoutePolyline();
+            renderSidebar();
         }
 
         // Alternar mode edició d'itinerari general (afegir nodes fent clics)
@@ -2591,7 +2765,6 @@
 
         // Guardar dades a Supabase i LocalStorage amb aïllament total
         async function saveCustomCoords() {
-            if (!isEditorMode) return;
             const btnSave = document.querySelector('.btn-editor-save');
             const originalText = btnSave ? btnSave.innerText : '💾 Guardar a Supabase';
             if (btnSave) {
