@@ -1323,10 +1323,10 @@
                 id: 'lum_baix',
                 type: 'lum',
                 code: '🌊',
-                name: "2. Carrer de Baix · «Onades Olímpiques»",
-                artist: "Creació d'Airearte",
-                project: 'Moviment d\'Onades i Disseny Olímpic',
-                descripcio: "Instal·lació inspirada en el moviment de les onades i l'esperit del disseny dels Jocs Olímpics amb un joc de formes i llums visuals (creació d'Airearte).",
+                name: "2. Carrer de Baix · «Onades Olímpiques Barcelona '92»",
+                artist: "Creació d'Airearte · Cessió de Fundació Bassat",
+                project: "Onades escultòriques dels Jocs Olímpics de Barcelona '92",
+                descripcio: "Instal·lació lumínica amb les monumentals onades escultòriques dels Jocs Olímpics de Barcelona '92, cedides per la Fundació Bassat (creació lumínica d'Airearte).",
                 lat: 42.07140,
                 lng: 2.95390,
                 ordre: 3
@@ -2130,6 +2130,9 @@
                 instagramButton = `<a href="https://instagram.com/dabuproject" target="_blank" rel="noopener noreferrer" class="popup-btn" style="background: rgba(236, 72, 153, 0.15); border-color: #ec4899; color: #f472b6;">📸 @dabuproject</a>`;
             } else if (['lum_baix', 'lum_tarongeta', 'lum_clos_garriga', 'lum_generalitat', 'lum_diposit', 'lum_1788310197763', 'lum_laberint', 'lum_1788309924074', 'lum_line_1788308987054', 'lum_drac'].includes(loc.id) || ['2', '3', '4', '7', '8'].includes(String(loc.code).trim())) {
                 instagramButton = `<a href="https://instagram.com/airearteairearte" target="_blank" rel="noopener noreferrer" class="popup-btn" style="background: rgba(236, 72, 153, 0.15); border-color: #ec4899; color: #f472b6;">📸 @airearteairearte</a>`;
+                if (loc.id === 'lum_baix' || loc.id === 'lum_1788310197763' || String(loc.code).trim() === '2') {
+                    instagramButton += ` <a href="https://www.instagram.com/fundaciobassat/" target="_blank" rel="noopener noreferrer" class="popup-btn" style="background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8;">🏛️ @fundaciobassat</a>`;
+                }
             }
 
             const popupContent = `
