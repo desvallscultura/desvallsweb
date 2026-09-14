@@ -937,7 +937,7 @@
         }
 
         const OFFICIAL_SPOT_TEXTS = {
-            '0': "Benvinguts i benvingudes, som a la plaça 1 d'octubre, el cor del jardí de les meduses i el punt de partida per endinsar-nos en el circuit d'Art Lumínic. Tot aquest univers visual pren forma amb la direcció artística de Lluís Mohedano i és fruit de la col·laboració estreta entre les associacions Desvalls Cultura i Airearte. Des d'aquí, seguint el càlid camí de les espelmes, ens submergirem en les aigües abissals del mare nostrum a través de nou instal·lacions fascinants. Mireu al vostre voltant: la plaça ja batega amb vida marina que desprèn la gran medusa inflable, una espectacular creació que ens dona la benvinguda. Abans, però, escolteu aquests versos... Medusa de seda fina, ballarina, transparent i preciosa, mandrosa, llargues cintes de color, blau, morat i groc carmí, l'acompanyen pel camí, quan navega a l'aigua clara, sembla l'arc de Sant Martí.",
+            '0': "Punt d'Inici del Circuit d'Art Lumínic «Mar Mediterrània». Seguiu el càlid camí d'espelmes cap a la Plaça 1 d'Octubre (Punt 1), a menys de 15 metres.",
             '1': "Benvinguts i benvingudes, som a la plaça 1 d'octubre, el cor del jardí de les meduses i el punt de partida per endinsar-nos en el circuit d'Art Lumínic. Tot aquest univers visual pren forma amb la direcció artística de Lluís Mohedano i és fruit de la col·laboració estreta entre les associacions Desvalls Cultura i Airearte. Des d'aquí, seguint el càlid camí de les espelmes, ens submergirem en les aigües abissals del mare nostrum a través de nou instal·lacions fascinants. Mireu al vostre voltant: la plaça ja batega amb vida marina que desprèn la gran medusa inflable, una espectacular creació que ens dona la benvinguda. Abans, però, escolteu aquests versos... Medusa de seda fina, ballarina, transparent i preciosa, mandrosa, llargues cintes de color, blau, morat i groc carmí, l'acompanyen pel camí, quan navega a l'aigua clara, sembla l'arc de Sant Martí.",
             '2': "Carrer de Baix, Onades Olímpiques. Aquestes monumentals onades escultòriques van bategar als Jocs Olímpics de Barcelona 92 i arriben a Sant Jordi Desvalls gràcies a la generosa cessió de la Fundació Bassat, transformades en un joc dinàmic de formes i llums visuals per Airearte.",
             '3': "Carrer Tarongeta, El túnel blau. Passatge envoltat de teles i atmosferes de llum blava. Inclou una Medusa gegant al final de la inmersió submarina.",
@@ -1390,8 +1390,8 @@
         let isAudioPlaying = false;
 
         const JOANA_AUDIO_BY_ID = {
-            '00_inici': 'sons/joana/00_inici.mp3',
-            'lum_start': 'sons/joana/00_inici.mp3',
+            '00_inici': null,
+            'lum_start': null,
             '01_placa_octubre': 'sons/joana/01_placa_octubre.mp3',
             'lum_octubre': 'sons/joana/01_placa_octubre.mp3',
             '02_carrer_baix': 'sons/joana/02_carrer_baix.mp3',
@@ -1413,7 +1413,7 @@
         };
 
         const JOANA_AUDIO_BY_INDEX = [
-            'sons/joana/00_inici.mp3',
+            null, // Punt 0 (Inici) - Sense àudio per proximitat (<15m) amb el Punt 1
             'sons/joana/01_placa_octubre.mp3',
             'sons/joana/02_carrer_baix.mp3',
             'sons/joana/03_carrer_tarongeta.mp3',
@@ -1478,6 +1478,15 @@
             currentPlayingSpotId = spot.id;
 
             stopAllAudio();
+
+            // Punt d'Inici: no té àudio per proximitat (<15m) amb el Punt 1
+            if (spot.id === '00_inici' || spot.id === 'lum_start' || spot.index === 0 || spot.type === 'start') {
+                updatePlayerUI(spot, false);
+                document.querySelectorAll('.spot-marker-circle').forEach(el => el.classList.remove('is-playing'));
+                const markerEl = document.getElementById(`spot-marker-${spot.id}`);
+                if (markerEl) markerEl.classList.add('is-playing');
+                return;
+            }
 
             if (isAudioMuted) {
                 updatePlayerUI(spot, false);
@@ -1586,6 +1595,12 @@
             const spot = spots.find(s => s.id === currentPlayingSpotId) || spots[currentTargetIndex];
             if (!spot) return;
 
+            if (spot.id === '00_inici' || spot.id === 'lum_start' || spot.index === 0 || spot.type === 'start') {
+                // El punt d'inici no té àudio; avancem directament al Punt 1
+                stepNextPoint();
+                return;
+            }
+
             if (currentAudio) {
                 if (!currentAudio.paused) {
                     currentAudio.pause();
@@ -1644,6 +1659,13 @@
             const eq = document.getElementById('audio-equalizer');
             const playIcon = document.getElementById('btn-play-icon');
             const playText = document.getElementById('btn-play-text');
+
+            if (spot.id === '00_inici' || spot.id === 'lum_start' || spot.index === 0 || spot.type === 'start') {
+                eq.classList.remove('playing');
+                playIcon.innerText = '🚩';
+                playText.innerText = 'Inici';
+                return;
+            }
 
             if (isPlaying) {
                 eq.classList.add('playing');
@@ -1750,14 +1772,21 @@
                 // Si l'usuari entra dins del radi de la instal·lació (ex: 10m)
                 if (dist <= spot.radius) {
                     if (currentPlayingSpotId !== spot.id) {
+                        currentTargetIndex = spot.index;
+                        updateTargetUI();
+
+                        // Si és el punt d'inici, no emetre cap àudio (a menys de 15m del punt 1)
+                        if (spot.id === '00_inici' || spot.id === 'lum_start' || spot.index === 0 || spot.type === 'start') {
+                            playSpotSpeech(spot);
+                            break;
+                        }
+
                         console.log(`📍 Has arribat a: ${spot.name} (${dist}m) -> Llegint fitxa en català!`);
                         
                         if (navigator.vibrate) {
                             navigator.vibrate([120, 80, 120]);
                         }
                         
-                        currentTargetIndex = spot.index;
-                        updateTargetUI();
                         playSpotSpeech(spot);
                     }
                     break;
