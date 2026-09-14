@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Dynamic Year for Footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     // 2. Form Submission Logic using Google Apps Script (AJAX)
     const form = document.getElementById('associationForm');

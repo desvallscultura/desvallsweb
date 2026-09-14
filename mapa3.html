@@ -910,15 +910,24 @@
             position: absolute;
             bottom: 1.25rem;
             left: 1rem;
-            background: rgba(11, 15, 25, 0.94);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 12px;
-            padding: 0.85rem 1rem;
+            background: rgba(11, 15, 25, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(6, 182, 212, 0.35);
+            border-radius: 14px;
+            padding: 0.9rem 1.15rem;
             z-index: 998;
-            font-size: 0.8rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
-            max-width: 310px;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(6, 182, 212, 0.15);
+            width: 350px;
+            max-width: calc(100vw - 2.5rem);
+            box-sizing: border-box;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .map-legend.collapsed {
+            display: none !important;
         }
 
         .map-legend-header {
@@ -927,22 +936,52 @@
             justify-content: space-between;
             font-weight: 800;
             color: white;
-            margin-bottom: 0.6rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0.35rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 0.45rem;
+        }
+
+        .map-legend-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.15s ease;
+        }
+
+        .map-legend-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
         }
 
         .map-legend-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
         }
 
         .legend-item {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: flex-start;
+            gap: 0.65rem;
             color: #cbd5e1;
+            font-size: 0.82rem;
+            line-height: 1.35;
+        }
+
+        .legend-item span:last-child {
+            flex: 1;
+            min-width: 0;
         }
 
         .legend-dot {
@@ -950,6 +989,7 @@
             height: 14px;
             border-radius: 50%;
             flex-shrink: 0;
+            margin-top: 3px;
         }
 
         .legend-dot-num {
@@ -968,6 +1008,7 @@
             flex-shrink: 0;
             font-family: 'Outfit', sans-serif;
             letter-spacing: -0.5px;
+            margin-top: 1px;
         }
 
         .legend-line {
@@ -977,13 +1018,81 @@
             flex-shrink: 0;
             background: #facc15;
             box-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+            margin-top: 7px;
+        }
+
+        /* Botó flotant per reobrir la llegenda si s'ha tancat */
+        .btn-reopen-legend {
+            position: absolute;
+            bottom: 1.25rem;
+            left: 1rem;
+            background: rgba(11, 15, 25, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            color: #38bdf8;
+            border-radius: 24px;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 0.4rem;
+            z-index: 997;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            transition: all 0.2s ease;
+        }
+
+        .btn-reopen-legend:hover {
+            background: rgba(6, 182, 212, 0.2);
+            color: white;
+            border-color: #38bdf8;
         }
 
         /* Classes especials per a l'exportació d'imatges */
         #map-wrapper.is-exporting .map-layer-switcher,
         #map-wrapper.is-exporting .symbol-size-control,
+        #map-wrapper.is-exporting .btn-reopen-legend,
         #map-wrapper.is-exporting .leaflet-control-zoom {
             display: none !important;
+        }
+
+        /* Millores visuals de la llegenda en l'exportació DIN A3 */
+        #map-wrapper.is-exporting .map-legend {
+            width: 380px !important;
+            max-width: 380px !important;
+            padding: 1.1rem 1.35rem !important;
+            background: rgba(11, 15, 25, 0.96) !important;
+            border: 2px solid rgba(6, 182, 212, 0.5) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85) !important;
+            border-radius: 16px !important;
+        }
+
+        #map-wrapper.is-exporting .map-legend-header {
+            font-size: 0.95rem !important;
+            margin-bottom: 0.85rem !important;
+            padding-bottom: 0.5rem !important;
+            white-space: nowrap !important;
+        }
+
+        #map-wrapper.is-exporting .map-legend .map-legend-close-btn {
+            display: none !important;
+        }
+
+        #map-wrapper.is-exporting .map-legend-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+        }
+
+        #map-wrapper.is-exporting .legend-item {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
+            font-size: 0.88rem !important;
+            line-height: 1.4 !important;
+            color: #e2e8f0 !important;
         }
 
         #map-wrapper.export-bg-only .leaflet-marker-pane,
@@ -1211,11 +1320,16 @@
                 <button type="button" class="btn-symbol-scale" onclick="changeSymbolScale(0.15)" title="Fer símbols més grans">+</button>
             </div>
 
+            <!-- Botó per reobrir la llegenda si s'ha tancat -->
+            <button type="button" class="btn-reopen-legend" id="btn-reopen-legend" onclick="toggleLegend(true)" title="Mostrar la llegenda">
+                <span>✨ Llegenda</span>
+            </button>
+
             <!-- Llegenda Flotant -->
             <div class="map-legend" id="map-legend">
                 <div class="map-legend-header">
                     <span>✨ LLEGENDA ART LUMÍNIC</span>
-                    <button type="button" onclick="toggleLegend()" style="background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 0.75rem;">✖</button>
+                    <button type="button" class="map-legend-close-btn" onclick="toggleLegend(false)" title="Tancar la llegenda">✖</button>
                 </div>
                 <div class="map-legend-grid">
                     <div class="legend-item">
@@ -2831,9 +2945,23 @@
             setTimeout(() => map && map.invalidateSize(), 320);
         }
 
-        function toggleLegend() {
+        function toggleLegend(forceState) {
             const leg = document.getElementById('map-legend');
-            leg.style.display = leg.style.display === 'none' ? 'block' : 'none';
+            const reopenBtn = document.getElementById('btn-reopen-legend');
+            if (!leg) return;
+
+            const isCurrentlyHidden = leg.classList.contains('collapsed') || leg.style.display === 'none';
+            const shouldShow = forceState !== undefined ? forceState : isCurrentlyHidden;
+
+            if (shouldShow) {
+                leg.classList.remove('collapsed');
+                leg.style.display = 'block';
+                if (reopenBtn) reopenBtn.style.display = 'none';
+            } else {
+                leg.classList.add('collapsed');
+                leg.style.display = 'none';
+                if (reopenBtn) reopenBtn.style.display = 'inline-flex';
+            }
         }
 
         // Inserir metadades de 300 DPI (pHYs chunk) en un PNG base64
@@ -2859,7 +2987,7 @@
                     0x00, 0x00, 0x2E, 0x23, // 11811 ppm X
                     0x00, 0x00, 0x2E, 0x23, // 11811 ppm Y
                     0x01,
-                    0x98, 0xFC, 0x51, 0x48
+                    0x78, 0xA5, 0x3F, 0x76
                 ]);
 
                 const newBytes = new Uint8Array(byteNumbers.length + physChunk.length);
@@ -2879,31 +3007,33 @@
             }
         }
 
-        // Reescalar a DIN A3 apaisat (4961 x 3508 px) a 300 DPI
-        async function scaleToDINA3_300DPI(sourceDataUrl, isTransparent = false) {
+        // Reescalar i composar a DIN A3 apaisat (4961 x 3508 px) a 300 DPI
+        function scaleToDINA3_300DPI(sourceDataUrl, isTransparent = false) {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => {
                     const A3_WIDTH = 4961;
                     const A3_HEIGHT = 3508;
+
                     const canvas = document.createElement('canvas');
                     canvas.width = A3_WIDTH;
                     canvas.height = A3_HEIGHT;
                     const ctx = canvas.getContext('2d');
-
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
 
                     if (!isTransparent) {
                         ctx.fillStyle = '#050811';
                         ctx.fillRect(0, 0, A3_WIDTH, A3_HEIGHT);
+                    } else {
+                        ctx.clearRect(0, 0, A3_WIDTH, A3_HEIGHT);
                     }
 
                     const srcAspect = img.width / img.height;
-                    const dstAspect = A3_WIDTH / A3_HEIGHT;
-
+                    const destAspect = A3_WIDTH / A3_HEIGHT;
                     let drawW, drawH, drawX, drawY;
-                    if (srcAspect > dstAspect) {
+
+                    if (srcAspect > destAspect) {
                         drawW = A3_WIDTH;
                         drawH = A3_WIDTH / srcAspect;
                         drawX = 0;
@@ -2916,7 +3046,6 @@
                     }
 
                     ctx.drawImage(img, drawX, drawY, drawW, drawH);
-
                     let finalDataUrl = canvas.toDataURL('image/png');
                     finalDataUrl = injectDpi300(finalDataUrl);
                     resolve(finalDataUrl);
@@ -2939,6 +3068,7 @@
                             if (node.classList && (
                                 node.classList.contains('map-layer-switcher') ||
                                 node.classList.contains('symbol-size-control') ||
+                                node.classList.contains('btn-reopen-legend') ||
                                 node.classList.contains('editor-banner') ||
                                 node.classList.contains('leaflet-control-zoom')
                             )) {
@@ -2947,20 +3077,36 @@
                             return true;
                         }
                     });
-                } catch (errDom) {
-                    console.warn('dom-to-image fallback:', errDom);
+                } catch (e) {
+                    console.warn('domtoimage error, intentant html2canvas...', e);
                 }
             }
 
             if (!dataUrl && window.html2canvas) {
-                const canvas = await html2canvas(mapEl, {
-                    useCORS: true,
-                    allowTaint: false,
-                    scale: 2,
-                    backgroundColor: isTransparent ? null : '#050811',
-                    logging: false
-                });
-                dataUrl = canvas.toDataURL('image/png');
+                try {
+                    const canvas = await html2canvas(mapEl, {
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: isTransparent ? null : '#050811',
+                        scale: 2,
+                        logging: false,
+                        ignoreElements: function(node) {
+                            if (node.classList && (
+                                node.classList.contains('map-layer-switcher') ||
+                                node.classList.contains('symbol-size-control') ||
+                                node.classList.contains('btn-reopen-legend') ||
+                                node.classList.contains('editor-banner') ||
+                                node.classList.contains('leaflet-control-zoom')
+                            )) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+                    dataUrl = canvas.toDataURL('image/png');
+                } catch (e) {
+                    console.error('html2canvas error:', e);
+                }
             }
 
             return dataUrl;
@@ -2993,7 +3139,7 @@
                 }
                 mapEl.classList.remove('export-bg-only', 'export-symbols-only', 'export-no-legend');
                 mapEl.classList.add('is-exporting');
-                await sleep(180);
+                await sleep(250);
 
                 let dataUrlFull = await captureMapFrame(mapEl, false);
                 if (dataUrlFull) {
@@ -3005,7 +3151,7 @@
                 if (btnExport) btnExport.innerText = '⏳ (2/5) Generant DIN A3 300 DPI Sense Llegenda...';
                 mapEl.classList.remove('export-bg-only', 'export-symbols-only');
                 mapEl.classList.add('is-exporting', 'export-no-legend');
-                await sleep(180);
+                await sleep(250);
 
                 let dataUrlNoLegend = await captureMapFrame(mapEl, false);
                 if (dataUrlNoLegend) {
@@ -3017,7 +3163,7 @@
                 if (btnExport) btnExport.innerText = '⏳ (3/5) Generant Mapa Base Net DIN A3...';
                 mapEl.classList.remove('export-symbols-only', 'export-no-legend');
                 mapEl.classList.add('is-exporting', 'export-bg-only');
-                await sleep(180);
+                await sleep(250);
 
                 let dataUrlBg = await captureMapFrame(mapEl, false);
                 if (dataUrlBg) {
@@ -3029,7 +3175,7 @@
                 if (btnExport) btnExport.innerText = '⏳ (4/5) Generant Símbols Transparents DIN A3...';
                 mapEl.classList.remove('export-bg-only');
                 mapEl.classList.add('is-exporting', 'export-symbols-only', 'export-no-legend');
-                await sleep(180);
+                await sleep(250);
 
                 let dataUrlSymbolsOnly = await captureMapFrame(mapEl, true);
                 if (dataUrlSymbolsOnly) {
@@ -3041,7 +3187,7 @@
                 if (btnExport) btnExport.innerText = '⏳ (5/5) Generant Símbols i Llegenda Transparents DIN A3...';
                 mapEl.classList.remove('export-bg-only', 'export-no-legend');
                 mapEl.classList.add('is-exporting', 'export-symbols-only');
-                await sleep(180);
+                await sleep(250);
 
                 let dataUrlSymbolsLegend = await captureMapFrame(mapEl, true);
                 if (dataUrlSymbolsLegend) {
