@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartell Oficial A3 · Festival d'Art Lumínic 2026 «Mar Mediterrània»</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @page {
+            size: A3 portrait;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #090d16;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 20px 10px 60px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .no-print-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 25px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 24px;
+            border-radius: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        .btn-toolbar {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+            text-decoration: none;
+        }
+
+        .btn-toolbar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+        }
+
+        .btn-toolbar.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            color: #cbd5e1;
+        }
+
+        .btn-toolbar.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .poster-a3 {
+            width: 297mm;
+            height: 420mm;
+            max-width: 100%;
+            position: relative;
+            background: #020617;
+            overflow: hidden;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .poster-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('img/cartell_fons_art_luminic.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            z-index: 1;
+        }
+
+        .poster-overlay-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 42%;
+            background: linear-gradient(180deg, 
+                rgba(2, 6, 23, 0.98) 0%, 
+                rgba(2, 6, 23, 0.92) 30%, 
+                rgba(2, 6, 23, 0.7) 65%, 
+                rgba(2, 6, 23, 0) 100%
+            );
+            z-index: 2;
+        }
+
+        .poster-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 54%;
+            background: linear-gradient(0deg, 
+                rgba(2, 6, 23, 0.99) 0%, 
+                rgba(2, 6, 23, 0.94) 45%, 
+                rgba(2, 6, 23, 0.7) 75%, 
+                rgba(2, 6, 23, 0) 100%
+            );
+            z-index: 2;
+        }
+
+        .poster-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16mm 14mm 12mm;
+        }
+
+        .poster-header {
+            text-align: center;
+        }
+
+        .header-edition-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 20px;
+            background: rgba(14, 165, 233, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 30px;
+            font-size: 11pt;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #7dd3fc;
+            margin-bottom: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .header-organizers {
+            font-size: 9pt;
+            color: #94a3b8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .main-title-tag {
+            font-family: 'Cinzel', 'Outfit', serif;
+            font-size: 19pt;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .main-title-luminic {
+            font-family: 'Outfit', sans-serif;
+            font-size: 44pt;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.02;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 40%, #38bdf8 80%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+        }
+
+        .main-title-mediterrania {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 38pt;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #38bdf8;
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.6), 0 0 50px rgba(6, 182, 212, 0.3);
+            margin-top: -4px;
+        }
+
+        .header-punchline {
+            font-size: 10.5pt;
+            color: #e2e8f0;
+            font-weight: 600;
+            letter-spacing: 1px;
+            max-width: 520px;
+            margin: 8px auto 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .datetime-banner {
+            margin: 14px auto 0;
+            max-width: 600px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(30, 20, 10, 0.85) 50%, rgba(245, 158, 11, 0.18) 100%);
+            border: 1.5px solid rgba(251, 191, 36, 0.55);
+            border-radius: 16px;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .date-box {
+            text-align: center;
+        }
+
+        .date-main {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15pt;
+            font-weight: 900;
+            color: #fef08a;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .time-location {
+            font-size: 10pt;
+            color: #fed7aa;
+            font-weight: 700;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .free-pill {
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 8.5pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+            white-space: nowrap;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 9px 11px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .feature-card.highlight-bassat {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(14, 165, 233, 0.15);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+        }
+
+        .feature-card.highlight-candle {
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(245, 158, 11, 0.15);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .feature-card.highlight-escola {
+            border-color: rgba(236, 72, 153, 0.5);
+            background: rgba(236, 72, 153, 0.12);
+        }
+
+        .feature-icon-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .feature-icon {
+            font-size: 13pt;
+        }
+
+        .feature-title {
+            font-size: 8.8pt;
+            font-weight: 800;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .feature-desc {
+            font-size: 7.6pt;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .feature-desc strong {
+            color: #f1f5f9;
+        }
+
+        .experience-strip {
+            background: rgba(2, 6, 23, 0.92);
+            border: 1.5px solid rgba(56, 189, 248, 0.35);
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .exp-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .qr-frame {
+            background: white;
+            padding: 5px;
+            border-radius: 10px;
+            width: 68px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            flex-shrink: 0;
+        }
+
+        .qr-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .exp-text-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .exp-badge {
+            font-size: 7.5pt;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .exp-title {
+            font-size: 11pt;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.2px;
+        }
+
+        .exp-desc {
+            font-size: 8pt;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+
+        .exp-gastro {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px dashed rgba(251, 191, 36, 0.5);
+            padding: 7px 12px;
+            border-radius: 12px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .exp-gastro-title {
+            font-size: 8pt;
+            font-weight: 800;
+            color: #fde047;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .exp-gastro-time {
+            font-size: 8.5pt;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .poster-footer {
+            background: rgba(2, 6, 23, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 8px;
+        }
+
+        .footer-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 6.8pt;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+            padding: 0 4px;
+        }
+
+        .logos-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
+        }
+
+        .logo-item {
+            background: #ffffff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 28px;
+            max-width: 110px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        .logo-item img {
+            max-height: 20px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .logo-item.dark {
+            background: #0d0e12;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .copyright-strip {
+            text-align: center;
+            font-size: 6.8pt;
+            color: #475569;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        @media print {
+            body {
+                background: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .no-print-toolbar {
+                display: none !important;
+            }
+
+            .poster-a3 {
+                box-shadow: none !important;
+                width: 297mm !important;
+                height: 420mm !important;
+                page-break-after: always;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print-toolbar">
+        <button type="button" class="btn-toolbar" onclick="window.print()">
+            🖨️ Imprimir / Guardar a PDF (Format A3)
+        </button>
+        <a href="art-luminic-2026.html" class="btn-toolbar secondary">
+            ✨ Web d'Art Lumínic
+        </a>
+        <a href="audioguia.html" class="btn-toolbar secondary">
+            🎧 Audioguia GPS
+        </a>
+        <a href="mapa3.html" class="btn-toolbar secondary">
+            🗺️ Plànol Oficial
+        </a>
+    </div>
+
+    <div class="poster-a3">
+        <div class="poster-bg"></div>
+        <div class="poster-overlay-top"></div>
+        <div class="poster-overlay-bottom"></div>
+
+        <div class="poster-content">
+
+            <header class="poster-header">
+                <div class="header-edition-badge">
+                    <span>🌟</span> 5a Fira Pluja d'Art · Sant Jordi Desvalls
+                </div>
+                <p class="header-organizers">
+                    Associació Desvalls Cultura &middot; Associació Airearte presenten:
+                </p>
+                <div class="main-title-tag">FESTIVAL D'ART LUMÍNIC</div>
+                <h1 class="main-title-luminic">MAR MEDITERRÀNIA</h1>
+                <div class="main-title-mediterrania">L'oceà de llum a Sant Jordi Desvalls</div>
+                
+                <p class="header-punchline">
+                    Un viatge sensorial nocturn on el nucli antic es transforma en un fons marí vibrant d'art, poesia i llum.
+                </p>
+
+                <div class="datetime-banner">
+                    <div class="date-box">
+                        <div class="date-main">📅 Dissabte 19 de Setembre de 2026</div>
+                        <div class="time-location">⏰ De 21:30 h a 01:30 h &middot; 📍 Nucli Antic de Sant Jordi Desvalls</div>
+                    </div>
+                    <div class="free-pill">
+                        ✨ Entrada Lliure
+                    </div>
+                </div>
+            </header>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: auto;">
+                
+                <div class="features-grid">
+                    
+                    <div class="feature-card highlight-candle">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">🕯️</span>
+                            <span class="feature-title" style="color: #fde047;">El Camí d'Espelmes</span>
+                        </div>
+                        <p class="feature-desc">
+                            Centenars d'espelmes al terra guien l'itinerari que connecta els <strong>9 espais lumínics</strong> del poble.
+                        </p>
+                    </div>
+
+                    <div class="feature-card highlight-bassat">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">🏅</span>
+                            <span class="feature-title" style="color: #7dd3fc;">Onades Barcelona '92</span>
+                        </div>
+                        <p class="feature-desc">
+                            Escultures olímpiques històriques per gentilesa i <strong>cessió de la Fundació Bassat</strong> (Creació Airearte).
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">🪼</span>
+                            <span class="feature-title">Meduses Gegants</span>
+                        </div>
+                        <p class="feature-desc">
+                            Instal·lacions inflables monumentals d'<strong>Airearte</strong> sota la direcció artística de <strong>Lluís Mohedano</strong>.
+                        </p>
+                    </div>
+
+                    <div class="feature-card highlight-escola">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">🏛️</span>
+                            <span class="feature-title" style="color: #f472b6;">MEDITERRÀNIA. FONS.</span>
+                        </div>
+                        <p class="feature-desc">
+                            Obra immersiva colpidora a l'Antiga Escola creada pels artistes <strong>DABÚ + isi</strong> (@dabuproject).
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">👑</span>
+                            <span class="feature-title">La Reina del Festival</span>
+                        </div>
+                        <p class="feature-desc">
+                            Monumental <strong>serp viva al dipòsit de l'aigua</strong> amb focus d'alta potència dominant l'horitzó.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-title">
+                            <span class="feature-icon">🌌</span>
+                            <span class="feature-title">Espectacle &amp; Live AV</span>
+                        </div>
+                        <p class="feature-desc">
+                            Inauguració «Vida i Mort» (21:30 h) i Live AV «Ommatidia» (21:45 h) a la Plaça 1 d'Octubre.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="experience-strip">
+                    <div class="exp-left">
+                        <div class="qr-frame">
+                            <img src="img/qr_art_luminic.svg" alt="Codi QR Art Lumínic i Audioguia" onerror="this.onerror=null; this.src='img/qr_art_luminic.png';">
+                        </div>
+                        <div class="exp-text-box">
+                            <span class="exp-badge">📱 Experiència Interactiva amb el Mòbil</span>
+                            <div class="exp-title">Audioguia GPS &middot; Plànol Oficial en Directe</div>
+                            <div class="exp-desc">
+                                Escaneja el QR per escoltar les locucions de la <strong>Joana</strong> a cada instal·lació i seguir el mapa en temps real.<br>
+                                <strong style="color: #38bdf8;">desvallscultura.cat/art-luminic-2026.html</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="exp-gastro">
+                        <div class="exp-gastro-title">🍔 Foodtrucks &amp; Festa</div>
+                        <div class="exp-gastro-time">Dv i Ds: 19:00 h &ndash; 0:00 h</div>
+                        <div style="font-size: 7pt; color: #cbd5e1; margin-top: 1px;">Sessió ball DJ Pipa (Ds nit)</div>
+                    </div>
+                </div>
+
+                <footer class="poster-footer">
+                    <div class="footer-labels">
+                        <span>Organitzen &amp; Direcció</span>
+                        <span>Cessió Patrimonial</span>
+                        <span>Col·laboració Artística</span>
+                        <span>Amb el suport institucional de</span>
+                    </div>
+
+                    <div class="logos-bar">
+                        <div class="logo-item" title="Desvalls Cultura">
+                            <img src="logos/Desvalls Cultura.jpg" alt="Desvalls Cultura">
+                        </div>
+
+                        <div class="logo-item" title="Fundació Bassat">
+                            <img src="logos/logo_fund_bassat.jpeg" alt="Fundació Bassat">
+                        </div>
+
+                        <div class="logo-item dark" title="DABÚ">
+                            <img src="logos/dabu_logo_crop.png" alt="DABÚ">
+                        </div>
+
+                        <div class="logo-item" title="isi">
+                            <img src="logos/isi_logo_crop.png" alt="isi">
+                        </div>
+
+                        <div class="logo-item" title="Ajuntament de Sant Jordi Desvalls">
+                            <img src="logos/Ajuntament Sant Jordi Desvalls.png" alt="Ajuntament Sant Jordi Desvalls">
+                        </div>
+
+                        <div class="logo-item" title="Generalitat de Catalunya">
+                            <img src="logos/Generalitat de Catalunya.png" alt="Generalitat de Catalunya">
+                        </div>
+
+                        <div class="logo-item" title="Diputació de Girona">
+                            <img src="logos/Diputació de Girona.jpg" alt="Diputació de Girona">
+                        </div>
+
+                        <div class="logo-item" title="Consell Comarcal del Gironès">
+                            <img src="logos/Consell Comarcal.png" alt="Consell Comarcal">
+                        </div>
+
+                        <div class="logo-item" title="Bòlit Centre d'Art Contemporani">
+                            <img src="logos/bolit.png" alt="Bòlit">
+                        </div>
+                    </div>
+
+                    <div class="copyright-strip">
+                        &copy; 2026 Associació Cultural Desvalls Cultura &middot; Sant Jordi Desvalls (Gironès) &middot; Disseny Oficial del Festival d'Art Lumínic «Mar Mediterrània»
+                    </div>
+                </footer>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
