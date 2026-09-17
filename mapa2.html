@@ -404,26 +404,28 @@
         }
 
         .btn-card-edit {
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.5);
-            color: #c4b5fd;
-            width: 28px;
-            height: 28px;
+            background: rgba(139, 92, 246, 0.25);
+            border: 1px solid rgba(139, 92, 246, 0.6);
+            color: #ddd6fe;
+            padding: 0.25rem 0.6rem;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
+            gap: 0.3rem;
+            font-size: 0.78rem;
+            font-weight: 700;
             margin-left: auto;
             flex-shrink: 0;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }
 
         .btn-card-edit:hover {
             background: #8b5cf6;
             color: #ffffff;
-            transform: scale(1.1);
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
 
         /* Custom Markers Leaflet */
@@ -1445,6 +1447,9 @@
                     <button type="button" class="btn-action primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem; border-radius: 20px;" onclick="saveCustomCoords()">💾 Guardar a Supabase</button>
                 </div>
                 <div class="editor-buttons-row">
+                    <select id="quick-edit-space-select" onchange="if(this.value){ openCardEditModal(this.value); this.value=''; }" style="background: rgba(139, 92, 246, 0.3); border: 1.5px solid #8b5cf6; color: #ffffff; padding: 0.35rem 0.65rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer; outline: none; max-width: 280px;" title="Selecciona una sala o espai per posar badges d'accessibilitat o editar textos">
+                        <option value="">🏷️ Tria una Sala per posar Badges / Graons... ▾</option>
+                    </select>
                     <button type="button" class="btn-add-pin btn-craft-draw" id="btn-draw-craft" onclick="toggleCraftDrawing()">🛒 Dibuixar Parades</button>
                     <button type="button" class="btn-add-pin btn-craft-draw" id="btn-draw-accessible" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7;" onclick="toggleAccessibleDrawing()">♿ Traçar Itinerari Accessible</button>
                     <button type="button" class="btn-add-pin" onclick="clearAccessibleRoute()" style="color: #fca5a5;">🗑️ Esborrar Itinerari ♿</button>
@@ -1453,6 +1458,12 @@
                     <button type="button" class="btn-add-pin" onclick="addNewPoint('wc_accessible')">➕ Nou WC Adaptat (♿)</button>
                     <button type="button" class="btn-add-pin" onclick="addNewPoint('food')">➕ Nou Foodtruck (🚚)</button>
                     <button type="button" class="btn-add-pin" onclick="addNewPoint('serv')">➕ Nou Pàrquing (🅿️)</button>
+                </div>
+
+                <!-- Banner informatiu ràpid sobre com posar badges d'accessibilitat -->
+                <div style="width: 100%; margin-top: 0.4rem; font-size: 0.8rem; background: rgba(139, 92, 246, 0.15); border: 1px dashed rgba(139, 92, 246, 0.45); padding: 0.45rem 0.8rem; border-radius: 6px; color: #ddd6fe; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <span>🏷️ <strong>Com posar badges informatius (♿ Cota zero, 🪜 Graons, ♿ Rampa):</strong></span>
+                    <span>Tria una sala al desplegable <strong>«🏷️ Tria una Sala»</strong>, o fes clic a qualsevol símbol del mapa i prem <strong>«✏️ Editar Textos i Badges»</strong>, o prem <strong>«✏️ Editar ♿»</strong> a la llista d'espais de la dreta.</span>
                 </div>
                 
                 <!-- Ajustos de Transparència i Ample de Carrer per a Parades -->
@@ -1621,15 +1632,18 @@
                 </div>
 
                 <!-- Informació d'Accessibilitat de l'Espai -->
-                <div class="form-group" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.75rem; margin-top: 0.35rem;">
-                    <label style="color: #34d399; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
-                        ♿ Informació d'Accessibilitat de l'Espai
+                <div class="form-group" style="background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.45); border-radius: 8px; padding: 0.85rem; margin-top: 0.5rem;">
+                    <label style="color: #34d399; font-weight: 800; display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem;">
+                        ♿ Badges i Informació d'Accessibilitat de l'Espai
                     </label>
-                    <div style="display: flex; gap: 0.75rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                    <p style="font-size: 0.76rem; color: #cbd5e1; margin: 0.2rem 0 0.5rem 0;">
+                        Indica si la sala té graons d'accés (apareixerà una icona 🪜 al mapa) o si és 100% accessible amb cota zero o rampa.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
                         <div style="flex: 1.2; min-width: 180px;">
-                            <label for="edit-card-access-type" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 0.2rem;">Tipus d'Accés / Entrada:</label>
-                            <select id="edit-card-access-type" style="width: 100%; padding: 0.45rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white;">
-                                <option value="none">❓ No especificat</option>
+                            <label for="edit-card-access-type" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 0.2rem;">Tipus d'Accés / Entrada (Badge):</label>
+                            <select id="edit-card-access-type" onchange="updateAccessBadgePreview()" style="width: 100%; padding: 0.5rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 600;">
+                                <option value="none">❓ No especificat (sense badge)</option>
                                 <option value="level">♿ Cota zero (sense graons)</option>
                                 <option value="ramp">♿ Rampa d'accés habilitada</option>
                                 <option value="step1">🪜 1 graó a l'entrada</option>
@@ -1639,8 +1653,11 @@
                         </div>
                         <div style="flex: 1.5; min-width: 200px;">
                             <label for="edit-card-access-notes" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 0.2rem;">Observacions d'accés / suport (opcional):</label>
-                            <input type="text" id="edit-card-access-notes" placeholder="Ex: Voluntaris per ajudar / Rampa de fusta" style="width: 100%; padding: 0.45rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white;">
+                            <input type="text" id="edit-card-access-notes" oninput="updateAccessBadgePreview()" placeholder="Ex: Rampa de fusta / Trucar abans" style="width: 100%; padding: 0.5rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white;">
                         </div>
+                    </div>
+                    <div id="access-badge-modal-preview" style="margin-top: 0.6rem; padding: 0.5rem 0.75rem; background: rgba(15, 23, 42, 0.75); border-radius: 6px; font-size: 0.8rem; border: 1px dashed rgba(255,255,255,0.15);">
+                        <!-- Vista prèvia dinàmica -->
                     </div>
                 </div>
 
@@ -2350,7 +2367,7 @@
                 if (isEditorMode) {
                     editorButtons = `
                         <div style="margin-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 0.5rem; display: flex; gap: 0.4rem; flex-direction: column;">
-                            <button type="button" class="popup-btn" style="background: rgba(139, 92, 246, 0.25); border-color: #8b5cf6; color: #c4b5fd; font-weight: 700;" onclick="openCardEditModal('${loc.id}')">✏️ Modificar Textos / Targeta</button>
+                            <button type="button" class="popup-btn" style="background: rgba(139, 92, 246, 0.35); border-color: #8b5cf6; color: #ffffff; font-weight: 800; font-size: 0.82rem; padding: 0.45rem;" onclick="openCardEditModal('${loc.id}')">✏️ Editar Textos i Badges d'Accessibilitat (Graons / Rampa)</button>
                             <button type="button" class="popup-btn delete" onclick="deletePoint('${loc.id}')">🗑️ Eliminar aquest punt</button>
                         </div>
                     `;
@@ -2482,7 +2499,7 @@
 
                 let editBtnHtml = '';
                 if (isEditorMode) {
-                    editBtnHtml = `<button type="button" class="btn-card-edit" onclick="event.stopPropagation(); openCardEditModal('${loc.id}')" title="Modificar Textos">✏️</button>`;
+                    editBtnHtml = `<button type="button" class="btn-card-edit" onclick="event.stopPropagation(); openCardEditModal('${loc.id}')" title="Modificar Textos i Accessibilitat (Graons / Rampa)">✏️ Editar ♿</button>`;
                 }
 
                 const card = document.createElement('div');
@@ -2505,6 +2522,7 @@
             });
 
             document.getElementById('locations-count').innerText = `${itemsToRender.length} espais`;
+            try { populateQuickEditSelect(); } catch(e) {}
         }
 
         function selectLocation(id) {
@@ -2702,8 +2720,62 @@
             document.getElementById('edit-card-access-type').value = access.type || 'none';
             document.getElementById('edit-card-access-notes').value = access.notes || '';
 
+            updateAccessBadgePreview();
+
             const modal = document.getElementById('card-edit-modal');
             if (modal) modal.style.display = 'flex';
+        }
+
+        function updateAccessBadgePreview() {
+            const previewEl = document.getElementById('access-badge-modal-preview');
+            if (!previewEl) return;
+            const type = document.getElementById('edit-card-access-type').value;
+            const notes = document.getElementById('edit-card-access-notes').value.trim();
+
+            if (type === 'none') {
+                previewEl.innerHTML = '<span style="color: #94a3b8;">👁️ <em>Sense badge d\'accessibilitat (no es mostrarà cap etiqueta especial).</em></span>';
+                return;
+            }
+
+            const dummyLoc = {
+                desc: '',
+                access: { type, notes }
+            };
+            const badgeHtml = getAccessibilityBadgeHtml(dummyLoc);
+            const hasSteps = ['step1', 'steps2_3', 'stairs'].includes(type);
+            const stepNote = hasSteps 
+                ? '<span style="margin-left: 0.5rem; color: #fbbf24; font-size: 0.78rem; font-weight: 700;">(S\'afegirà la icona 🪜 sobre el pin del mapa)</span>' 
+                : '<span style="margin-left: 0.5rem; color: #34d399; font-size: 0.78rem; font-weight: 700;">(Sense graons / Cota zero o rampa)</span>';
+
+            previewEl.innerHTML = `<span style="color: #94a3b8; font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">Vista prèvia del badge resultant:</span> ${badgeHtml} ${stepNote}`;
+        }
+
+        function populateQuickEditSelect() {
+            const sel = document.getElementById('quick-edit-space-select');
+            if (!sel) return;
+            const curVal = sel.value;
+            sel.innerHTML = '<option value="">🏷️ Tria una Sala per posar Badges / Graons... ▾</option>';
+
+            const sorted = [...locations].sort((a, b) => getLocationSortWeight(a) - getLocationSortWeight(b));
+            sorted.forEach(loc => {
+                const opt = document.createElement('option');
+                opt.value = loc.id;
+                let accMark = '';
+                const parsed = parseAccessibilityFromDesc(loc.desc || '');
+                const access = loc.access || parsed.access;
+                if (access && access.type && access.type !== 'none') {
+                    if (['step1', 'steps2_3', 'stairs'].includes(access.type)) {
+                        accMark = ' [🪜 Amb Graons]';
+                    } else if (access.type === 'ramp') {
+                        accMark = ' [♿ Rampa]';
+                    } else if (access.type === 'level') {
+                        accMark = ' [♿ Cota zero]';
+                    }
+                }
+                opt.textContent = `${loc.code} ${loc.name}${accMark}`;
+                sel.appendChild(opt);
+            });
+            if (curVal) sel.value = curVal;
         }
 
         function closeCardEditModal() {
@@ -2774,6 +2846,7 @@
             closeCardEditModal();
             renderMarkers();
             renderSidebar();
+            populateQuickEditSelect();
             selectLocation(loc.id);
         }
 
@@ -2812,6 +2885,8 @@
             renderMarkers();
             renderCraftZone();
             renderAccessibleRoute();
+            renderSidebar();
+            populateQuickEditSelect();
         }
 
         // ========================================================
@@ -3740,6 +3815,7 @@
         try { renderAccessibleRoute(); } catch (e) { console.error("renderAccessibleRoute:", e); }
         try { renderMarkers(); } catch (e) { console.error("renderMarkers:", e); }
         try { renderSidebar(); } catch (e) { console.error("renderSidebar:", e); }
+        try { populateQuickEditSelect(); } catch (e) { console.error("populateQuickEditSelect:", e); }
         try { loadLocationsFromSupabase(); } catch (e) { console.error("loadLocationsFromSupabase:", e); }
 
         // Assegurar càrrega correcta de tessel·les de Leaflet
