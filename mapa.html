@@ -985,6 +985,16 @@
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.4);
         }
+        .access-badge.access-elevator {
+            background: rgba(14, 165, 233, 0.18);
+            color: #38bdf8;
+            border: 1px solid rgba(14, 165, 233, 0.4);
+        }
+        .access-badge.access-elevator-acc {
+            background: rgba(16, 185, 129, 0.22);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
         .access-notes-info {
             font-size: 0.76rem;
             color: #cbd5e1;
@@ -1007,6 +1017,9 @@
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.6);
             z-index: 10;
+        }
+        .marker-step-indicator.marker-elevator-indicator {
+            border-color: #38bdf8;
         }
 
         /* Ocultar controls de navegació i edició en exportar a imatge PNG */
@@ -1272,6 +1285,7 @@
                         <div class="legend-item"><span class="legend-icon">💜</span> <span>Punt Lila</span></div>
                         <div class="legend-item"><span class="legend-icon" style="color: #10b981; font-weight: 900; font-size: 1.1rem;">━━</span> <span>♿ Itinerari Accessible (Pendent Suau)</span></div>
                         <div class="legend-item"><span class="legend-icon">🪜</span> <span>Sala amb Graons a l'Entrada</span></div>
+                        <div class="legend-item"><span class="legend-icon">🛗</span> <span>Espai amb Ascensor</span></div>
                     </div>
                 </div>
             </div>
@@ -2050,6 +2064,12 @@
             if (access.type === 'ramp') {
                 badgeClass = 'access-ramp';
                 label = '♿ Rampa habilitada';
+            } else if (access.type === 'elevator_acc') {
+                badgeClass = 'access-elevator-acc';
+                label = '🛗♿ Ascensor accessible (PMR)';
+            } else if (access.type === 'elevator') {
+                badgeClass = 'access-elevator';
+                label = '🛗 Ascensor disponible';
             } else if (access.type === 'step1') {
                 badgeClass = 'access-step';
                 label = '🪜 1 graó a l\'entrada';
@@ -2116,9 +2136,16 @@
 
             const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
             const accessInfo = loc.access || parsedDesc.access;
-            const stepIndicator = (accessInfo && ['step1', 'steps2_3', 'stairs'].includes(accessInfo.type)) 
-                ? '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>' 
-                : '';
+            let stepIndicator = '';
+            if (accessInfo) {
+                if (['step1', 'steps2_3', 'stairs'].includes(accessInfo.type)) {
+                    stepIndicator = '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>';
+                } else if (accessInfo.type === 'elevator_acc') {
+                    stepIndicator = '<span class="marker-step-indicator marker-elevator-indicator" title="Ascensor accessible (PMR)">🛗</span>';
+                } else if (accessInfo.type === 'elevator') {
+                    stepIndicator = '<span class="marker-step-indicator marker-elevator-indicator" title="Ascensor disponible">🛗</span>';
+                }
+            }
 
             return L.divIcon({
                 className: 'custom-marker-wrapper',

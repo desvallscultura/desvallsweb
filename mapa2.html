@@ -938,6 +938,16 @@
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.4);
         }
+        .access-badge.access-elevator {
+            background: rgba(14, 165, 233, 0.18);
+            color: #38bdf8;
+            border: 1px solid rgba(14, 165, 233, 0.4);
+        }
+        .access-badge.access-elevator-acc {
+            background: rgba(16, 185, 129, 0.22);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
         .access-notes-info {
             font-size: 0.76rem;
             color: #cbd5e1;
@@ -960,6 +970,9 @@
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.6);
             z-index: 10;
+        }
+        .marker-step-indicator.marker-elevator-indicator {
+            border-color: #38bdf8;
         }
 
         /* Ocultar controls de navegació i edició en exportar a imatge PNG */
@@ -1529,6 +1542,7 @@
                         <!-- Gastronomia, Serveis i Accessibilitat -->
                         <div class="legend-item"><span class="legend-icon" style="color: #10b981; font-weight: 900; font-size: 1.1rem;">━━</span> <span>♿ Itinerari Accessible (Pendent Suau)</span></div>
                         <div class="legend-item"><span class="legend-icon">🪜</span> <span>Sala amb Graons a l'Entrada</span></div>
+                        <div class="legend-item"><span class="legend-icon">🛗</span> <span>Espai amb Ascensor</span></div>
                         <div class="legend-item"><span class="legend-icon">🚚</span> <span>Foodtrucks & Gastronomia</span></div>
                         <div class="legend-item"><span class="legend-icon">🚻</span> <span>Lavabos WC</span></div>
                         <div class="legend-item"><span class="legend-icon">♿</span> <span>Lavabo Adaptat PMR</span></div>
@@ -1646,6 +1660,8 @@
                                 <option value="none">❓ No especificat (sense badge)</option>
                                 <option value="level">♿ Cota zero (sense graons)</option>
                                 <option value="ramp">♿ Rampa d'accés habilitada</option>
+                                <option value="elevator_acc">🛗♿ Ascensor accessible (PMR)</option>
+                                <option value="elevator">🛗 Ascensor disponible</option>
                                 <option value="step1">🪜 1 graó a l'entrada</option>
                                 <option value="steps2_3">🪜 2 o 3 graons a l'entrada</option>
                                 <option value="stairs">🪜🪜 Tram d'escales (> 3 graons)</option>
@@ -2278,9 +2294,16 @@
 
             const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
             const accessInfo = loc.access || parsedDesc.access;
-            const stepIndicator = (accessInfo && ['step1', 'steps2_3', 'stairs'].includes(accessInfo.type))
-                ? '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>'
-                : '';
+            let stepIndicator = '';
+            if (accessInfo) {
+                if (['step1', 'steps2_3', 'stairs'].includes(accessInfo.type)) {
+                    stepIndicator = '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>';
+                } else if (accessInfo.type === 'elevator_acc') {
+                    stepIndicator = '<span class="marker-step-indicator marker-elevator-indicator" title="Ascensor accessible (PMR)">🛗</span>';
+                } else if (accessInfo.type === 'elevator') {
+                    stepIndicator = '<span class="marker-step-indicator marker-elevator-indicator" title="Ascensor disponible">🛗</span>';
+                }
+            }
 
             return L.divIcon({
                 className: 'custom-marker-wrapper',
@@ -2301,6 +2324,12 @@
             if (access.type === 'ramp') {
                 badgeClass = 'access-ramp';
                 label = '♿ Rampa habilitada';
+            } else if (access.type === 'elevator_acc') {
+                badgeClass = 'access-elevator-acc';
+                label = '🛗♿ Ascensor accessible (PMR)';
+            } else if (access.type === 'elevator') {
+                badgeClass = 'access-elevator';
+                label = '🛗 Ascensor disponible';
             } else if (access.type === 'step1') {
                 badgeClass = 'access-step';
                 label = '🪜 1 graó a l\'entrada';
@@ -2743,9 +2772,14 @@
             };
             const badgeHtml = getAccessibilityBadgeHtml(dummyLoc);
             const hasSteps = ['step1', 'steps2_3', 'stairs'].includes(type);
-            const stepNote = hasSteps 
-                ? '<span style="margin-left: 0.5rem; color: #fbbf24; font-size: 0.78rem; font-weight: 700;">(S\'afegirà la icona 🪜 sobre el pin del mapa)</span>' 
-                : '<span style="margin-left: 0.5rem; color: #34d399; font-size: 0.78rem; font-weight: 700;">(Sense graons / Cota zero o rampa)</span>';
+            const hasElevator = ['elevator', 'elevator_acc'].includes(type);
+
+            let stepNote = '<span style="margin-left: 0.5rem; color: #34d399; font-size: 0.78rem; font-weight: 700;">(Sense graons / Cota zero o rampa)</span>';
+            if (hasSteps) {
+                stepNote = '<span style="margin-left: 0.5rem; color: #fbbf24; font-size: 0.78rem; font-weight: 700;">(S\'afegirà la icona 🪜 sobre el pin del mapa)</span>';
+            } else if (hasElevator) {
+                stepNote = '<span style="margin-left: 0.5rem; color: #38bdf8; font-size: 0.78rem; font-weight: 700;">(S\'afegirà la icona 🛗 sobre el pin del mapa)</span>';
+            }
 
             previewEl.innerHTML = `<span style="color: #94a3b8; font-size: 0.75rem; display: block; margin-bottom: 0.25rem;">Vista prèvia del badge resultant:</span> ${badgeHtml} ${stepNote}`;
         }
@@ -2766,6 +2800,10 @@
                 if (access && access.type && access.type !== 'none') {
                     if (['step1', 'steps2_3', 'stairs'].includes(access.type)) {
                         accMark = ' [🪜 Amb Graons]';
+                    } else if (access.type === 'elevator_acc') {
+                        accMark = ' [🛗♿ Ascensor PMR]';
+                    } else if (access.type === 'elevator') {
+                        accMark = ' [🛗 Ascensor]';
                     } else if (access.type === 'ramp') {
                         accMark = ' [♿ Rampa]';
                     } else if (access.type === 'level') {
