@@ -871,12 +871,103 @@
             background: #f97316;
         }
 
+        /* Estils dels Nodes i Midpoints d'Edició de l'Itinerari Accessible */
+        .accessible-node-handle {
+            width: 14px;
+            height: 14px;
+            background: #10b981;
+            border: 2.5px solid #ffffff;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            transition: transform 0.15s ease;
+        }
+
+        .accessible-node-handle:hover {
+            transform: scale(1.35);
+            background: #34d399;
+        }
+
+        .accessible-midpoint-handle {
+            width: 10px;
+            height: 10px;
+            background: rgba(16, 185, 129, 0.85);
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            transition: transform 0.15s ease;
+        }
+
+        .accessible-midpoint-handle:hover {
+            transform: scale(1.4);
+            background: #34d399;
+        }
+
+        /* Badges d'Accessibilitat */
+        .access-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 0.35rem;
+            margin-bottom: 0.25rem;
+        }
+        .access-badge.access-level {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+        .access-badge.access-ramp {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .access-badge.access-step {
+            background: rgba(245, 158, 11, 0.18);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .access-badge.access-stairs {
+            background: rgba(239, 68, 68, 0.18);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .access-notes-info {
+            font-size: 0.76rem;
+            color: #cbd5e1;
+            margin-top: 0.2rem;
+            line-height: 1.4;
+        }
+        .marker-step-indicator {
+            position: absolute;
+            top: -5px;
+            right: -6px;
+            font-size: 11px;
+            line-height: 1;
+            background: #1e293b;
+            border: 1.5px solid #f59e0b;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+
         /* Ocultar controls de navegació i edició en exportar a imatge PNG */
         #map-wrapper.is-exporting .map-layer-switcher,
         #map-wrapper.is-exporting .editor-banner,
         #map-wrapper.is-exporting .mobile-sidebar-toggle,
         #map-wrapper.is-exporting .craft-node-wrapper,
         #map-wrapper.is-exporting .craft-mid-wrapper,
+        #map-wrapper.is-exporting .accessible-node-wrapper,
+        #map-wrapper.is-exporting .accessible-mid-wrapper,
         #map-wrapper.is-exporting .btn-toggle-legend,
         #map-wrapper.is-exporting .leaflet-control-zoom {
             display: none !important;
@@ -1354,7 +1445,9 @@
                     <button type="button" class="btn-action primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem; border-radius: 20px;" onclick="saveCustomCoords()">💾 Guardar a Supabase</button>
                 </div>
                 <div class="editor-buttons-row">
-                    <button type="button" class="btn-add-pin btn-craft-draw" id="btn-draw-craft" onclick="toggleCraftDrawing()">🛒 Dibuixar Parades d'Artesania</button>
+                    <button type="button" class="btn-add-pin btn-craft-draw" id="btn-draw-craft" onclick="toggleCraftDrawing()">🛒 Dibuixar Parades</button>
+                    <button type="button" class="btn-add-pin btn-craft-draw" id="btn-draw-accessible" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7;" onclick="toggleAccessibleDrawing()">♿ Traçar Itinerari Accessible</button>
+                    <button type="button" class="btn-add-pin" onclick="clearAccessibleRoute()" style="color: #fca5a5;">🗑️ Esborrar Itinerari ♿</button>
                     <button type="button" class="btn-add-pin" onclick="clearCraftZone()">🗑️ Esborrar Parades</button>
                     <button type="button" class="btn-add-pin" onclick="addNewPoint('wc')">➕ Nou WC (🚻)</button>
                     <button type="button" class="btn-add-pin" onclick="addNewPoint('wc_accessible')">➕ Nou WC Adaptat (♿)</button>
@@ -1376,6 +1469,17 @@
                         <span id="width-val">16px</span>
                     </div>
                     <span id="craft-draw-status" style="font-size: 0.75rem; color: #a7f3d0; margin-left: auto;"></span>
+                </div>
+
+                <!-- Ajustos de l'Itinerari Accessible (Pendent Suau) -->
+                <div class="craft-controls-row" id="accessible-controls-row" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; margin-top: 0.35rem;">
+                    <span style="color: #6ee7b7; font-weight: 800;">♿ Itinerari Accessible (Pendent Suau):</span>
+                    <div class="craft-control-item">
+                        <label for="accessible-width">Gruix Línia:</label>
+                        <input type="range" id="accessible-width" min="4" max="14" step="1" value="6" oninput="updateAccessibleStyle()">
+                        <span id="accessible-width-val">6px</span>
+                    </div>
+                    <span id="accessible-draw-status" style="font-size: 0.75rem; color: #a7f3d0; margin-left: auto;"></span>
                 </div>
             </div>
 
@@ -1412,6 +1516,8 @@
                         <div class="legend-item"><span class="legend-icon">🥁</span> <span>Carrers de la Vila</span></div>
 
                         <!-- Gastronomia, Serveis i Accessibilitat -->
+                        <div class="legend-item"><span class="legend-icon" style="color: #10b981; font-weight: 900; font-size: 1.1rem;">━━</span> <span>♿ Itinerari Accessible (Pendent Suau)</span></div>
+                        <div class="legend-item"><span class="legend-icon">🪜</span> <span>Sala amb Graons a l'Entrada</span></div>
                         <div class="legend-item"><span class="legend-icon">🚚</span> <span>Foodtrucks & Gastronomia</span></div>
                         <div class="legend-item"><span class="legend-icon">🚻</span> <span>Lavabos WC</span></div>
                         <div class="legend-item"><span class="legend-icon">♿</span> <span>Lavabo Adaptat PMR</span></div>
@@ -1512,6 +1618,30 @@
                 <div class="form-group">
                     <label for="edit-card-desc">Descripció Detallada (Text de la Targeta)</label>
                     <textarea id="edit-card-desc" rows="4" placeholder="Escriu aquí el text complet que apareixerà a la targeta informativa..."></textarea>
+                </div>
+
+                <!-- Informació d'Accessibilitat de l'Espai -->
+                <div class="form-group" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.75rem; margin-top: 0.35rem;">
+                    <label style="color: #34d399; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem;">
+                        ♿ Informació d'Accessibilitat de l'Espai
+                    </label>
+                    <div style="display: flex; gap: 0.75rem; margin-top: 0.4rem; flex-wrap: wrap;">
+                        <div style="flex: 1.2; min-width: 180px;">
+                            <label for="edit-card-access-type" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 0.2rem;">Tipus d'Accés / Entrada:</label>
+                            <select id="edit-card-access-type" style="width: 100%; padding: 0.45rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white;">
+                                <option value="none">❓ No especificat</option>
+                                <option value="level">♿ Cota zero (sense graons)</option>
+                                <option value="ramp">♿ Rampa d'accés habilitada</option>
+                                <option value="step1">🪜 1 graó a l'entrada</option>
+                                <option value="steps2_3">🪜 2 o 3 graons a l'entrada</option>
+                                <option value="stairs">🪜🪜 Tram d'escales (> 3 graons)</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1.5; min-width: 200px;">
+                            <label for="edit-card-access-notes" style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 0.2rem;">Observacions d'accés / suport (opcional):</label>
+                            <input type="text" id="edit-card-access-notes" placeholder="Ex: Voluntaris per ajudar / Rampa de fusta" style="width: 100%; padding: 0.45rem; border-radius: 6px; background: #0f172a; border: 1px solid rgba(255,255,255,0.2); color: white;">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-edit-footer">
@@ -2129,13 +2259,48 @@
             const fontSize = Math.max(7, Math.round(baseFontSize * scale));
             const borderWidth = (scale < 0.75) ? 1.2 : 1.8;
 
+            const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
+            const accessInfo = loc.access || parsedDesc.access;
+            const stepIndicator = (accessInfo && ['step1', 'steps2_3', 'stairs'].includes(accessInfo.type))
+                ? '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>'
+                : '';
+
             return L.divIcon({
                 className: 'custom-marker-wrapper',
-                html: `<div class="custom-marker ${markerClass}" style="width: ${size}px; height: ${size}px; font-size: ${fontSize}px; line-height: ${size}px; border-width: ${borderWidth}px;">${loc.code}</div>`,
+                html: `<div class="custom-marker ${markerClass}" style="position: relative; width: ${size}px; height: ${size}px; font-size: ${fontSize}px; line-height: ${size}px; border-width: ${borderWidth}px;">${loc.code}${stepIndicator}</div>`,
                 iconSize: [size, size],
                 iconAnchor: [size / 2, size / 2],
                 popupAnchor: [0, -size / 2]
             });
+        }
+
+        function getAccessibilityBadgeHtml(loc) {
+            const parsed = parseAccessibilityFromDesc(loc.desc || '');
+            const access = loc.access || parsed.access;
+            if (!access || !access.type || access.type === 'none') return '';
+
+            let badgeClass = 'access-level';
+            let label = '♿ Cota zero';
+            if (access.type === 'ramp') {
+                badgeClass = 'access-ramp';
+                label = '♿ Rampa habilitada';
+            } else if (access.type === 'step1') {
+                badgeClass = 'access-step';
+                label = '🪜 1 graó a l\'entrada';
+            } else if (access.type === 'steps2_3') {
+                badgeClass = 'access-step';
+                label = '🪜 2 o 3 graons a l\'entrada';
+            } else if (access.type === 'stairs') {
+                badgeClass = 'access-stairs';
+                label = '🪜🪜 Tram d\'escales (> 3 graons)';
+            }
+
+            return `
+                <div style="margin-top: 0.35rem;">
+                    <span class="access-badge ${badgeClass}">${label}</span>
+                    ${access.notes ? `<div class="access-notes-info">ℹ️ ${access.notes}</div>` : ''}
+                </div>
+            `;
         }
 
         // Esdeveniment per redimensionar marcadors automàticament en apropar o allunyar el mapa
@@ -2191,12 +2356,16 @@
                     `;
                 }
 
-                const formattedDesc = (loc.desc || '').replace(/\n/g, '<br>');
+                const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
+                const formattedDesc = (parsedDesc.cleanDesc || '').replace(/\n/g, '<br>');
+                const accessBadgeHtml = getAccessibilityBadgeHtml(loc);
+
                 const popupContent = `
                     <div>
                         <span class="popup-badge ${badgeClass}">${badgeLabel} · ${loc.code}</span>
                         <div class="popup-title">${loc.name}</div>
                         ${loc.artist ? `<div class="popup-artist">${loc.artist}</div>` : ''}
+                        ${accessBadgeHtml}
                         <p class="popup-desc" style="line-height: 1.55; margin-top: 0.4rem;">${formattedDesc}</p>
                         <div class="popup-actions">
                             <a href="${gmapsUrl}" target="_blank" class="popup-btn">📍 Com anar-hi (Google Maps)</a>
@@ -2327,6 +2496,7 @@
                         <div class="loc-name">${loc.name}</div>
                         ${loc.artist ? `<div class="loc-artist">${loc.artist}</div>` : ''}
                         <div class="loc-sub">${loc.project}</div>
+                        ${getAccessibilityBadgeHtml(loc)}
                     </div>
                     ${editBtnHtml}
                 `;
@@ -2489,6 +2659,29 @@
         // ========================================================
         let currentEditingCardId = null;
 
+        function parseAccessibilityFromDesc(descText) {
+            if (!descText) return { cleanDesc: '', access: null };
+            const match = descText.match(/<!--access:(\{.*?\})-->/);
+            if (match) {
+                try {
+                    const access = JSON.parse(match[1]);
+                    const cleanDesc = descText.replace(/<!--access:\{.*?\}-->/, '').trim();
+                    return { cleanDesc, access };
+                } catch (e) {
+                    return { cleanDesc: descText, access: null };
+                }
+            }
+            return { cleanDesc: descText, access: null };
+        }
+
+        function formatDescWithAccessibility(rawDesc, accessObj) {
+            let base = rawDesc ? rawDesc.replace(/<!--access:\{.*?\}-->/, '').trim() : '';
+            if (accessObj && accessObj.type && accessObj.type !== 'none') {
+                base += (base ? '\n\n' : '') + `<!--access:${JSON.stringify(accessObj)}-->`;
+            }
+            return base;
+        }
+
         function openCardEditModal(id) {
             const loc = locations.find(l => l.id === id);
             if (!loc) return;
@@ -2500,7 +2693,14 @@
             document.getElementById('edit-card-code').value = loc.code || '';
             document.getElementById('edit-card-artist').value = loc.artist || '';
             document.getElementById('edit-card-project').value = loc.project || '';
-            document.getElementById('edit-card-desc').value = loc.desc || '';
+            
+            // Extreure accessibilitat si està incrustada a la descripció
+            const parsed = parseAccessibilityFromDesc(loc.desc || '');
+            document.getElementById('edit-card-desc').value = parsed.cleanDesc;
+
+            const access = loc.access || parsed.access || { type: 'none', notes: '' };
+            document.getElementById('edit-card-access-type').value = access.type || 'none';
+            document.getElementById('edit-card-access-notes').value = access.notes || '';
 
             const modal = document.getElementById('card-edit-modal');
             if (modal) modal.style.display = 'flex';
@@ -2535,7 +2735,13 @@
             loc.code = document.getElementById('edit-card-code').value.trim() || '📍';
             loc.artist = document.getElementById('edit-card-artist').value.trim();
             loc.project = document.getElementById('edit-card-project').value.trim();
-            loc.desc = document.getElementById('edit-card-desc').value.trim();
+            
+            const rawDesc = document.getElementById('edit-card-desc').value.trim();
+            const accessType = document.getElementById('edit-card-access-type').value;
+            const accessNotes = document.getElementById('edit-card-access-notes').value.trim();
+
+            loc.access = (accessType !== 'none') ? { type: accessType, notes: accessNotes } : null;
+            loc.desc = formatDescWithAccessibility(rawDesc, loc.access);
 
             // 1. Guardar a LocalStorage
             localStorage.setItem('pluja_art_map_locations', JSON.stringify(locations));
@@ -2600,10 +2806,12 @@
                 btn.innerHTML = '✏️ Mode Editor Ubicacions';
                 banner.classList.remove('active');
                 if (isDrawingCraft) toggleCraftDrawing();
+                if (isDrawingAccessible) toggleAccessibleDrawing();
             }
 
             renderMarkers();
             renderCraftZone();
+            renderAccessibleRoute();
         }
 
         // ========================================================
@@ -2768,11 +2976,17 @@
 
         // Clic al mapa en mode continu de dibuix
         map.on('click', function(e) {
-            if (!isDrawingCraft || !isEditorMode) return;
+            if (!isEditorMode) return;
             const newCoord = [Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6))];
-            craftPoints.push(newCoord);
-            renderCraftZone();
-            localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+            if (isDrawingCraft) {
+                craftPoints.push(newCoord);
+                renderCraftZone();
+                localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+            } else if (isDrawingAccessible) {
+                accessiblePoints.push(newCoord);
+                renderAccessibleRoute();
+                localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
+            }
         });
 
         function updateCraftStyle() {
@@ -2807,6 +3021,214 @@
             if (status) status.innerText = '🗑️ Traçat esborrat.';
         }
 
+        // ========================================================
+        // 8B. GESTIÓ I DIBUIX DE L'ITINERARI ACCESSIBLE RECOMANAT (♿)
+        // ========================================================
+        const DEFAULT_ACCESSIBLE_POINTS = [
+            [42.07197, 2.95115], // Sala Nova & Aparcament PMR
+            [42.07175, 2.95210], // Carrer Francesc Macià
+            [42.07135, 2.95340], // Plaça U d'Octubre (Ajuntament & WC Adaptat)
+            [42.07140, 2.95390], // Carrer de Baix (pendent suau)
+            [42.07205, 2.95334]  // Plaça Major (Escenari central)
+        ];
+
+        let accessiblePoints = [...DEFAULT_ACCESSIBLE_POINTS];
+        let accessibleWidth = 6;
+        let accessiblePolyline = null;
+        let accessibleGlowPolyline = null;
+        let accessibleNodeLayerGroup = L.layerGroup().addTo(map);
+        let isDrawingAccessible = false;
+
+        try {
+            const savedAcc = localStorage.getItem('pluja_art_accessible_route');
+            if (savedAcc) {
+                const parsed = JSON.parse(savedAcc);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    accessiblePoints = parsed;
+                }
+            }
+        } catch (e) {}
+
+        function renderAccessibleRoute() {
+            if (accessiblePolyline) {
+                map.removeLayer(accessiblePolyline);
+                accessiblePolyline = null;
+            }
+            if (accessibleGlowPolyline) {
+                map.removeLayer(accessibleGlowPolyline);
+                accessibleGlowPolyline = null;
+            }
+            accessibleNodeLayerGroup.clearLayers();
+
+            if (!accessiblePoints || accessiblePoints.length === 0) return;
+
+            // Halo verd suau
+            accessibleGlowPolyline = L.polyline(accessiblePoints, {
+                color: '#34d399',
+                weight: accessibleWidth + 6,
+                opacity: 0.35,
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: false
+            }).addTo(map);
+
+            // Línia verda maragda principal
+            accessiblePolyline = L.polyline(accessiblePoints, {
+                color: '#10b981',
+                weight: accessibleWidth,
+                opacity: 0.95,
+                dashArray: '8, 8',
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: true
+            }).addTo(map);
+
+            accessiblePolyline.bindPopup(`
+                <div class="popup-title">♿ Itinerari Accessible Recomanat</div>
+                <div class="popup-artist">Pendent Suau i Paviment Regular</div>
+                <div class="popup-desc">Recorregut adaptat recomanat per a persones amb mobilitat reduïda, cadires de rodes, gent gran i cotxets, connectant els principals escenaris i serveis adaptats.</div>
+            `);
+
+            // Nodes manipulables en Mode Editor
+            if (isEditorMode) {
+                accessiblePoints.forEach((pt, idx) => {
+                    const nodeIcon = L.divIcon({
+                        className: 'accessible-node-wrapper',
+                        html: `<div class="accessible-node-handle" title="Node ♿ ${idx + 1}: Arrossega per moure o fes clic dret per esborrar">${idx + 1}</div>`,
+                        iconSize: [18, 18],
+                        iconAnchor: [9, 9]
+                    });
+
+                    const nodeMarker = L.marker(pt, {
+                        icon: nodeIcon,
+                        draggable: true
+                    }).addTo(accessibleNodeLayerGroup);
+
+                    nodeMarker.on('drag', function(e) {
+                        const newPos = e.target.getLatLng();
+                        accessiblePoints[idx] = [Number(newPos.lat.toFixed(6)), Number(newPos.lng.toFixed(6))];
+                        accessiblePolyline.setLatLngs(accessiblePoints);
+                        if (accessibleGlowPolyline) accessibleGlowPolyline.setLatLngs(accessiblePoints);
+                    });
+
+                    nodeMarker.on('dragend', function() {
+                        localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
+                        renderAccessibleRoute();
+                    });
+
+                    nodeMarker.on('contextmenu', function(e) {
+                        L.DomEvent.stopPropagation(e);
+                        if (accessiblePoints.length <= 2) {
+                            alert("Cal mantenir almenys 2 punts a l'itinerari accessible.");
+                            return;
+                        }
+                        if (confirm(`Vols eliminar el node ${idx + 1} de l'itinerari accessible?`)) {
+                            accessiblePoints.splice(idx, 1);
+                            localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
+                            renderAccessibleRoute();
+                        }
+                    });
+
+                    nodeMarker.bindTooltip(`Node ♿ ${idx + 1} (Arrossega / Clic dret per esborrar)`, {
+                        direction: 'top',
+                        offset: [0, -10]
+                    });
+                });
+
+                // Midpoints entre nodes per afegir vèrtexs fàcilment
+                for (let i = 0; i < accessiblePoints.length - 1; i++) {
+                    const p1 = accessiblePoints[i];
+                    const p2 = accessiblePoints[i + 1];
+                    const midLat = Number(((p1[0] + p2[0]) / 2).toFixed(6));
+                    const midLng = Number(((p1[1] + p2[1]) / 2).toFixed(6));
+
+                    const midIcon = L.divIcon({
+                        className: 'accessible-mid-wrapper',
+                        html: `<div class="accessible-midpoint-handle" title="Fes clic o arrossega per afegir un node nou aquí">+</div>`,
+                        iconSize: [14, 14],
+                        iconAnchor: [7, 7]
+                    });
+
+                    const midMarker = L.marker([midLat, midLng], {
+                        icon: midIcon,
+                        draggable: true
+                    }).addTo(accessibleNodeLayerGroup);
+
+                    midMarker.on('dragstart', function() {
+                        accessiblePoints.splice(i + 1, 0, [midLat, midLng]);
+                    });
+
+                    midMarker.on('drag', function(e) {
+                        const pos = e.target.getLatLng();
+                        accessiblePoints[i + 1] = [Number(pos.lat.toFixed(6)), Number(pos.lng.toFixed(6))];
+                        accessiblePolyline.setLatLngs(accessiblePoints);
+                        if (accessibleGlowPolyline) accessibleGlowPolyline.setLatLngs(accessiblePoints);
+                    });
+
+                    midMarker.on('dragend', function() {
+                        localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
+                        renderAccessibleRoute();
+                    });
+
+                    midMarker.on('click', function() {
+                        accessiblePoints.splice(i + 1, 0, [midLat, midLng]);
+                        localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
+                        renderAccessibleRoute();
+                    });
+                }
+            }
+        }
+
+        function toggleAccessibleDrawing() {
+            isDrawingAccessible = !isDrawingAccessible;
+            if (isDrawingAccessible && isDrawingCraft) toggleCraftDrawing();
+            const btn = document.getElementById('btn-draw-accessible');
+            const status = document.getElementById('accessible-draw-status');
+
+            if (isDrawingAccessible) {
+                btn.classList.add('active');
+                btn.innerText = '⏹️ Finalitzar Itinerari ♿';
+                if (status) status.innerText = '👉 Fes clics sobre els carrers per continuar afegint nodes a l\'itinerari accessible.';
+                map.getContainer().style.cursor = 'crosshair';
+            } else {
+                btn.classList.remove('active');
+                btn.innerText = '♿ Traçar Itinerari Accessible';
+                if (status) status.innerText = '✅ Itinerari llest. Pots moure els nodes o afegir-ne de nous.';
+                map.getContainer().style.cursor = '';
+            }
+        }
+
+        function updateAccessibleStyle() {
+            const widVal = document.getElementById('accessible-width');
+            if (widVal) accessibleWidth = parseInt(widVal.value);
+            const widTxt = document.getElementById('accessible-width-val');
+            if (widTxt) widTxt.innerText = `${accessibleWidth}px`;
+
+            if (accessiblePolyline) {
+                accessiblePolyline.setStyle({ weight: accessibleWidth });
+            }
+            if (accessibleGlowPolyline) {
+                accessibleGlowPolyline.setStyle({ weight: accessibleWidth + 6 });
+            }
+        }
+
+        function clearAccessibleRoute() {
+            if (!confirm("Vols esborrar el traçat de l'itinerari accessible?")) return;
+            accessiblePoints = [];
+            if (accessiblePolyline) {
+                map.removeLayer(accessiblePolyline);
+                accessiblePolyline = null;
+            }
+            if (accessibleGlowPolyline) {
+                map.removeLayer(accessibleGlowPolyline);
+                accessibleGlowPolyline = null;
+            }
+            accessibleNodeLayerGroup.clearLayers();
+            localStorage.removeItem('pluja_art_accessible_route');
+            const status = document.getElementById('accessible-draw-status');
+            if (status) status.innerText = '🗑️ Traçat accessible esborrat.';
+        }
+
         // Carregar coordenades des de Supabase
         async function loadLocationsFromSupabase() {
             if (!supabaseClient) return;
@@ -2835,24 +3257,44 @@
                         }
                     }
 
-                    // Filtrar la fila de parades i qualsevol registre d'art lumínic per aïllament total
+                    // Comprovar si hi ha dades guardades de l'itinerari accessible
+                    const accRow = data.find(d => d.id === 'accessible_route_polyline');
+                    if (accRow && accRow.descripcio) {
+                        try {
+                            const parsedAcc = JSON.parse(accRow.descripcio);
+                            if (parsedAcc.points && parsedAcc.points.length > 0) {
+                                accessiblePoints = parsedAcc.points;
+                                if (parsedAcc.width) accessibleWidth = parsedAcc.width;
+                                renderAccessibleRoute();
+                            }
+                        } catch (e) {
+                            console.warn("Error parsing accRow:", e);
+                        }
+                    }
+
+                    // Filtrar la fila de parades, itinerari accessible i qualsevol registre d'art lumínic per aïllament total
                     const cleanLocations = data.filter(d => 
                         d.id !== 'craft_zone_polyline' && 
+                        d.id !== 'accessible_route_polyline' && 
                         d.id !== 'luminic_route_polyline' && 
                         !String(d.id).startsWith('lum_')
                     );
 
-                    locations = cleanLocations.map(d => ({
-                        id: d.id,
-                        type: d.type,
-                        code: d.code,
-                        name: d.name,
-                        artist: d.artist || '',
-                        project: d.project || '',
-                        desc: d.descripcio || d.desc || '',
-                        lat: Number(d.lat),
-                        lng: Number(d.lng)
-                    }));
+                    locations = cleanLocations.map(d => {
+                        const parsedAcc = parseAccessibilityFromDesc(d.descripcio || d.desc || '');
+                        return {
+                            id: d.id,
+                            type: d.type,
+                            code: d.code,
+                            name: d.name,
+                            artist: d.artist || '',
+                            project: d.project || '',
+                            desc: d.descripcio || d.desc || '',
+                            access: parsedAcc.access,
+                            lat: Number(d.lat),
+                            lng: Number(d.lng)
+                        };
+                    });
                     locations.sort((a, b) => getLocationSortWeight(a) - getLocationSortWeight(b));
                     renderMarkers();
                     renderSidebar();
@@ -2862,7 +3304,7 @@
             }
         }
 
-        // Guardar coordenades i traçat de parades (Local + Supabase)
+        // Guardar coordenades i traçats (Local + Supabase)
         async function saveCustomCoords() {
             const btnSave = document.querySelector('#editor-banner button');
             const originalText = btnSave ? btnSave.innerText : '💾 Guardar a Supabase';
@@ -2875,6 +3317,7 @@
                 // 1. Guardar a LocalStorage
                 localStorage.setItem('pluja_art_map_locations', JSON.stringify(locations));
                 localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
 
                 // 2. Guardar a Supabase
                 if (supabaseClient) {
@@ -2907,6 +3350,21 @@
                         updated_at: new Date().toISOString()
                     });
 
+                    // Afegir el traçat de l'itinerari accessible
+                    payload.push({
+                        id: 'accessible_route_polyline',
+                        type: 'route_accessible',
+                        code: '♿',
+                        name: 'Itinerari Accessible Recomanat',
+                        artist: 'Pendent Suau i Paviment Regular',
+                        project: 'Sense barreres arquitectòniques',
+                        descripcio: JSON.stringify({ points: accessiblePoints, width: accessibleWidth }),
+                        lat: 42.0718,
+                        lng: 2.9525,
+                        ordre: 998,
+                        updated_at: new Date().toISOString()
+                    });
+
                     // Upsert tots els registres actuals
                     const { error } = await supabaseClient
                         .from('festival_locations')
@@ -2914,13 +3372,15 @@
 
                     if (error) throw error;
 
-                    // Sincronitzar eliminacions: esborrar de Supabase qualsevol registre del festival general que hagi estat eliminat (sense tocar mai lum_* ni luminic_route_polyline)
+                    // Sincronitzar eliminacions: esborrar de Supabase qualsevol registre del festival general que hagi estat eliminat (sense tocar mai lum_*, craft_zone_polyline, accessible_route_polyline ni luminic_route_polyline)
                     const activeIds = payload.map(p => p.id);
                     const { data: dbRows } = await supabaseClient.from('festival_locations').select('id');
                     if (dbRows && dbRows.length > 0) {
                         const idsToDelete = dbRows.map(r => r.id).filter(id => 
                             !activeIds.includes(id) && 
                             !String(id).startsWith('lum_') && 
+                            id !== 'craft_zone_polyline' &&
+                            id !== 'accessible_route_polyline' &&
                             id !== 'luminic_route_polyline'
                         );
                         for (const delId of idsToDelete) {
@@ -2928,9 +3388,9 @@
                         }
                     }
 
-                    alert("✅ Tots els espais, WC, Foodtrucks i la Zona de Parades d'Artesania s'han desat i sincronitzat a Supabase amb èxit!");
+                    alert("✅ Tots els espais, l'Itinerari Accessible ♿ i les Parades d'Artesania s'han desat i sincronitzat a Supabase amb èxit!");
                 } else {
-                    alert("✅ Ubicacions i parades guardades al navegador!");
+                    alert("✅ Ubicacions, itinerari accessible i parades guardades al navegador!");
                 }
             } catch (err) {
                 console.error("Error desant a Supabase:", err);
@@ -3277,6 +3737,7 @@
         // Inicialització inicial segura
         try { updateSymbolSizeUI(); } catch (e) { console.error("updateSymbolSizeUI:", e); }
         try { renderCraftZone(); } catch (e) { console.error("renderCraftZone:", e); }
+        try { renderAccessibleRoute(); } catch (e) { console.error("renderAccessibleRoute:", e); }
         try { renderMarkers(); } catch (e) { console.error("renderMarkers:", e); }
         try { renderSidebar(); } catch (e) { console.error("renderSidebar:", e); }
         try { loadLocationsFromSupabase(); } catch (e) { console.error("loadLocationsFromSupabase:", e); }

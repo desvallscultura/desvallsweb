@@ -371,6 +371,145 @@
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
         }
 
+        /* Banner Destacat: Audioguia Poètica Margarida Codina */
+        .poetic-audio-banner {
+            background: radial-gradient(ellipse at top, rgba(8, 30, 60, 0.92) 0%, rgba(2, 10, 25, 0.96) 100%);
+            border: 1.5px solid rgba(56, 189, 248, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(6, 182, 212, 0.25);
+            border-radius: 24px;
+            padding: 2.2rem 2.2rem;
+            max-width: 860px;
+            margin: 0 auto 2.5rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+        }
+
+        .poetic-audio-banner::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -15%;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .poetic-audio-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            padding-bottom: 0.9rem;
+        }
+
+        .poetic-audio-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(236, 72, 153, 0.18);
+            border: 1px solid rgba(244, 114, 182, 0.5);
+            color: #f472b6;
+            padding: 0.35rem 0.95rem;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .poetic-audio-credits {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            flex-wrap: wrap;
+        }
+
+        .poetic-audio-credits strong {
+            color: #38bdf8;
+        }
+
+        .poetic-audio-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 0.85rem;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #7dd3fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .poetic-audio-body {
+            color: #e2e8f0;
+            font-size: 1.08rem;
+            line-height: 1.75;
+            margin-bottom: 1.4rem;
+        }
+
+        .poetic-audio-body strong {
+            color: #67e8f9;
+        }
+
+        .poetic-audio-features {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.6rem;
+        }
+
+        .poetic-audio-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+        }
+
+        .poetic-audio-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-poetic-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+            border: 1.5px solid #38bdf8;
+            color: #ffffff;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.55);
+            transition: all 0.3s ease;
+        }
+
+        .btn-poetic-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(56, 189, 248, 0.8);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
         .hero-cta-group {
             display: flex;
             justify-content: center;
@@ -945,7 +1084,7 @@
                 <li><a href="pluja-art-2026.html">🎭 Programa Pluja d'Art</a></li>
                 <li><a href="#itinerari" style="color: var(--sea-neon);">🌊 Itinerari dels 9 Espais</a></li>
                 <li><a href="#espelmes" style="color: #fbbf24;">🕯️ Camí d'Espelmes</a></li>
-                <li><a href="audioguia.html" style="color: #38bdf8; font-weight: 800;">🎧 Audioguia GPS</a></li>
+                <li><a href="audioguia.html" style="color: #38bdf8; font-weight: 800;">🎧 Audioguia Poètica</a></li>
                 <li><a href="mapa3.html" class="btn-map-nav">🗺️ Plànol Oficial Lumínic</a></li>
             </ul>
             <div class="mobile-menu-icon" id="mobileMenuIcon" onclick="toggleMobileMenu()" style="display: none; cursor: pointer; color: white; font-size: 1.5rem;">
@@ -978,13 +1117,49 @@
                 Benvinguts al Festival d'Art Lumínic de la Fira Pluja d'Art, enguany titulat: <strong>Mar Mediterrània</strong>, el festival d’art lumínic que transforma els carrers i places del nostre poble en un oceà de llum, color i art immersiu.<br><br>
                 Durant aquesta nit especial, l'entorn urbà es converteix en un fons marí viu: instal·lacions d'inflables gegants, projeccions làser, estructures fluides i un joc constant de llums blaves i textures visuals us convidaran a endinsar-vos en les profunditats del Mediterrani.<br><br>
                 L'ànima i direcció artística d'aquest viatge sensorial bateguen amb la visió de l'artista <strong>Lluís Mohedano</strong>, capdavanter i creador d'un univers lumínic captivador. La col·laboració, esforç i il·lusió compartits entre l'<strong>Associació Airearte</strong> i <strong>Desvalls Cultura</strong> uneixen forces i talent per fer possible aquesta nit màgica i transformar el nostre poble en una obra d'art viva.<br><br>
+                Enguany, el nostre univers marí s'enriqueix amb una aliança única entre l'art visual i la literatura. Hem concebut una <strong>Audioguia Poètica per a dispositius mòbils</strong> amb la col·laboració i la <strong>veu de l'escriptora Margarida Codina</strong>, que us acompanyarà en aquesta travessa de llum i mar recitant <strong>versos de poesia</strong>. A cada racó, la matèria lumínica i la paraula dialoguen en un mateix batec, fent que cada pas pel camí d'espelmes sigui un fragment d'un poema navegat.<br><br>
                 El festival compta especialment amb la col·laboració d'<strong>Isi i Dabú</strong> en la creació de la instal·lació <strong>«MEDITERRÀNIA. FONS.»</strong> a l'<strong>Antiga Escola</strong>, una reflexió lumínica commovedora sobre la fragilitat de la vida, la memòria i el mar.<br><br>
                 Així mateix, celebrem la presència històrica de les <strong>onades escultòriques dels Jocs Olímpics de Barcelona '92</strong> al Carrer de Baix gràcies a la generosa cessió de la <strong>Fundació Bassat</strong>.
             </p>
 
+            <!-- BANNER DESTACAT: AUDIOGUIA POÈTICA -->
+            <div class="poetic-audio-banner">
+                <div class="poetic-audio-header">
+                    <div class="poetic-audio-tag">
+                        <span>🎙️✨</span> Audioguia Poètica Mòbil
+                    </div>
+                    <div class="poetic-audio-credits">
+                        <span>Veu: <strong>Margarida Codina</strong></span>
+                        <span style="opacity: 0.4;">•</span>
+                        <span>Versos: <strong>Poesia</strong></span>
+                    </div>
+                </div>
+
+                <div class="poetic-audio-title">
+                    La Llum Feta Paraula: Margarida Codina us Guia en la Travessa
+                </div>
+
+                <div class="poetic-audio-body">
+                    Endinsa't en la nit amb els auriculars posats i deixa't bressolar pel diàleg íntim entre les arts lumíniques i la poesia. La veu càlida de l'escriptora <strong>Margarida Codina</strong> us acompanyarà en aquesta travessa de llum i mar, desvetllant l'ànima, les emocions i la bellesa abissal de cadascuna de les 9 obres d'art a mesura que camines pel poble.
+                </div>
+
+                <div class="poetic-audio-features">
+                    <span class="poetic-audio-pill">📱 Directament al navegador mòbil (sense descàrregues)</span>
+                    <span class="poetic-audio-pill">📍 S'activa automàticament per GPS a cada instal·lació</span>
+                    <span class="poetic-audio-pill">🎧 Recomanat l'ús d'auriculars</span>
+                </div>
+
+                <div class="poetic-audio-actions">
+                    <a href="audioguia.html" class="btn-poetic-play">
+                        <span>🎧</span> Iniciar l'Audioguia Poètica
+                    </a>
+                    <span style="color: #94a3b8; font-size: 0.9rem; font-weight: 500;">Recorregut poètic i sonor · 9 Estacions</span>
+                </div>
+            </div>
+
             <div class="hero-cta-group">
                 <a href="audioguia.html" class="btn-ocean-primary" style="background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); border-color: #38bdf8; box-shadow: 0 0 25px rgba(6, 182, 212, 0.6); font-weight: 800;">
-                    <span>🎧</span> Iniciar Audioguia GPS Mòbil
+                    <span>🎧</span> Iniciar Audioguia Poètica
                 </a>
                 <a href="mapa3.html" class="btn-ocean-candle">
                     <span>🗺️</span> Obrir Plànol Oficial

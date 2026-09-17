@@ -288,6 +288,7 @@
         .filter-pill.active.wc { background: var(--accent-wc); border-color: var(--accent-wc); }
         .filter-pill.active.wc-acc { background: var(--accent-wc-acc); border-color: var(--accent-wc-acc); }
         .filter-pill.active.serveis { background: var(--accent-amber); border-color: var(--accent-amber); color: #0f172a; }
+        .filter-pill.active.accessible { background: #10b981; border-color: #10b981; color: #ffffff; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
 
         .search-box {
             width: 100%;
@@ -952,6 +953,62 @@
             background: #f97316;
         }
 
+        /* Badges d'Accessibilitat */
+        .access-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 0.35rem;
+            margin-bottom: 0.25rem;
+        }
+        .access-badge.access-level {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+        .access-badge.access-ramp {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .access-badge.access-step {
+            background: rgba(245, 158, 11, 0.18);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .access-badge.access-stairs {
+            background: rgba(239, 68, 68, 0.18);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .access-notes-info {
+            font-size: 0.76rem;
+            color: #cbd5e1;
+            margin-top: 0.2rem;
+            line-height: 1.4;
+        }
+        .marker-step-indicator {
+            position: absolute;
+            top: -5px;
+            right: -6px;
+            font-size: 11px;
+            line-height: 1;
+            background: #1e293b;
+            border: 1.5px solid #f59e0b;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+
         /* Ocultar controls de navegació i edició en exportar a imatge PNG */
         #map-wrapper.is-exporting .map-layer-switcher,
         #map-wrapper.is-exporting .editor-banner,
@@ -1213,6 +1270,8 @@
                         <div class="legend-item"><span class="legend-icon">🅿️</span> <span>Aparcaments del Poble</span></div>
                         <div class="legend-item"><span class="legend-icon">ℹ️</span> <span>Punt d'Informació</span></div>
                         <div class="legend-item"><span class="legend-icon">💜</span> <span>Punt Lila</span></div>
+                        <div class="legend-item"><span class="legend-icon" style="color: #10b981; font-weight: 900; font-size: 1.1rem;">━━</span> <span>♿ Itinerari Accessible (Pendent Suau)</span></div>
+                        <div class="legend-item"><span class="legend-icon">🪜</span> <span>Sala amb Graons a l'Entrada</span></div>
                     </div>
                 </div>
             </div>
@@ -1246,6 +1305,7 @@
                     <button class="filter-pill food" onclick="setFilter('food', this)">🚚 Foodtrucks</button>
                     <button class="filter-pill wc" onclick="setFilter('wc_group', this)">🚻 WC & ♿</button>
                     <button class="filter-pill serveis" onclick="setFilter('serv', this)">🅿️ Pàrquings</button>
+                    <button class="filter-pill accessible" onclick="setFilter('accessible', this)">♿ Accessibilitat</button>
                 </div>
 
                 <input type="text" id="search-input" class="search-box" placeholder="🔍 Cerca artista, espai, WC, foodtruck..." oninput="handleSearch(this.value)">
@@ -1963,6 +2023,53 @@
         }
 
         // ========================================================
+        // 3B. HELPER PER A L'ACCESSIBILITAT DE LES LOCALITZACIONS
+        // ========================================================
+        function parseAccessibilityFromDesc(descText) {
+            if (!descText) return { cleanDesc: '', access: null };
+            const match = descText.match(/<!--access:(\{.*?\})-->/);
+            if (match) {
+                try {
+                    const access = JSON.parse(match[1]);
+                    const cleanDesc = descText.replace(/<!--access:\{.*?\}-->/, '').trim();
+                    return { cleanDesc, access };
+                } catch (e) {
+                    return { cleanDesc: descText, access: null };
+                }
+            }
+            return { cleanDesc: descText, access: null };
+        }
+
+        function getAccessibilityBadgeHtml(loc) {
+            const parsed = parseAccessibilityFromDesc(loc.desc || '');
+            const access = loc.access || parsed.access;
+            if (!access || !access.type || access.type === 'none') return '';
+
+            let badgeClass = 'access-level';
+            let label = '♿ Cota zero';
+            if (access.type === 'ramp') {
+                badgeClass = 'access-ramp';
+                label = '♿ Rampa habilitada';
+            } else if (access.type === 'step1') {
+                badgeClass = 'access-step';
+                label = '🪜 1 graó a l\'entrada';
+            } else if (access.type === 'steps2_3') {
+                badgeClass = 'access-step';
+                label = '🪜 2 o 3 graons a l\'entrada';
+            } else if (access.type === 'stairs') {
+                badgeClass = 'access-stairs';
+                label = '🪜🪜 Tram d\'escales (> 3 graons)';
+            }
+
+            return `
+                <div style="margin-top: 0.35rem;">
+                    <span class="access-badge ${badgeClass}">${label}</span>
+                    ${access.notes ? `<div class="access-notes-info">ℹ️ ${access.notes}</div>` : ''}
+                </div>
+            `;
+        }
+
+        // ========================================================
         // 4. RENDERITZACIÓ DELS MARCADORS (MIDES COMPACTES PER A VISTA GENERAL)
         // ========================================================
         function createMarkerIcon(loc) {
@@ -2007,9 +2114,15 @@
             const fontSize = Math.max(7, Math.round(baseFontSize * scale));
             const borderWidth = (scale < 0.75) ? 1.0 : 1.5;
 
+            const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
+            const accessInfo = loc.access || parsedDesc.access;
+            const stepIndicator = (accessInfo && ['step1', 'steps2_3', 'stairs'].includes(accessInfo.type)) 
+                ? '<span class="marker-step-indicator" title="Accés amb graons a l\'entrada">🪜</span>' 
+                : '';
+
             return L.divIcon({
                 className: 'custom-marker-wrapper',
-                html: `<div class="custom-marker ${markerClass}" style="width: ${size}px; height: ${size}px; font-size: ${fontSize}px; line-height: ${size}px; border-width: ${borderWidth}px;">${loc.code}</div>`,
+                html: `<div class="custom-marker ${markerClass}" style="position: relative; width: ${size}px; height: ${size}px; font-size: ${fontSize}px; line-height: ${size}px; border-width: ${borderWidth}px;">${loc.code}${stepIndicator}</div>`,
                 iconSize: [size, size],
                 iconAnchor: [size / 2, size / 2],
                 popupAnchor: [0, -size / 2]
@@ -2038,6 +2151,12 @@
                 // Filtres
                 if (currentFilter === 'wc_group') {
                     if (loc.type !== 'wc' && loc.type !== 'wc_accessible') return;
+                } else if (currentFilter === 'accessible') {
+                    const parsed = parseAccessibilityFromDesc(loc.desc || '');
+                    const acc = loc.access || parsed.access;
+                    const isAccService = loc.type === 'wc_accessible' || (loc.type === 'serv' && (loc.id === 'serv_p1' || loc.code.includes('♿🅿️')));
+                    const hasAccessInfo = acc && acc.type && acc.type !== 'none';
+                    if (!isAccService && !hasAccessInfo) return;
                 } else if (currentFilter !== 'all' && loc.type !== currentFilter) {
                     return;
                 }
@@ -2068,12 +2187,16 @@
                     `;
                 }
 
-                const formattedDesc = (loc.desc || '').replace(/\n/g, '<br>');
+                const parsedDesc = parseAccessibilityFromDesc(loc.desc || '');
+                const formattedDesc = (parsedDesc.cleanDesc || '').replace(/\n/g, '<br>');
+                const accessBadgeHtml = getAccessibilityBadgeHtml(loc);
+
                 const popupContent = `
                     <div>
                         <span class="popup-badge ${badgeClass}">${badgeLabel} · ${loc.code}</span>
                         <div class="popup-title">${loc.name}</div>
                         ${loc.artist ? `<div class="popup-artist">${loc.artist}</div>` : ''}
+                        ${accessBadgeHtml}
                         <p class="popup-desc" style="line-height: 1.55; margin-top: 0.4rem;">${formattedDesc}</p>
                         <div class="popup-actions">
                             <a href="${gmapsUrl}" target="_blank" class="popup-btn">📍 Com anar-hi (Google Maps)</a>
@@ -2151,6 +2274,12 @@
             let itemsToRender = filtered.filter(loc => {
                 if (currentFilter === 'wc_group') {
                     return loc.type === 'wc' || loc.type === 'wc_accessible';
+                } else if (currentFilter === 'accessible') {
+                    const parsed = parseAccessibilityFromDesc(loc.desc || '');
+                    const acc = loc.access || parsed.access;
+                    const isAccService = loc.type === 'wc_accessible' || (loc.type === 'serv' && (loc.id === 'serv_p1' || loc.code.includes('♿🅿️')));
+                    const hasAccessInfo = acc && acc.type && acc.type !== 'none';
+                    return isAccService || hasAccessInfo;
                 } else if (currentFilter !== 'all') {
                     return loc.type === currentFilter;
                 }
@@ -2201,6 +2330,7 @@
                         <div class="loc-name">${loc.name}</div>
                         ${loc.artist ? `<div class="loc-artist">${loc.artist}</div>` : ''}
                         <div class="loc-sub">${loc.project}</div>
+                        ${getAccessibilityBadgeHtml(loc)}
                     </div>
                 `;
 
@@ -2602,6 +2732,72 @@
             if (status) status.innerText = '🗑️ Traçat esborrat.';
         }
 
+        // ========================================================
+        // 8B. GESTIÓ I DIBUIX DE L'ITINERARI ACCESSIBLE RECOMANAT (♿)
+        // ========================================================
+        const DEFAULT_ACCESSIBLE_POINTS = [
+            [42.07197, 2.95115], // Sala Nova & Aparcament PMR
+            [42.07175, 2.95210], // Carrer Francesc Macià
+            [42.07135, 2.95340], // Plaça U d'Octubre (Ajuntament & WC Adaptat)
+            [42.07140, 2.95390], // Carrer de Baix (pendent suau)
+            [42.07205, 2.95334]  // Plaça Major (Escenari central)
+        ];
+
+        let accessiblePoints = [...DEFAULT_ACCESSIBLE_POINTS];
+        let accessibleWidth = 6;
+        let accessiblePolyline = null;
+        let accessibleGlowPolyline = null;
+
+        try {
+            const savedAcc = localStorage.getItem('pluja_art_accessible_route');
+            if (savedAcc) {
+                const parsed = JSON.parse(savedAcc);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    accessiblePoints = parsed;
+                }
+            }
+        } catch (e) {}
+
+        function renderAccessibleRoute() {
+            if (accessiblePolyline) {
+                map.removeLayer(accessiblePolyline);
+                accessiblePolyline = null;
+            }
+            if (accessibleGlowPolyline) {
+                map.removeLayer(accessibleGlowPolyline);
+                accessibleGlowPolyline = null;
+            }
+
+            if (!accessiblePoints || accessiblePoints.length === 0) return;
+
+            // Halo verd suau
+            accessibleGlowPolyline = L.polyline(accessiblePoints, {
+                color: '#34d399',
+                weight: accessibleWidth + 6,
+                opacity: 0.35,
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: false
+            }).addTo(map);
+
+            // Línia verda maragda principal
+            accessiblePolyline = L.polyline(accessiblePoints, {
+                color: '#10b981',
+                weight: accessibleWidth,
+                opacity: 0.95,
+                dashArray: '8, 8',
+                lineCap: 'round',
+                lineJoin: 'round',
+                interactive: true
+            }).addTo(map);
+
+            accessiblePolyline.bindPopup(`
+                <div class="popup-title">♿ Itinerari Accessible Recomanat</div>
+                <div class="popup-artist">Pendent Suau i Paviment Regular</div>
+                <div class="popup-desc">Recorregut adaptat recomanat per a persones amb mobilitat reduïda, cadires de rodes, gent gran i cotxets, connectant els principals escenaris i serveis adaptats.</div>
+            `);
+        }
+
         // Carregar coordenades des de Supabase
         async function loadLocationsFromSupabase() {
             if (!supabaseClient) return;
@@ -2630,24 +2826,44 @@
                         }
                     }
 
-                    // Filtrar la fila de parades i qualsevol registre d'art lumínic per aïllament total
+                    // Comprovar si hi ha dades guardades de l'itinerari accessible
+                    const accRow = data.find(d => d.id === 'accessible_route_polyline');
+                    if (accRow && accRow.descripcio) {
+                        try {
+                            const parsedAcc = JSON.parse(accRow.descripcio);
+                            if (parsedAcc.points && parsedAcc.points.length > 0) {
+                                accessiblePoints = parsedAcc.points;
+                                if (parsedAcc.width) accessibleWidth = parsedAcc.width;
+                                renderAccessibleRoute();
+                            }
+                        } catch (e) {
+                            console.warn("Error parsing accRow:", e);
+                        }
+                    }
+
+                    // Filtrar la fila de parades, itinerari accessible i qualsevol registre d'art lumínic per aïllament total
                     const cleanLocations = data.filter(d => 
                         d.id !== 'craft_zone_polyline' && 
+                        d.id !== 'accessible_route_polyline' && 
                         d.id !== 'luminic_route_polyline' && 
                         !String(d.id).startsWith('lum_')
                     );
 
-                    locations = cleanLocations.map(d => ({
-                        id: d.id,
-                        type: d.type,
-                        code: d.code,
-                        name: d.name,
-                        artist: d.artist || '',
-                        project: d.project || '',
-                        desc: d.descripcio || d.desc || '',
-                        lat: Number(d.lat),
-                        lng: Number(d.lng)
-                    }));
+                    locations = cleanLocations.map(d => {
+                        const parsedAcc = parseAccessibilityFromDesc(d.descripcio || d.desc || '');
+                        return {
+                            id: d.id,
+                            type: d.type,
+                            code: d.code,
+                            name: d.name,
+                            artist: d.artist || '',
+                            project: d.project || '',
+                            desc: d.descripcio || d.desc || '',
+                            access: parsedAcc.access,
+                            lat: Number(d.lat),
+                            lng: Number(d.lng)
+                        };
+                    });
                     locations.sort((a, b) => getLocationSortWeight(a) - getLocationSortWeight(b));
                     renderMarkers();
                     renderSidebar();
@@ -2671,6 +2887,7 @@
                 // 1. Guardar a LocalStorage
                 localStorage.setItem('pluja_art_map_locations', JSON.stringify(locations));
                 localStorage.setItem('pluja_art_craft_points', JSON.stringify(craftPoints));
+                localStorage.setItem('pluja_art_accessible_route', JSON.stringify(accessiblePoints));
 
                 // 2. Guardar a Supabase
                 if (supabaseClient) {
@@ -2703,12 +2920,27 @@
                         updated_at: new Date().toISOString()
                     });
 
+                    // Afegir el traçat de l'itinerari accessible
+                    payload.push({
+                        id: 'accessible_route_polyline',
+                        type: 'route_accessible',
+                        code: '♿',
+                        name: 'Itinerari Accessible Recomanat',
+                        artist: 'Pendent Suau i Paviment Regular',
+                        project: 'Sense barreres arquitectòniques',
+                        descripcio: JSON.stringify({ points: accessiblePoints, width: accessibleWidth }),
+                        lat: 42.0718,
+                        lng: 2.9525,
+                        ordre: 998,
+                        updated_at: new Date().toISOString()
+                    });
+
                     const { error } = await supabaseClient
                         .from('festival_locations')
                         .upsert(payload, { onConflict: 'id' });
 
                     if (error) throw error;
-                    alert("✅ Tots els espais, WC, Foodtrucks i la Zona de Parades d'Artesania s'han desat a Supabase amb èxit!");
+                    alert("✅ Tots els espais, WC, Foodtrucks, l'Itinerari Accessible ♿ i la Zona de Parades d'Artesania s'han desat a Supabase amb èxit!");
                 } else {
                     alert("✅ Ubicacions i parades guardades al navegador!");
                 }
@@ -2960,6 +3192,7 @@
         // Inicialització inicial segura
         try { checkOrientationPrompt(); } catch (e) { console.error("checkOrientationPrompt:", e); }
         try { renderCraftZone(); } catch (e) { console.error("renderCraftZone:", e); }
+        try { renderAccessibleRoute(); } catch (e) { console.error("renderAccessibleRoute:", e); }
         try { renderMarkers(); } catch (e) { console.error("renderMarkers:", e); }
         try { renderSidebar(); } catch (e) { console.error("renderSidebar:", e); }
         try { fitMapToAllSymbols(); } catch (e) { console.error("fitMapToAllSymbols:", e); }
