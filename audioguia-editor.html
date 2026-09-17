@@ -877,6 +877,7 @@
                 descripcio: "Artèria transformada amb un conjunt de meduses flotants i filtres cromàtics jugant amb perspectives i altures (creació d'Airearte).",
                 lat: 42.07190,
                 lng: 2.95260,
+                radius: 30,
                 ordre: 8
             },
             {
@@ -889,6 +890,7 @@
                 descripcio: "Serp gegant inflable viva amb focus de gran potència i ventilació contínua, governant i presidint el festival des de les altures (creació d'Airearte).",
                 lat: 42.07235,
                 lng: 2.95420,
+                radius: 60,
                 ordre: 9
             },
             {
@@ -1235,6 +1237,47 @@
                     }
                 }
 
+                // Configuració de radi de geofencing per defecte i per punt oficial
+                let spotRadius = 10;
+                if (typeof item.radius === 'number' && item.radius > 0) {
+                    spotRadius = item.radius;
+                }
+
+                // Detecció oficial per a l'itinerari d'Art Lumínic:
+                // - Punt 8 (Dipòsit de l'Aigua / La Serp): 60 metres
+                // - Punt 7 (Avinguda Generalitat / Corrents Marines): 30 metres
+                const spotName = (item.name || '').toLowerCase();
+                const spotProj = (item.project || '').toLowerCase();
+                const spotId = (item.id || '').toLowerCase();
+                const spotCode = String(item.code || '').trim();
+
+                if (
+                    spotId === 'lum_diposit' || 
+                    spotId === '08_diposit' || 
+                    spotId === 'lum_drac' || 
+                    spotId === '07_serp' || 
+                    spotCode === '8' || 
+                    spotCode === '👑' || 
+                    spotName.includes('diposit') || 
+                    spotName.includes('dipòsit') || 
+                    spotName.includes('serp') || 
+                    spotName.includes('drac') ||
+                    spotProj.includes('serp')
+                ) {
+                    spotRadius = 60;
+                } else if (
+                    spotId === 'lum_generalitat' || 
+                    spotId === '07_generalitat' || 
+                    spotId === 'lum_line_1788308987054' || 
+                    spotCode === '7' || 
+                    spotCode === '🪼3' || 
+                    spotName.includes('generalitat') || 
+                    spotName.includes('corrents') ||
+                    spotProj.includes('meduses i filtres')
+                ) {
+                    spotRadius = 30;
+                }
+
                 const speechText = getSpotSpeechText(item);
 
                 return {
@@ -1249,7 +1292,7 @@
                     speechText: speechText,
                     lat: actualLat,
                     lng: actualLng,
-                    radius: 10, // radi de detecció geofence exacte a 10 metres
+                    radius: spotRadius, // radi de detecció geofence (Punt 8: 60m, Punt 7: 30m, altres: 10m)
                     isLine: item.isLine,
                     coords: item.coords,
                     color: item.color || '#38bdf8'
@@ -1899,7 +1942,7 @@
                             break;
                         }
 
-                        console.log(`📍 Has arribat a: ${spot.name} (${dist}m) -> Llegint fitxa en català!`);
+                        console.log(`📍 Has arribat a: ${spot.name} (${dist}m <= radi ${spot.radius}m) -> Reproduint àudio!`);
                         
                         if (navigator.vibrate) {
                             navigator.vibrate([120, 80, 120]);
