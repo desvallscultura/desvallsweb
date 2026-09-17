@@ -7,13 +7,13 @@
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <title>🎧 Audioguia GPS Interactiva · Mar Mediterrània (Art Lumínic 2026)</title>
-    <meta name="description" content="Audioguia interactiva amb navegació GPS en viu pel Festival d'Art Lumínic «Mar Mediterrània» 2026 a Sant Jordi Desvalls. Música i disseny sonor marítim automàtic a cada punt sincronitzat amb Supabase.">
+    <title>🎧 Audioguia Poètica GPS · Mar Mediterrània (Art Lumínic 2026)</title>
+    <meta name="description" content="Audioguia poètica interactiva amb navegació GPS pel Festival d'Art Lumínic «Mar Mediterrània» 2026 a Sant Jordi Desvalls. Veu de Margarida Codina, versos de poesia i música ambiental als carrers.">
     
     <!-- OpenGraph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="🎧 Audioguia GPS Interactiva · Festival d'Art Lumínic 2026">
-    <meta property="og:description" content="Navega pel circuit d'art lumínic amb OpenStreetMap i GPS. La música de cada instal·lació s'activa automàticament en acostar-t'hi!">
+    <meta property="og:title" content="🎧 Audioguia Poètica GPS · Veu: Margarida Codina · Mar Mediterrània 2026">
+    <meta property="og:description" content="Navega pel circuit d'art lumínic amb OpenStreetMap i GPS. La veu poètica de cada instal·lació s'activa automàticament en acostar-t'hi!">
     <meta property="og:image" content="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&w=1200&q=80">
     
     <!-- Google Fonts -->
@@ -637,7 +637,10 @@
     <header class="app-header">
         <a href="art-luminic-2026.html" class="header-brand">
             <span>🌊</span>
-            <span>Mar <span class="highlight">Mediterrània</span></span>
+            <div>
+                <div style="line-height: 1.1;">Mar <span class="highlight">Mediterrània</span></div>
+                <div style="font-size: 0.68rem; color: #94a3b8; font-weight: 600;">Audioguia Poètica GPS</div>
+            </div>
         </a>
 
         <div class="gps-status-badge" id="gps-badge">
@@ -730,14 +733,19 @@
     <div class="audio-unlock-overlay" id="unlock-overlay">
         <div class="unlock-card">
             <div class="unlock-icon">🗣️✨</div>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 0.6rem;">
-                Audioguia amb Veu en Català
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 0.4rem;">
+                Audioguia Poètica amb Veu en Català
             </h2>
-            <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.5; margin-bottom: 0.5rem;">
-                Posa't els auriculars i recorre el circuit! Quan arribis a <strong>menys de 10 metres</strong> de cada instal·lació o espai, una veu agradable en català et llegirà automàticament la fitxa explicativa.
+            <div style="display: flex; justify-content: center; gap: 0.6rem; font-size: 0.82rem; color: #cbd5e1; margin-bottom: 0.8rem; flex-wrap: wrap;">
+                <span>Veu: <strong style="color: #38bdf8;">Margarida Codina</strong></span>
+                <span style="opacity: 0.4;">•</span>
+                <span>Versos: <strong style="color: #f472b6;">Poesia</strong></span>
+            </div>
+            <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.5; margin-bottom: 0.8rem;">
+                Posa't els auriculars i recorre el circuit! A mesura que t'acostis a cada instal·lació o espai, la veu de l'escriptora <strong>Margarida Codina</strong> us acompanyarà automàticament en aquest diàleg íntim entre les arts lumíniques i la poesia, mentre els sons i la música ambiental omplen els carrers del poble.
             </p>
             <button type="button" class="btn-start-tour" onclick="unlockAudioAndStart()">
-                <span>🎧</span> Iniciar Audioguia amb Veu
+                <span>🎧</span> Iniciar Audioguia Poètica
             </button>
         </div>
     </div>
@@ -814,6 +822,18 @@
                 lat: 42.07210,
                 lng: 2.95340,
                 ordre: 4
+            },
+            {
+                id: 'lum_medusa',
+                type: 'lum',
+                code: '🪼',
+                name: "Instal·lació Lumínica · «La Medusa»",
+                artist: 'Airearte',
+                project: 'Estructures Bioluminescents Flotants',
+                descripcio: "Instal·lació flotant amb reflexos i filaments lluminosos suspesos.",
+                lat: 42.072291,
+                lng: 2.9536,
+                ordre: 4.5
             },
             {
                 id: 'lum_clos_garriga',
@@ -939,14 +959,15 @@
         const OFFICIAL_SPOT_TEXTS = {
             '0': "Punt d'Inici del Circuit d'Art Lumínic «Mar Mediterrània». Seguiu el càlid camí d'espelmes cap a la Plaça 1 d'Octubre (Punt 1), a menys de 15 metres.",
             '1': "Benvinguts i benvingudes, som a la plaça 1 d'octubre, el cor del jardí de les meduses i el punt de partida per endinsar-nos en el circuit d'Art Lumínic. Tot aquest univers visual pren forma amb la direcció artística de Lluís Mohedano i és fruit de la col·laboració estreta entre les associacions Desvalls Cultura i Airearte. Des d'aquí, seguint el càlid camí de les espelmes, ens submergirem en les aigües abissals del mare nostrum a través de nou instal·lacions fascinants. Mireu al vostre voltant: la plaça ja batega amb vida marina que desprèn la gran medusa inflable, una espectacular creació que ens dona la benvinguda. Abans, però, escolteu aquests versos... Medusa de seda fina, ballarina, transparent i preciosa, mandrosa, llargues cintes de color, blau, morat i groc carmí, l'acompanyen pel camí, quan navega a l'aigua clara, sembla l'arc de Sant Martí.",
-            '2': "Carrer de Baix, Onades Olímpiques. Aquestes monumentals onades escultòriques van bategar als Jocs Olímpics de Barcelona 92 i arriben a Sant Jordi Desvalls gràcies a la generosa cessió de la Fundació Bassat, transformades en un joc dinàmic de formes i llums visuals per Airearte.",
-            '3': "Carrer Tarongeta, El túnel blau. Passatge envoltat de teles i atmosferes de llum blava. Inclou una Medusa gegant al final de la inmersió submarina.",
-            '4': "Plaça Clos Garriga, Profunditats residuals. Composició immersiva amb teles, tirants, raig làser i punts de llum simulant els raigs de sol penetrant en les aigües profundes.",
-            '5': "Antiga Escola, obra titulada: MEDITERRÀNIA. FONS. Una vida. Una medusa. Un mar immens. Fràgil, com tantes vides que el Mediterrani ha engolit. Per alguns, el mar és frontera. Per d'altres, l'última esperança. Instal·lació immersiva creada pels artistes DABÚ i isi.",
-            '6': "Església, L'abisme i el fum. Instal·lació d'estil industrial basada en tubs de llum i efectes de fum que simulen fumaroles i corrents de fosses marines.",
-            '7': "Avinguda Generalitat, Corrents marines. Artèria transformada amb un conjunt de meduses flotants i filtres cromàtics jugant amb perspectives i altures.",
-            '8': "Dipòsit de l'Aigua, La Reina del Festival. Serp gegant inflable viva amb focus de gran potència i ventilació contínua, governant i presidint el festival des de les altures.",
-            '9': "Airearte, Punt final amb una medusa lumínica i la gran exposició col·lectiva dels artistes locals del Festival Pluja d'Art."
+            '2': "Pel carrer de baix ens bressolaran les onades olímpiques que van bressolar els jocs olímpics de Barcelona 92. Gràcies a la generosa cessió de la fundació Bassat i a la recreació lumínica de l'estudi Airearte, podem gaudir del diàleg rítmic entre la memòria i l'avantguarda. Donem veu als pirates de Mar i Cel d'Àngel Guimerà des del cor de Sant Jordi Desvalls: El mar és com un desert d'aigua, no té camins ni té senyals. El mar és un desert d'onades, una lluita sorda i constant. És el mar la nostra terra ferma on vivim enreulats en el vent. Les veles s'inflaran, el vent ens portarà com un cavall desbocat per les ones.",
+            '3': "Endinsem-nos ara al carrer Tarongeta i creuem el túnel blau. Les teles suspeses i la llum suau blava ens traslladen al bell fons del mar. Parem atenció: al final d'aquesta immersió ens espera una majestuosa medusa gegant. Fem que el poeta grec Kavafis ens hi acompanyi: Quan surts per fer el viatge cap a Ítaca, has de pregar que el camí sigui llarg, ple d'aventures, ple de coneixences. Has de pregar que el camí sigui llarg, que siguin moltes les matinades d'estiu en quina delictança, en quina joia, entraràs en un port que els teus ulls ignoraven. Sempre tingues al cor la idea d'Ítaca. Has d'arribar-hi, és el teu destí.",
+            '4': "Arribem a la plaça Clos Garriga, l'escenari de profunditats residuals. Gràcies a un enginyós muntatge amb teles, tirants i raigs làser, ens submergirem dins la fosca de les aigües més profundes, i podrem sentir com si un únic i potent raig de sol ens fes arribar al centre del mar i en nostre, més enllà dels versos de Baudelaire: Home, dona lliure, sempre estimaràs el mar. El mar és el mirall on contemples l'ànima, t'esbrossola en l'onada infinita cercant l'abisme del teu esperit. Tu i el mar sou tenebrosos i discrets. Ningú no arriba a la fondària dels vostres abismes, ningú no coneix les vostres íntimes riqueses, ningú no arriba al fons del vostre cor.",
+            '5': "A l'antiga escola, contemplem l'obra mediterrània dels artistes Dabú i isi que ens colpeix amb un missatge profund. El mar immens i fort és capaç d'engolir les vides d'aquells que el creuen a la recerca de l'última esperança. Escoltam uns versos de Joan Dausà: Com plora el mar quan veu un cos que cau? Un altre cos que cau. La mort, amb gust de sal, s'escola a gola avall. I al fons, els peixos corglaçats imploren pietat. Inactiu, impotent, abaixo el cap. Fa tant de mal! Però és llei de mar? No entenc aquests humans. Com plora el mar i les balenes que tants cops va dibuixar? Se l'emporten quan ja tot ha passat. I el mar és un mirall, i es fa un silenci llarg. I blau.",
+            '5_medusa': "Des de les pedres centenàries de l'església, la medusa gegant sura en la foscó del cel, com si fos al mar, i el poble reposés al bell fons de l'Oceà, com l'Atlàntida que cantava Verdaguer. Els llargs tentacles de llum cauen lleugers i ingràvids, acolorint de blau la pedra, acariciant l'aire de la nit. Sentim el seu cant: Mireu-me sense por, no us convertiré en pedra com deien els antics. Si Déu o la natura em féu diferent, no ho van fer per ferir, que diversos són els éssers i diverses les parles, però vens amb l'àngel en el sentit. Mireu-me sense por, només vull que reconeguin els meus ulls els vostres.",
+            '6': "A l'entorn de l'església, l'atmosfera canvia radicalment amb l'abisme i el fum. Som davant d'una instal·lació d'estil industrial, on els tubs de llum i la boira artificial s'entrellacen. L'efecte recrea la intensitat i el misteri de les fumaroles i els densos corrents de les fosses marines més inexplorades. Escoltem ara uns versos de John Masefield: He de baixar de nou al mar, al mar solitari i al cel, i només demano un veler i una estrella que l'orienti, i la força del timó i el cant del vent i la tremolor de la vela blanca, i una boira gris al rostre i una gris aurora.",
+            '7': "L'avinguda Generalitat s'ha transformat en un riu de corrents marines. Un espectacular banc de meduses flotants i filtres de colors juguen amb l'alçada i la perspectiva, creant un efecte òptic vibrant que ens acompanya fins al darrer punt. Deixem que ens acompanyin uns versos de Josep Piera: La mar, la mar, la mar és una música en blau, un mirall d'argent per al sol, el llit on la lluna s'adorm, el somni amb estels d'un infant. La mar és la terra en moviment d'aquest univers, en un mot que igual diu la vida joiosa com negre silenci, com mort. La mar, la mar, la mar.",
+            '8': "La serp s'enfila, s'escaragola, sisa, s'esmuny, té una llengua llarga i bífida, escates que brillen a la foscor, carnívora, carrega la poma per expulsar-nos del paradís, símbol de la medicina des que els grecs ho van decidir. Avui, des de l'alçada, observa com de vegades també a nosaltres ens convé mudar la pell, deixar enrere la condició terrestre, i per camins de llum i aigua, submergir-nos en la mar, vestits de peix o d'alga, però sempre amb ulls immensament humans.",
+            '9': "Finalment, el circuit es tanca de manera brillant a l'espai Airearte. Una última medusa lumínica ens dona la benvinguda a l'exposició col·lectiva dels artistes locals. És el veritable batec del Festival Pluja d'Art, on tota aquesta inspiració es converteix en comunitat. I és que, a Sant Jordi Desvalls, cada dia hi ha una petita Pluja d'Art. I de nou, Kavafis ens hi acompanyi: Deixeu que aquí m'estigui i que posi una mica els ulls dins de l'art i la natura, aquest mar de matí, aquest cel sense núvols, amb blau resplendent i la groga ribera, tot bell i immensament il·luminat. I a Ítaca, ja hem arribat."
         };
 
         const OFFICIAL_SPOT_TEXTS_BY_ID = {
@@ -954,22 +975,30 @@
             'lum_start': OFFICIAL_SPOT_TEXTS['0'],
             '01_placa_octubre': OFFICIAL_SPOT_TEXTS['1'],
             'lum_octubre': OFFICIAL_SPOT_TEXTS['1'],
+            'lum_1788309361080': OFFICIAL_SPOT_TEXTS['1'],
             '02_carrer_baix': OFFICIAL_SPOT_TEXTS['2'],
             'lum_baix': OFFICIAL_SPOT_TEXTS['2'],
+            'lum_1788310197763': OFFICIAL_SPOT_TEXTS['2'],
             '03_carrer_tarongeta': OFFICIAL_SPOT_TEXTS['3'],
             'lum_tarongeta': OFFICIAL_SPOT_TEXTS['3'],
+            'lum_laberint': OFFICIAL_SPOT_TEXTS['3'],
+            'lum_medusa': OFFICIAL_SPOT_TEXTS['5_medusa'],
             '04_clos_garriga': OFFICIAL_SPOT_TEXTS['4'],
             'lum_clos_garriga': OFFICIAL_SPOT_TEXTS['4'],
+            'lum_1788309924074': OFFICIAL_SPOT_TEXTS['4'],
             '05_antiga_escola': OFFICIAL_SPOT_TEXTS['5'],
             'lum_escola': OFFICIAL_SPOT_TEXTS['5'],
             '06_esglesia': OFFICIAL_SPOT_TEXTS['6'],
             'lum_esglesia': OFFICIAL_SPOT_TEXTS['6'],
             '07_generalitat': OFFICIAL_SPOT_TEXTS['7'],
             'lum_generalitat': OFFICIAL_SPOT_TEXTS['7'],
+            'lum_line_1788308987054': OFFICIAL_SPOT_TEXTS['7'],
             '08_diposit': OFFICIAL_SPOT_TEXTS['8'],
             'lum_diposit': OFFICIAL_SPOT_TEXTS['8'],
+            'lum_drac': OFFICIAL_SPOT_TEXTS['8'],
             '09_airearte': OFFICIAL_SPOT_TEXTS['9'],
-            'lum_airearte': OFFICIAL_SPOT_TEXTS['9']
+            'lum_airearte': OFFICIAL_SPOT_TEXTS['9'],
+            'lum_1788310014470': OFFICIAL_SPOT_TEXTS['9']
         };
 
         function getSpotSpeechText(spot, idx) {
@@ -1385,45 +1414,128 @@
             });
         }
 
-        // --- SISTEMA D'ÀUDIO AMB VEU OFICIAL (JOANA NEURAL) I FALLBACK ---
+        // --- SISTEMA D'ÀUDIO AMB VEU OFICIAL (MARGARIDA CODINA) ---
         let currentAudio = null;
         let isAudioPlaying = false;
 
-        const JOANA_AUDIO_BY_ID = {
+        const MARGA_AUDIO_BY_ID = {
             '00_inici': null,
             'lum_start': null,
-            '01_placa_octubre': 'sons/joana/01_placa_octubre.mp3',
-            'lum_octubre': 'sons/joana/01_placa_octubre.mp3',
-            '02_carrer_baix': 'sons/joana/02_carrer_baix.mp3',
-            'lum_baix': 'sons/joana/02_carrer_baix.mp3',
-            '03_carrer_tarongeta': 'sons/joana/03_carrer_tarongeta.mp3',
-            'lum_tarongeta': 'sons/joana/03_carrer_tarongeta.mp3',
-            '04_clos_garriga': 'sons/joana/04_clos_garriga.mp3',
-            'lum_clos_garriga': 'sons/joana/04_clos_garriga.mp3',
-            '05_antiga_escola': 'sons/joana/05_antiga_escola.mp3',
-            'lum_escola': 'sons/joana/05_antiga_escola.mp3',
-            '06_esglesia': 'sons/joana/06_esglesia.mp3',
-            'lum_esglesia': 'sons/joana/06_esglesia.mp3',
-            '07_generalitat': 'sons/joana/07_generalitat.mp3',
-            'lum_generalitat': 'sons/joana/07_generalitat.mp3',
-            '08_diposit': 'sons/joana/08_diposit.mp3',
-            'lum_diposit': 'sons/joana/08_diposit.mp3',
-            '09_airearte': 'sons/joana/09_airearte.mp3',
-            'lum_airearte': 'sons/joana/09_airearte.mp3'
+            // 1. Plaça 1 d'Octubre
+            '01_placa_octubre': 'sons/marga/01_placa_octubre.mp3',
+            'lum_octubre': 'sons/marga/01_placa_octubre.mp3',
+            'lum_1788309361080': 'sons/marga/01_placa_octubre.mp3',
+            // 2. Carrer de Baix
+            '02_carrer_baix': 'sons/marga/02_carrer_baix.mp3',
+            'lum_baix': 'sons/marga/02_carrer_baix.mp3',
+            'lum_1788310197763': 'sons/marga/02_carrer_baix.mp3',
+            // 3. Carrer Tarongeta (El túnel blau)
+            '03_carrer_tarongeta': 'sons/marga/03_carrer_tarongeta.mp3',
+            'lum_tarongeta': 'sons/marga/03_carrer_tarongeta.mp3',
+            'lum_laberint': 'sons/marga/03_carrer_tarongeta.mp3',
+            // Medusa (Església / Instal·lació)
+            'lum_medusa': 'sons/marga/05_medusa_esglesia.mp3',
+            '05_medusa_esglesia': 'sons/marga/05_medusa_esglesia.mp3',
+            '5_medusa': 'sons/marga/05_medusa_esglesia.mp3',
+            // 4. Plaça Clos Garriga
+            '04_clos_garriga': 'sons/marga/04_clos_garriga.mp3',
+            'lum_clos_garriga': 'sons/marga/04_clos_garriga.mp3',
+            'lum_1788309924074': 'sons/marga/04_clos_garriga.mp3',
+            // 5. Antiga Escola
+            '05_antiga_escola': 'sons/marga/05_antiga_escola.mp3',
+            'lum_escola': 'sons/marga/05_antiga_escola.mp3',
+            // 6. Església
+            '06_esglesia': 'sons/marga/06_esglesia.mp3',
+            'lum_esglesia': 'sons/marga/06_esglesia.mp3',
+            // 7. Avinguda Generalitat
+            '07_generalitat': 'sons/marga/07_generalitat.mp3',
+            'lum_generalitat': 'sons/marga/07_generalitat.mp3',
+            'lum_line_1788308987054': 'sons/marga/07_generalitat.mp3',
+            // 8. Dipòsit de l'Aigua / La Serp
+            '08_diposit': 'sons/marga/08_diposit.mp3',
+            'lum_diposit': 'sons/marga/08_diposit.mp3',
+            'lum_drac': 'sons/marga/08_diposit.mp3',
+            '07_serp': 'sons/marga/08_diposit.mp3',
+            // 9. Airearte
+            '09_airearte': 'sons/marga/09_airearte.mp3',
+            'lum_airearte': 'sons/marga/09_airearte.mp3',
+            'lum_1788310014470': 'sons/marga/09_airearte.mp3'
         };
 
-        const JOANA_AUDIO_BY_INDEX = [
-            null, // Punt 0 (Inici) - Sense àudio per proximitat (<15m) amb el Punt 1
-            'sons/joana/01_placa_octubre.mp3',
-            'sons/joana/02_carrer_baix.mp3',
-            'sons/joana/03_carrer_tarongeta.mp3',
-            'sons/joana/04_clos_garriga.mp3',
-            'sons/joana/05_antiga_escola.mp3',
-            'sons/joana/06_esglesia.mp3',
-            'sons/joana/07_generalitat.mp3',
-            'sons/joana/08_diposit.mp3',
-            'sons/joana/09_airearte.mp3'
+        const MARGA_AUDIO_BY_CODE = {
+            '1': 'sons/marga/01_placa_octubre.mp3',
+            '🪼1': 'sons/marga/01_placa_octubre.mp3',
+            '2': 'sons/marga/02_carrer_baix.mp3',
+            '🌊': 'sons/marga/02_carrer_baix.mp3',
+            '3': 'sons/marga/03_carrer_tarongeta.mp3',
+            '🪼2': 'sons/marga/03_carrer_tarongeta.mp3',
+            '🪼': 'sons/marga/05_medusa_esglesia.mp3',
+            '4': 'sons/marga/04_clos_garriga.mp3',
+            '⚡': 'sons/marga/04_clos_garriga.mp3',
+            '5': 'sons/marga/05_antiga_escola.mp3',
+            '6': 'sons/marga/06_esglesia.mp3',
+            '🌋': 'sons/marga/06_esglesia.mp3',
+            '7': 'sons/marga/07_generalitat.mp3',
+            '🪼3': 'sons/marga/07_generalitat.mp3',
+            '8': 'sons/marga/08_diposit.mp3',
+            '👑': 'sons/marga/08_diposit.mp3',
+            '9': 'sons/marga/09_airearte.mp3',
+            '🎨': 'sons/marga/09_airearte.mp3'
+        };
+
+        const MARGA_AUDIO_BY_INDEX = [
+            null, // 0. Punt d'Inici
+            'sons/marga/01_placa_octubre.mp3',     // 1. Plaça 1 d'Octubre
+            'sons/marga/02_carrer_baix.mp3',       // 2. Carrer de Baix
+            'sons/marga/03_carrer_tarongeta.mp3',   // 3. Carrer Tarongeta
+            'sons/marga/05_medusa_esglesia.mp3',   // 4 (a Supabase: lum_medusa)
+            'sons/marga/04_clos_garriga.mp3',      // 5 (a Supabase: Clos Garriga)
+            'sons/marga/05_antiga_escola.mp3',     // 6 (a Supabase: Antiga Escola)
+            'sons/marga/06_esglesia.mp3',          // 7 (a Supabase: Església)
+            'sons/marga/07_generalitat.mp3',       // 8 (a Supabase: Avda. Generalitat)
+            'sons/marga/08_diposit.mp3',           // 9 (a Supabase: La Serp de Sant Jordi)
+            'sons/marga/09_airearte.mp3'           // 10 (a Supabase: Airearte)
         ];
+
+        // Mantenir retrocompatibilitat
+        const JOANA_AUDIO_BY_ID = MARGA_AUDIO_BY_ID;
+        const JOANA_AUDIO_BY_INDEX = MARGA_AUDIO_BY_INDEX;
+
+        function getSpotAudioSource(spot) {
+            if (!spot) return null;
+            if (spot.id === '00_inici' || spot.id === 'lum_start' || spot.type === 'start') return null;
+
+            // 1. Cercar directament per ID
+            if (spot.id && MARGA_AUDIO_BY_ID[spot.id]) {
+                return MARGA_AUDIO_BY_ID[spot.id];
+            }
+
+            // 2. Cercar per codi / numLabel
+            const code = String(spot.numLabel || spot.code || '').trim();
+            if (code && MARGA_AUDIO_BY_CODE[code]) {
+                return MARGA_AUDIO_BY_CODE[code];
+            }
+
+            // 3. Cercar per coincidència semàntica
+            const key = `${spot.id || ''} ${spot.name || ''} ${spot.project || ''}`.toLowerCase();
+            if (key.includes('octubre') || key.includes('jardí de les meduses') || key.includes('jardi de les meduses')) return 'sons/marga/01_placa_octubre.mp3';
+            if (key.includes('baix') || key.includes('onades')) return 'sons/marga/02_carrer_baix.mp3';
+            if (key.includes('tarongeta') || key.includes('túnel blau') || key.includes('tunel blau') || key.includes('laberint')) return 'sons/marga/03_carrer_tarongeta.mp3';
+            if (key.includes('clos garriga') || key.includes('profunditats')) return 'sons/marga/04_clos_garriga.mp3';
+            if (key.includes('antiga escola') || key.includes('escola') || key.includes('fons')) return 'sons/marga/05_antiga_escola.mp3';
+            if (key.includes('medusa')) return 'sons/marga/05_medusa_esglesia.mp3';
+            if (key.includes('esglesia') || key.includes('església') || key.includes('abisme')) return 'sons/marga/06_esglesia.mp3';
+            if (key.includes('generalitat') || key.includes('corrents')) return 'sons/marga/07_generalitat.mp3';
+            if (key.includes('serp') || key.includes('diposit') || key.includes('dipòsit') || key.includes('drac') || key.includes('reina')) return 'sons/marga/08_diposit.mp3';
+            if (key.includes('airearte')) return 'sons/marga/09_airearte.mp3';
+
+            // 4. Fallback per índex
+            if (spot.index !== undefined && MARGA_AUDIO_BY_INDEX[spot.index]) {
+                return MARGA_AUDIO_BY_INDEX[spot.index];
+            }
+
+            return null;
+        }
 
         function stopAllAudio() {
             if (currentAudio) {
@@ -1493,8 +1605,8 @@
                 return;
             }
 
-            // 1. Cercar fitxer MP3 amb la veu de Joana
-            const audioSrc = JOANA_AUDIO_BY_ID[spot.id] || (spot.index !== undefined ? JOANA_AUDIO_BY_INDEX[spot.index] : null);
+            // 1. Cercar fitxer MP3 amb la veu oficial (Margarida Codina)
+            const audioSrc = getSpotAudioSource(spot);
 
             if (audioSrc) {
                 const audio = new Audio(audioSrc);
